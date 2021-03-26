@@ -1,0 +1,13 @@
+@import "src/styles.scss";
+
+:host {
+  display: block;
+  background-color: #5cdb94;
+
+  h1 {
+    font-family: $title-font;
+    font-size: 7rem;
+    color: #EDF5E0;
+    letter-spacing: 0.4rem;
+  }
+}
