@@ -1,7 +1,4 @@
-/* You can add global styles to this file, and also import other style files */
-
-@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Press+Start+2P&family=Roboto&display=swap");
 
 * {
   font-family: "Roboto", sans-serif;
@@ -11,4 +8,8 @@
 }
 
 $normal-font: "Roboto", sans-serif;
-$title-font: "Bebas Neue", cursive; 
+$title-font: "Bebas Neue", cursive;
+$retro-font: "Press Start 2P", cursive;
+
+$background-color: #5cdb94;
+$dark-blue: #05396b;

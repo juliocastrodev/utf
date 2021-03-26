@@ -2,12 +2,18 @@
 
 :host {
   display: block;
-  background-color: #5cdb94;
+  background-color: $background-color;
 
   h1 {
-    font-family: $title-font;
-    font-size: 7rem;
-    color: #EDF5E0;
+    font-family: $retro-font;
+    font-size: 3rem;
+    color: $dark-blue;
     letter-spacing: 0.4rem;
+  }
+
+  p {
+    font-family: $title-font;
+    font-size: 4rem;
+    color: $dark-blue;
   }
 }
