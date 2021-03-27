@@ -15,6 +15,7 @@ import { DecodingPageComponent } from './pages/decoding-page/decoding-page.compo
 import { EncodingPageComponent } from './pages/encoding-page/encoding-page.component';
 import { ButtonComponent } from './components/button/button.component';
 import { RetroDirective } from './directives/retro.directive';
+import { LineInputDirective } from './directives/line-input.directive';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { RetroDirective } from './directives/retro.directive';
     EncodingPageComponent,
     ButtonComponent,
     RetroDirective,
+    LineInputDirective,
   ],
   imports: [BrowserModule, AppRoutingModule, FormsModule],
   providers: [],

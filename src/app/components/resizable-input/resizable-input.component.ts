@@ -2,21 +2,27 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'app-resizable-input',
-  templateUrl: './resizable-input.component.html',
-  styleUrls: ['./resizable-input.component.scss'],
+  template: `
+    <input
+      appLineInput
+      type="text"
+      [ngModel]="value"
+      (input)="update($event.target.value)"
+      [style.width]="(value ? value.toString().length : 1) * MIN_WIDTH + 'rem'"
+    />
+  `,
 })
 export class ResizableInputComponent implements OnInit {
-  @Input() value: number;
-  @Output() valueChange = new EventEmitter<number>();
+  @Input() value: string;
+  @Output() valueChange = new EventEmitter<string>();
 
-  readonly MIN_WIDTH = 3; // rem
+  readonly MIN_WIDTH = 2; // rem
   constructor() {}
 
   ngOnInit(): void {}
 
   update(value: string) {
-    const numValue = value ? +value : null;
-    this.value = numValue;
-    this.valueChange.emit(numValue);
+    this.value = value;
+    this.valueChange.emit(value);
   }
 }

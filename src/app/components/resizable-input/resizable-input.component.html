@@ -1,9 +1,0 @@
-<input
-  #input
-  type="number"
-  [ngModel]="value"
-  (input)="update($event.target.value)"
-  [style.width]="
-    (value ? input.value.toString().length : 1) * MIN_WIDTH + 'rem'
-  "
-/>

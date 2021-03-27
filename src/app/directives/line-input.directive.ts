@@ -2,9 +2,9 @@ import { Directive, ElementRef, Renderer2 } from '@angular/core';
 import { UtilsService } from '../services/utils/utils.service';
 
 @Directive({
-  selector: '[appRetro]',
+  selector: '[appLineInput]',
 })
-export class RetroDirective {
+export class LineInputDirective {
   constructor(
     private renderer: Renderer2,
     private elementRef: ElementRef,
@@ -12,10 +12,13 @@ export class RetroDirective {
   ) {}
 
   readonly STYLES = {
-    'font-family': 'var(--retro-font)',
-    'font-size': '3rem',
+    'text-align': 'center',
+    border: 'none',
+    'border-bottom': 'solid 0.2rem var(--dark-blue)',
+    'background-color': 'transparent',
+    height: '3rem',
     color: 'var(--dark-blue)',
-    'letter-spacing': '0.4rem',
+    'font-size': '3rem',
   };
 
   ngOnInit() {

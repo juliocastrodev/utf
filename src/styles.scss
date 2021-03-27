@@ -17,3 +17,12 @@
 body {
   background-color: var(--background-color);
 }
+
+input {
+  &::-webkit-inner-spin-button {
+    display: none;
+  }
+  &:focus {
+    outline: none;
+  }
+}
