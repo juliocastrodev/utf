@@ -16,7 +16,6 @@ export class LineInputDirective {
     border: 'none',
     'border-bottom': 'solid 0.2rem var(--dark-blue)',
     'background-color': 'transparent',
-    height: '3rem',
     color: 'var(--dark-blue)',
     'font-size': '3rem',
   };

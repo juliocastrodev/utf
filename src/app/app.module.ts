@@ -16,6 +16,7 @@ import { EncodingPageComponent } from './pages/encoding-page/encoding-page.compo
 import { ButtonComponent } from './components/button/button.component';
 import { RetroDirective } from './directives/retro.directive';
 import { LineInputDirective } from './directives/line-input.directive';
+import { SingleCharInputComponent } from './components/single-char-input/single-char-input.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { LineInputDirective } from './directives/line-input.directive';
     ButtonComponent,
     RetroDirective,
     LineInputDirective,
+    SingleCharInputComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, FormsModule],
   providers: [],
