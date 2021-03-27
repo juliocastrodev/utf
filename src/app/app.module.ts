@@ -3,16 +3,16 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { CenterComponent } from './layout/center.component';
+import { CenterComponent } from './layouts/center.component';
 import { CreditsComponent } from './components/credits/credits.component';
 import { CodingComponent } from './components/coding/coding.component';
 import { FormsModule } from '@angular/forms';
 import { BlockComponent } from './components/coding/block/block.component';
-import { BinaryPipe } from './pipe/binary.pipe';
+import { BinaryPipe } from './pipes/binary.pipe';
 import { ResizableInputComponent } from './components/resizable-input/resizable-input.component';
-import { HomePageComponent } from './page/home-page/home-page.component';
-import { DecodingPageComponent } from './page/decoding-page/decoding-page.component';
-import { EncodingPageComponent } from './page/encoding-page/encoding-page.component';
+import { HomePageComponent } from './pages/home-page/home-page.component';
+import { DecodingPageComponent } from './pages/decoding-page/decoding-page.component';
+import { EncodingPageComponent } from './pages/encoding-page/encoding-page.component';
 import { RetroTitleComponent } from './components/retro-title/retro-title.component';
 import { ButtonComponent } from './components/button/button.component';
 
