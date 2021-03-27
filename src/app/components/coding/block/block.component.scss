@@ -1,13 +1,11 @@
-@import "src/styles";
-
 :host {
   display: flex;
 
   div {
     font-size: 2rem;
-    font-family: $retro-font;
-    color: $dark-blue;
-    border: dashed 0.2rem $dark-blue;
+    font-family: var(--retro-font);
+    color: var(--dark-blue);
+    border: dashed 0.2rem var(--dark-blue);
     &:not(:last-of-type) {
       border-right: none;
     }

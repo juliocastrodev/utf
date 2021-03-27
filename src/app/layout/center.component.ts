@@ -11,7 +11,7 @@ import { Component } from '@angular/core';
         align-items: center;
         gap: 4rem;
         padding: 2rem;
-        min-height: 100vh;
+        min-height: 90vh;
       }
     `,
   ],

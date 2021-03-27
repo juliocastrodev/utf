@@ -1,16 +1,14 @@
-@import "src/styles";
-
 :host {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  border: dotted 0.2rem $dark-blue;
+  border: dotted 0.2rem var(--dark-blue);
   padding: 0.5rem;
   max-width: 25vw;
   text-align: center;
 
   * {
-    color: $dark-blue;
+    color: var(--dark-blue);
   }
 
   .label {

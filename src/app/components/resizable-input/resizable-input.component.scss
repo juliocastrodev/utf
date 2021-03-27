@@ -1,12 +1,10 @@
-@import "src/styles";
-
 input {
   text-align: center;
   border: none;
-  border-bottom: solid 0.2rem $dark-blue;
+  border-bottom: solid 0.2rem var(--dark-blue);
   background-color: transparent;
   height: 3rem;
-  color: $dark-blue;
+  color: var(--dark-blue);
   font-size: 3rem;
 
   &::-webkit-inner-spin-button {
