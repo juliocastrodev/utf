@@ -13,8 +13,8 @@ import { ResizableInputComponent } from './components/resizable-input/resizable-
 import { HomePageComponent } from './pages/home-page/home-page.component';
 import { DecodingPageComponent } from './pages/decoding-page/decoding-page.component';
 import { EncodingPageComponent } from './pages/encoding-page/encoding-page.component';
-import { RetroTitleComponent } from './components/retro-title/retro-title.component';
 import { ButtonComponent } from './components/button/button.component';
+import { RetroDirective } from './directives/retro.directive';
 
 @NgModule({
   declarations: [
@@ -28,8 +28,8 @@ import { ButtonComponent } from './components/button/button.component';
     ResizableInputComponent,
     DecodingPageComponent,
     EncodingPageComponent,
-    RetroTitleComponent,
     ButtonComponent,
+    RetroDirective,
   ],
   imports: [BrowserModule, AppRoutingModule, FormsModule],
   providers: [],
