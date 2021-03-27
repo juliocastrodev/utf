@@ -5,7 +5,6 @@ div {
   padding: 1rem 2rem;
 
   &:hover {
-    border-color: var(--background-color);
     color: var(--background-color);
     background-color: var(--dark-blue);
     cursor: pointer;
