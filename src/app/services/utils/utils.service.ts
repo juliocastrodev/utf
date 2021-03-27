@@ -15,4 +15,12 @@ export class UtilsService {
       renderer.setStyle(elementRef.nativeElement, styleName, styleValue);
     });
   }
+
+  readonly POSSIBLE_CHARS =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  randomChar() {
+    return this.POSSIBLE_CHARS[
+      this.randomInt(0, this.POSSIBLE_CHARS.length - 1)
+    ];
+  }
 }

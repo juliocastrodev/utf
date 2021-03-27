@@ -18,6 +18,7 @@ export class LineInputDirective {
     'background-color': 'transparent',
     color: 'var(--dark-blue)',
     'font-size': '3rem',
+    'font-family': 'var(--simple-font)',
   };
 
   ngOnInit() {
