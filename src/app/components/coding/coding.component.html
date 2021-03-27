@@ -1,8 +1,3 @@
-<!-- [width]="input.value.toString().length * 100 + 'px'" -->
-<input
-  #input
-  type="number"
-  [(ngModel)]="num"
-  [style.width]="num ? input.value.toString().length * 3 + 'rem' : '3rem'"
-/>
+<label for="input">Introduce un número</label>
+<app-resizable-input id="input" [(value)]="num"></app-resizable-input>
 <app-block *ngIf="num" [value]="num | binary"></app-block>

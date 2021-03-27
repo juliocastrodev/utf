@@ -10,6 +10,7 @@ import { CodingComponent } from './components/coding/coding.component';
 import { FormsModule } from '@angular/forms';
 import { BlockComponent } from './components/coding/block/block.component';
 import { BinaryPipe } from './pipe/binary.pipe';
+import { ResizableInputComponent } from './components/resizable-input/resizable-input.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { BinaryPipe } from './pipe/binary.pipe';
     CodingComponent,
     BlockComponent,
     BinaryPipe,
+    ResizableInputComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, FormsModule],
   providers: [],
