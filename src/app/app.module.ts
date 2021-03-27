@@ -14,6 +14,7 @@ import { HomePageComponent } from './page/home-page/home-page.component';
 import { DecodingPageComponent } from './page/decoding-page/decoding-page.component';
 import { EncodingPageComponent } from './page/encoding-page/encoding-page.component';
 import { RetroTitleComponent } from './components/retro-title/retro-title.component';
+import { ButtonComponent } from './components/button/button.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { RetroTitleComponent } from './components/retro-title/retro-title.compon
     DecodingPageComponent,
     EncodingPageComponent,
     RetroTitleComponent,
+    ButtonComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, FormsModule],
   providers: [],
