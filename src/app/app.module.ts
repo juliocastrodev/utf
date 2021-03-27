@@ -17,6 +17,8 @@ import { ButtonComponent } from './components/button/button.component';
 import { RetroDirective } from './directives/retro.directive';
 import { LineInputDirective } from './directives/line-input.directive';
 import { SingleCharInputComponent } from './components/single-char-input/single-char-input.component';
+import { StatsComponent } from './components/stats/stats.component';
+import { ColumnComponent } from './layouts/column.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +36,8 @@ import { SingleCharInputComponent } from './components/single-char-input/single-
     RetroDirective,
     LineInputDirective,
     SingleCharInputComponent,
+    StatsComponent,
+    ColumnComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, FormsModule],
   providers: [],
