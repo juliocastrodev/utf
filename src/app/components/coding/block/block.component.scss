@@ -1,0 +1,18 @@
+@import "src/styles";
+
+:host {
+  display: flex;
+
+  div {
+    font-size: 2rem;
+    font-family: $retro-font;
+    color: $dark-blue;
+    border: dashed 0.2rem $dark-blue;
+    &:not(:last-of-type) {
+      border-right: none;
+    }
+
+    padding: 0.4rem;
+    width: fit-content;
+  }
+}

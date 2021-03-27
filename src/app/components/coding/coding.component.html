@@ -1,0 +1,8 @@
+<!-- [width]="input.value.toString().length * 100 + 'px'" -->
+<input
+  #input
+  type="number"
+  [(ngModel)]="num"
+  [style.width]="num ? input.value.toString().length * 3 + 'rem' : '3rem'"
+/>
+<app-block *ngIf="num" [value]="num | binary"></app-block>

@@ -1,6 +1,6 @@
 @import "src/styles";
 
-.container {
+:host {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
