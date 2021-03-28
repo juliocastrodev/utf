@@ -17,7 +17,9 @@
     Para codificarlo en UTF-8 necesitamos un total de {{ encoded.length }}
     {{ encoded.length > 1 ? "bytes" : "byte" }}
   </p>
-  <app-utf8-binary-block [numOfBytes]="encoded.length"></app-utf8-binary-block>
+  <app-byte-sequence
+    [sequence]="utf8Service.getTemplateBytes(encoded.length)"
+  ></app-byte-sequence>
 
   <p>Vamos rellenando de derecha a izquierda las x's</p>
 

@@ -20,8 +20,6 @@ import { FormatUnicodePipe } from './pipes/format-unicode.pipe';
 import { UnicodeReferenceButtonComponent } from './components/unicode-reference-button/unincode-reference-button.component';
 import { FlexComponent } from './layouts/flex.component';
 import { EncodingWizardComponent } from './components/encoding-wizard/encoding-wizard.component';
-import { ByteBlockComponent } from './components/byte-block/byte-block.component';
-import { Utf8BinaryBlockComponent } from './components/utf8-binary-block/utf8-binary-block.component';
 import { ByteSequenceComponent } from './components/byte-sequence/byte-sequence.component';
 import { ByteComponent } from './components/byte-sequence/byte/byte.component';
 import { BitComponent } from './components/byte-sequence/byte/bit/bit.component';
@@ -46,8 +44,6 @@ import { BytesPipe } from './pipes/bytes.pipe';
     UnicodePipe,
     FormatUnicodePipe,
     EncodingWizardComponent,
-    ByteBlockComponent,
-    Utf8BinaryBlockComponent,
     ByteSequenceComponent,
     ByteComponent,
     BitComponent,
