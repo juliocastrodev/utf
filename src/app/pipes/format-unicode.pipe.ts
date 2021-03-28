@@ -12,6 +12,6 @@ export class FormatUnicodePipe implements PipeTransform {
       hexStr = '0' + hexStr;
     }
 
-    return `UTF+${hexStr}`;
+    return `U+${hexStr}`;
   }
 }

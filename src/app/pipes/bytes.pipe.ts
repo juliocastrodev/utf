@@ -1,21 +1,15 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { UtilsService } from 'src/app/services/utils/utils.service';
+import { Pipe, PipeTransform } from '@angular/core';
+import { UtilsService } from '../services/utils/utils.service';
 
-@Component({
-  selector: 'app-binary-blocks',
-  templateUrl: './binary-blocks.component.html',
-  styleUrls: ['./binary-blocks.component.scss'],
+@Pipe({
+  name: 'bytes',
 })
-export class BinaryBlocksComponent implements OnInit {
-  @Input() sequence: string;
-
+export class BytesPipe implements PipeTransform {
   constructor(private utilsService: UtilsService) {}
 
-  ngOnInit(): void {}
-
-  getBytes(): string[][] {
+  transform(sequence: string): string[][] {
     return this.utilsService
-      .getValidUTF8Chars(this.sequence)
+      .getValidUTF8Chars(sequence)
       .map(this.getBytesFromChar)
       .flat();
   }

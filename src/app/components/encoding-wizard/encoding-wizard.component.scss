@@ -3,16 +3,13 @@
   flex-direction: column;
   gap: 1rem;
   border: dashed 0.1rem var(--dark-blue);
-  min-width: 50vw;
-  min-height: 25vh;
   padding: 2rem;
 
   span {
     color: var(--dark-blue);
   }
 
-  app-binary-blocks,
-  app-utf8-binary-block {
+  app-byte-sequence {
     margin: 0 auto;
   }
 }
