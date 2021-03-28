@@ -2,18 +2,24 @@
   <h1 appRetro>CODIFICACION</h1>
 
   <app-flex gap="1rem" direction="column">
-    <label for="input">Introduce un carácter</label>
-    <app-single-char-input [(value)]="char"></app-single-char-input>
+    <label *ngIf="!showEncoding" for="input">Introduce un carácter</label>
+    <app-single-char-input
+      [(value)]="char"
+      [disabled]="showEncoding"
+    ></app-single-char-input>
   </app-flex>
 
-  <ng-container *ngIf="char">
-    <app-unicode-reference-button [char]="char"></app-unicode-reference-button>
+  <app-unicode-reference-button
+    *ngIf="char && !showEncoding"
+    [char]="char"
+  ></app-unicode-reference-button>
 
-    <app-binary-blocks [char]="char"></app-binary-blocks>
-  </ng-container>
+  <app-encoding-wizard *ngIf="showEncoding"></app-encoding-wizard>
 
   <app-flex class="menu" gap="1rem">
-    <app-button *ngIf="char">Codificar</app-button>
+    <app-button *ngIf="char" (click)="showEncoding = !showEncoding">{{
+      !showEncoding ? "Codificar" : "Reiniciar"
+    }}</app-button>
     <app-button routerLink="/">Volver</app-button>
   </app-flex>
 </app-center>

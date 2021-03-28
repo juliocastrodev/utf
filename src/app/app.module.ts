@@ -20,6 +20,7 @@ import { FormatUnicodePipe } from './pipes/format-unicode.pipe';
 import { UnicodeReferenceButtonComponent } from './components/unicode-reference-button/unincode-reference-button.component';
 import { BinaryBlocksComponent } from './components/binary-blocks/binary-blocks.component';
 import { FlexComponent } from './layouts/flex.component';
+import { EncodingWizardComponent } from './components/encoding-wizard/encoding-wizard.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { FlexComponent } from './layouts/flex.component';
     UnicodePipe,
     FormatUnicodePipe,
     BinaryBlocksComponent,
+    EncodingWizardComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, FormsModule],
   providers: [],

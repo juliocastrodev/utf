@@ -9,6 +9,8 @@ import UTF8 from 'utf8';
       type="text"
       [(ngModel)]="value"
       (input)="update(getSingleCharUTF8($event.target.value))"
+      [disabled]="disabled"
+      [ngStyle]="{ opacity: disabled ? 0.7 : null }"
     />
   `,
   styles: [
@@ -20,6 +22,7 @@ import UTF8 from 'utf8';
   ],
 })
 export class SingleCharInputComponent implements OnInit {
+  @Input() disabled: boolean = false;
   @Input() value: string = '';
   @Output() valueChange = new EventEmitter<string>();
 

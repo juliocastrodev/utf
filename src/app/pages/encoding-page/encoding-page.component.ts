@@ -8,6 +8,7 @@ import { UtilsService } from 'src/app/services/utils/utils.service';
 })
 export class EncodingPageComponent implements OnInit {
   char: string = this.utilsService.randomChar();
+  showEncoding: boolean = true; // TODO: change to false
 
   constructor(private utilsService: UtilsService) {}
 
