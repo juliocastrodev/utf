@@ -15,11 +15,11 @@ import { ButtonComponent } from './components/button/button.component';
 import { RetroDirective } from './directives/retro.directive';
 import { LineInputDirective } from './directives/line-input.directive';
 import { SingleCharInputComponent } from './components/single-char-input/single-char-input.component';
-import { ColumnComponent } from './layouts/column.component';
 import { UnicodePipe } from './pipes/unicode.pipe';
 import { FormatUnicodePipe } from './pipes/format-unicode.pipe';
 import { UnicodeReferenceButtonComponent } from './components/unicode-reference-button/unincode-reference-button.component';
 import { BinaryBlocksComponent } from './components/binary-blocks/binary-blocks.component';
+import { FlexComponent } from './layouts/flex.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +36,7 @@ import { BinaryBlocksComponent } from './components/binary-blocks/binary-blocks.
     LineInputDirective,
     SingleCharInputComponent,
     UnicodeReferenceButtonComponent,
-    ColumnComponent,
+    FlexComponent,
     UnicodePipe,
     FormatUnicodePipe,
     BinaryBlocksComponent,

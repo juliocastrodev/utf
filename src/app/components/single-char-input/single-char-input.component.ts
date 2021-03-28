@@ -4,7 +4,6 @@ import UTF8 from 'utf8';
 @Component({
   selector: 'app-single-char-input',
   template: `
-    <!-- [maxLength]="2 - value.length" -->
     <input
       appLineInput
       type="text"
