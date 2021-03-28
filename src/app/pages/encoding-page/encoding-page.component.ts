@@ -7,8 +7,8 @@ import { UtilsService } from 'src/app/services/utils/utils.service';
   styleUrls: ['./encoding-page.component.scss'],
 })
 export class EncodingPageComponent implements OnInit {
-  char: string = '😄'; // TODO: uncoment that -> this.utilsService.randomChar();
-  showEncoding: boolean = true; // TODO: change to false
+  char: string = this.utilsService.randomChar();
+  showEncoding: boolean = false;
 
   constructor(private utilsService: UtilsService) {}
 
