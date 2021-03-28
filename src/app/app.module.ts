@@ -22,6 +22,7 @@ import { BinaryBlocksComponent } from './components/binary-blocks/binary-blocks.
 import { FlexComponent } from './layouts/flex.component';
 import { EncodingWizardComponent } from './components/encoding-wizard/encoding-wizard.component';
 import { ByteBlockComponent } from './components/byte-block/byte-block.component';
+import { Utf8BinaryBlockComponent } from './components/utf8-binary-block/utf8-binary-block.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import { ByteBlockComponent } from './components/byte-block/byte-block.component
     BinaryBlocksComponent,
     EncodingWizardComponent,
     ByteBlockComponent,
+    Utf8BinaryBlockComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, FormsModule],
   providers: [],

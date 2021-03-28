@@ -6,14 +6,18 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./binary-blocks.component.scss'],
 })
 export class BinaryBlocksComponent implements OnInit {
-  @Input() char: string;
+  @Input() sequence: string;
 
   constructor() {}
 
   ngOnInit(): void {}
 
   getBytes(): string[][] {
-    let charInBinaryStr = this.char.codePointAt(0).toString(2);
+    return this.sequence.split('').map(this.getBytesFromChar).flat();
+  }
+
+  private getBytesFromChar(char: string): string[][] {
+    let charInBinaryStr = char.codePointAt(0).toString(2);
 
     while (charInBinaryStr.length % 8 !== 0) {
       charInBinaryStr = '0' + charInBinaryStr;

@@ -15,4 +15,8 @@ export class EncodingWizardComponent implements OnInit {
   ngOnInit(): void {
     this.encoded = UTF8.encode(this.char);
   }
+
+  isACII(): boolean {
+    return this.char.codePointAt(0) <= 127;
+  }
 }
