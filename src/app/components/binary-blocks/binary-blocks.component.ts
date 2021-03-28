@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { UtilsService } from 'src/app/services/utils/utils.service';
 
 @Component({
   selector: 'app-binary-blocks',
@@ -8,12 +9,15 @@ import { Component, Input, OnInit } from '@angular/core';
 export class BinaryBlocksComponent implements OnInit {
   @Input() sequence: string;
 
-  constructor() {}
+  constructor(private utilsService: UtilsService) {}
 
   ngOnInit(): void {}
 
   getBytes(): string[][] {
-    return this.sequence.split('').map(this.getBytesFromChar).flat();
+    return this.utilsService
+      .getValidUTF8Chars(this.sequence)
+      .map(this.getBytesFromChar)
+      .flat();
   }
 
   private getBytesFromChar(char: string): string[][] {
