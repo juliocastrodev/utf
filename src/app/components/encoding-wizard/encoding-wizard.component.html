@@ -4,7 +4,10 @@
   >, que en binario es:
 </p>
 
-<app-byte-sequence [sequence]="char | bytes"></app-byte-sequence>
+<app-byte-sequence
+  [sequence]="char | bytes"
+  colorMode="Normal"
+></app-byte-sequence>
 
 <p *ngIf="isACII(); else notasciicase">
   El carácter entra dentro del rango de los correspondientes a ASCII. Luego, se
@@ -19,9 +22,13 @@
   </p>
   <app-byte-sequence
     [sequence]="utf8Service.getTemplateBytes(encoded.length)"
+    colorMode="UTF8"
   ></app-byte-sequence>
 
   <p>Vamos rellenando de derecha a izquierda las x's</p>
 
-  <app-byte-sequence [sequence]="encoded | bytes"></app-byte-sequence>
+  <app-byte-sequence
+    [sequence]="encoded | bytes"
+    colorMode="UTF8"
+  ></app-byte-sequence>
 </ng-template>
