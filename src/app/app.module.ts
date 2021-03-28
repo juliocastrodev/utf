@@ -5,9 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CenterComponent } from './layouts/center.component';
 import { CreditsComponent } from './components/credits/credits.component';
-import { CodingComponent } from './components/coding/coding.component';
 import { FormsModule } from '@angular/forms';
-import { BlockComponent } from './components/coding/block/block.component';
 import { BinaryPipe } from './pipes/binary.pipe';
 import { ResizableInputComponent } from './components/resizable-input/resizable-input.component';
 import { HomePageComponent } from './pages/home-page/home-page.component';
@@ -21,6 +19,7 @@ import { ColumnComponent } from './layouts/column.component';
 import { UnicodePipe } from './pipes/unicode.pipe';
 import { FormatUnicodePipe } from './pipes/format-unicode.pipe';
 import { UnicodeReferenceButtonComponent } from './components/unicode-reference-button/unincode-reference-button.component';
+import { BinaryBlocksComponent } from './components/binary-blocks/binary-blocks.component';
 
 @NgModule({
   declarations: [
@@ -28,8 +27,6 @@ import { UnicodeReferenceButtonComponent } from './components/unicode-reference-
     HomePageComponent,
     CenterComponent,
     CreditsComponent,
-    CodingComponent,
-    BlockComponent,
     BinaryPipe,
     ResizableInputComponent,
     DecodingPageComponent,
@@ -42,6 +39,7 @@ import { UnicodeReferenceButtonComponent } from './components/unicode-reference-
     ColumnComponent,
     UnicodePipe,
     FormatUnicodePipe,
+    BinaryBlocksComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, FormsModule],
   providers: [],

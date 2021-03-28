@@ -1,16 +1,16 @@
 <app-center>
   <h1 appRetro>CODIFICACION</h1>
 
-  <!-- <app-coding></app-coding> -->
   <app-column gap="1rem">
     <label for="input">Introduce un carácter</label>
     <app-single-char-input [(value)]="char"></app-single-char-input>
   </app-column>
 
-  <app-unicode-reference-button
-    *ngIf="char"
-    [char]="char"
-  ></app-unicode-reference-button>
+  <ng-container *ngIf="char">
+    <app-unicode-reference-button [char]="char"></app-unicode-reference-button>
+
+    <app-binary-blocks [char]="char"></app-binary-blocks>
+  </ng-container>
 
   <app-button routerLink="/">Volver</app-button>
 </app-center>
