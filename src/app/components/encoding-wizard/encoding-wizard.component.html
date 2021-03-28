@@ -1,3 +1,12 @@
-<p>encoding-wizard works!</p>
-<p>encoding-wizard works!</p>
-<p>encoding-wizard works!</p>
+<p>
+  El carácter <span class="simple-font">{{ char }}</span> corresponde con el
+  código Unicode <span>{{ char | unicode | formatUnicode }}</span
+  >, que en binario es:
+</p>
+
+<app-binary-blocks [char]="char"></app-binary-blocks>
+
+<p>
+  Para codificarlo necesitamos un total de {{ encoded.length }}
+  {{ encoded.length > 1 ? "bytes" : "byte" }}
+</p>

@@ -14,7 +14,7 @@
     [char]="char"
   ></app-unicode-reference-button>
 
-  <app-encoding-wizard *ngIf="showEncoding"></app-encoding-wizard>
+  <app-encoding-wizard *ngIf="showEncoding" [char]="char"></app-encoding-wizard>
 
   <app-flex class="menu" gap="1rem">
     <app-button *ngIf="char" (click)="showEncoding = !showEncoding">{{
