@@ -14,7 +14,5 @@ export class EncodingWizardComponent implements OnInit {
 
   ngOnInit(): void {
     this.encoded = UTF8.encode(this.char);
-    console.log(this.encoded);
-    console.log(this.encoded.length);
   }
 }

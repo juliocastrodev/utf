@@ -12,17 +12,17 @@ export class BinaryBlocksComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  binaryBlocks(): string[][] {
-    let binaryStr = this.char.codePointAt(0).toString(2);
+  getBytes(): string[][] {
+    let charInBinaryStr = this.char.codePointAt(0).toString(2);
 
-    while (binaryStr.length % 8 !== 0) {
-      binaryStr = '0' + binaryStr;
+    while (charInBinaryStr.length % 8 !== 0) {
+      charInBinaryStr = '0' + charInBinaryStr;
     }
 
     const res = [],
-      numOfBytes = binaryStr.length / 8;
+      numOfBytes = charInBinaryStr.length / 8;
     for (let i = 0; res.length < numOfBytes; i += 8) {
-      res.push(binaryStr.substr(i, 8).split(''));
+      res.push(charInBinaryStr.substr(i, 8).split(''));
     }
 
     return res;

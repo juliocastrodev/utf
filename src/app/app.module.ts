@@ -21,6 +21,7 @@ import { UnicodeReferenceButtonComponent } from './components/unicode-reference-
 import { BinaryBlocksComponent } from './components/binary-blocks/binary-blocks.component';
 import { FlexComponent } from './layouts/flex.component';
 import { EncodingWizardComponent } from './components/encoding-wizard/encoding-wizard.component';
+import { ByteBlockComponent } from './components/byte-block/byte-block.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { EncodingWizardComponent } from './components/encoding-wizard/encoding-w
     FormatUnicodePipe,
     BinaryBlocksComponent,
     EncodingWizardComponent,
+    ByteBlockComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, FormsModule],
   providers: [],

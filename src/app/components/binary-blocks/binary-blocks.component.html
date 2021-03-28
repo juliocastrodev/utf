@@ -1,5 +1,1 @@
-<div class="block" *ngFor="let block of binaryBlocks()">
-  <div class="bit" *ngFor="let bit of block">
-    {{ bit }}
-  </div>
-</div>
+<app-byte-block *ngFor="let byte of getBytes()" [byte]="byte"></app-byte-block>
