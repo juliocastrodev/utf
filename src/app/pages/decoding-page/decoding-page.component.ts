@@ -1,8 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import {
-  UTF8DecodingError,
-  Utf8Service,
-} from 'src/app/services/utf8/utf8.service';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { BinaryInputComponent } from 'src/app/components/binary-input/binary-input.component';
+import { Utf8Service } from 'src/app/services/utf8/utf8.service';
 
 @Component({
   selector: 'app-decoding-page',
@@ -10,17 +8,21 @@ import {
   styleUrls: ['./decoding-page.component.scss'],
 })
 export class DecodingPageComponent implements OnInit {
-  byteSequence: string;
-  decodingError: UTF8DecodingError | string;
+  @ViewChild(BinaryInputComponent, { static: true })
+  binaryInput: BinaryInputComponent;
+
+  binarySequence: string;
+  showDecoding: boolean;
+  showDecodingButton: boolean = false;
 
   constructor(public utf8Service: Utf8Service) {}
 
   ngOnInit(): void {}
 
-  handleInput(byteSequence: string) {
-    this.byteSequence = byteSequence;
-    this.decodingError = this.utf8Service.getDecodingError(byteSequence);
-
-    console.log(this.decodingError);
+  reset() {
+    this.showDecoding = false;
+    this.showDecodingButton = false;
+    this.binarySequence = '';
+    this.binaryInput.value = '';
   }
 }

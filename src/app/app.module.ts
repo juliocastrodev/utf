@@ -27,6 +27,8 @@ import { BytesPipe } from './pipes/bytes.pipe';
 import { SubstringFromOccurrencePipe } from './pipes/substring-from-occurrence.pipe';
 import { BinaryInputComponent } from './components/binary-input/binary-input.component';
 import { DecodingErrorComponent } from './components/decoding-error/decoding-error.component';
+import { CharComponent } from './components/char/char.component';
+import { DecodingWizardComponent } from './components/decoding-wizard/decoding-wizard.component';
 
 @NgModule({
   declarations: [
@@ -54,6 +56,8 @@ import { DecodingErrorComponent } from './components/decoding-error/decoding-err
     SubstringFromOccurrencePipe,
     BinaryInputComponent,
     DecodingErrorComponent,
+    CharComponent,
+    DecodingWizardComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, FormsModule],
   providers: [BytesPipe],

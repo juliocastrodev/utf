@@ -1,12 +1,21 @@
 <app-center>
   <h1 appRetro>DECODIFICACION</h1>
 
-  <app-binary-input (change)="handleInput($event)"></app-binary-input>
+  <app-binary-input
+    (blur)="binarySequence = $event"
+    (change)="showDecodingButton = true"
+  ></app-binary-input>
 
-  <app-decoding-error
-    [error]="utf8Service.getDecodingError(byteSequence)"
-  ></app-decoding-error>
-  <div>testing: {{ byteSequence }}</div>
+  <app-decoding-wizard
+    *ngIf="showDecoding"
+    [binarySequence]="binarySequence"
+  ></app-decoding-wizard>
 
-  <app-button routerLink="/">Volver</app-button>
+  <app-flex class="menu" gap="1rem">
+    <app-button *ngIf="showDecodingButton" (click)="showDecoding = true">
+      Decodificar
+    </app-button>
+    <app-button *ngIf="showDecoding" (click)="reset()"> Reiniciar </app-button>
+    <app-button routerLink="/">Volver</app-button>
+  </app-flex>
 </app-center>

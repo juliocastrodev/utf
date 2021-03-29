@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { UtilsService } from 'src/app/services/utils/utils.service';
 
 @Component({
@@ -10,13 +10,22 @@ export class BinaryInputComponent implements OnInit {
   readonly BYTES_SEPARATOR = '   ';
 
   value: string = '';
-  @Output() change = new EventEmitter<string>();
+  @Output() blur = new EventEmitter<string>();
+  @Output() change = new EventEmitter<void>();
 
   constructor(public utilsService: UtilsService) {}
 
   ngOnInit(): void {}
 
   handleInteraction(entered: string) {
+    // enter key
+    if (entered === 'Enter') {
+      this.format();
+      return false;
+    }
+
+    this.change.emit();
+
     // if false the entered string is ignored
     return /^([0-1]{1,})$/.test(entered);
   }
@@ -26,7 +35,7 @@ export class BinaryInputComponent implements OnInit {
       .cleanSpaces(this.value)
       .substr(0, 32);
 
-    this.change.emit(valueWithoutSpaces);
+    this.blur.emit(valueWithoutSpaces);
 
     // then format value
     this.value = this.utilsService

@@ -3,7 +3,7 @@ import { UtilsService } from '../utils/utils.service';
 import UTF8 from 'utf8';
 
 export enum UTF8DecodingError {
-  NotByteSequence,
+  NotByteSequence = 1,
   IncorrectASCII,
   IncorrectFirstByte,
   IncorrectMiddleBytes,
@@ -51,7 +51,7 @@ export class Utf8Service {
     return base;
   }
 
-  getDecodingError(binarySequence: string): UTF8DecodingError | string {
+  getDecodingError(binarySequence: string): UTF8DecodingError {
     if (!binarySequence) {
       return null;
     }
@@ -64,9 +64,7 @@ export class Utf8Service {
     const firstByte = bytes[0];
 
     if (bytes.length === 1) {
-      return firstByte[0] === '0'
-        ? this.decodeBinarySequence(binarySequence)
-        : UTF8DecodingError.IncorrectASCII;
+      return firstByte[0] === '0' ? null : UTF8DecodingError.IncorrectASCII;
     }
 
     const firstByteStartBits = this.getFirstNBits(firstByte, bytes.length + 1),
@@ -89,10 +87,12 @@ export class Utf8Service {
     }
 
     try {
-      return this.decodeBinarySequence(binarySequence);
+      this.decodeBinarySequence(binarySequence);
     } catch (err) {
       return UTF8DecodingError.NotExistingUnicode;
     }
+
+    return null; // no error
   }
 
   private getFirstNBits(byte: string[], nBits: number) {
