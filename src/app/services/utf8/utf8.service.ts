@@ -51,7 +51,11 @@ export class Utf8Service {
     return base;
   }
 
-  getDecodingError(binarySequence: string): UTF8DecodingError {
+  getDecodingError(binarySequence: string): UTF8DecodingError | string {
+    if (!binarySequence) {
+      return null;
+    }
+
     if (binarySequence.length % 8 !== 0) {
       return UTF8DecodingError.NotByteSequence;
     }
@@ -59,8 +63,10 @@ export class Utf8Service {
     const bytes = this.utilsService.chunks(binarySequence.split(''), 8);
     const firstByte = bytes[0];
 
-    if (bytes.length === 1 && firstByte[0] !== '0') {
-      return UTF8DecodingError.IncorrectASCII;
+    if (bytes.length === 1) {
+      return firstByte[0] === '0'
+        ? this.decodeBinarySequence(binarySequence)
+        : UTF8DecodingError.IncorrectASCII;
     }
 
     const firstByteStartBits = this.getFirstNBits(firstByte, bytes.length + 1),
@@ -83,16 +89,25 @@ export class Utf8Service {
     }
 
     try {
-      console.log(UTF8.decode(parseInt(binarySequence, 2).toString(16)));
+      return this.decodeBinarySequence(binarySequence);
     } catch (err) {
-      console.error(err);
       return UTF8DecodingError.NotExistingUnicode;
     }
-
-    return null; // no error
   }
 
   private getFirstNBits(byte: string[], nBits: number) {
     return byte.slice(0, nBits);
+  }
+
+  decodeBinarySequence(binarySequence: string): string {
+    const bytesInStringChunks: string[] = this.utilsService
+      .chunks(binarySequence.split(''), 8)
+      .map((byte) => byte.join('')); // xxxxxxxx xxxxxxxx ... xxxxxxxx
+
+    const encodedSequence: string = bytesInStringChunks
+      .map((byte) => String.fromCodePoint(parseInt(byte, 2)))
+      .join('');
+
+    return UTF8.decode(encodedSequence);
   }
 }

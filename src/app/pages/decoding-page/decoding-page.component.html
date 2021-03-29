@@ -1,8 +1,12 @@
 <app-center>
   <h1 appRetro>DECODIFICACION</h1>
 
-  <app-binary-input (change)="byteSequence = $event"></app-binary-input>
-  {{ byteSequence }}
+  <app-binary-input (change)="handleInput($event)"></app-binary-input>
+
+  <app-decoding-error
+    [error]="utf8Service.getDecodingError(byteSequence)"
+  ></app-decoding-error>
+  <div>testing: {{ byteSequence }}</div>
 
   <app-button routerLink="/">Volver</app-button>
 </app-center>
