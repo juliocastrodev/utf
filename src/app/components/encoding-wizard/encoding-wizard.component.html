@@ -1,7 +1,11 @@
 <p>
   El carácter <span class="simple-font">{{ char }}</span> corresponde con el
   código Unicode <span>{{ char | unicode | formatUnicode }}</span
-  >, que en binario es:
+  >, la parte de
+  <span>{{
+    char | unicode | formatUnicode | substringFromOccurrence: "+"
+  }}</span>
+  está en hexadecimal, que en binario es:
 </p>
 
 <app-byte-sequence

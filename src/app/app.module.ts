@@ -24,6 +24,7 @@ import { ByteSequenceComponent } from './components/byte-sequence/byte-sequence.
 import { ByteComponent } from './components/byte-sequence/byte/byte.component';
 import { BitComponent } from './components/byte-sequence/byte/bit/bit.component';
 import { BytesPipe } from './pipes/bytes.pipe';
+import { SubstringFromOccurrencePipe } from './pipes/substring-from-occurrence.pipe';
 
 @NgModule({
   declarations: [
@@ -48,6 +49,7 @@ import { BytesPipe } from './pipes/bytes.pipe';
     ByteComponent,
     BitComponent,
     BytesPipe,
+    SubstringFromOccurrencePipe,
   ],
   imports: [BrowserModule, AppRoutingModule, FormsModule],
   providers: [BytesPipe],
