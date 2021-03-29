@@ -8,9 +8,13 @@ export class Utf8Service {
 
   getTemplateBytes(numOfBytes: number): string[][] {
     return [
-      this.getFirstByte(numOfBytes),
-      ...new Array(numOfBytes - 1).fill(this.getFollowingByte()),
+      this.getTemplateFirstByte(numOfBytes),
+      ...new Array(numOfBytes - 1).fill(this.getTemplateFollowingByte()),
     ];
+  }
+
+  isACII(char: string): boolean {
+    return char.codePointAt(0) <= 127;
   }
 
   private getBaseByte(): string[] {
@@ -20,7 +24,7 @@ export class Utf8Service {
   // 2 -> ["1","1","0","x","x","x","x","x"]
   // 3 -> ["1","1","1","0","x","x","x","x"]
   // 3 -> ["1","1","1","1","0","x","x","x"]
-  private getFirstByte(numOfBytes: number): string[] {
+  getTemplateFirstByte(numOfBytes: number): string[] {
     const base = this.getBaseByte();
     for (let i = 0; i < numOfBytes; i++) {
       base[i] = '1';
@@ -30,7 +34,7 @@ export class Utf8Service {
   }
 
   // always ["1","0","x","x","x","x","x","x"]
-  private getFollowingByte(): string[] {
+  private getTemplateFollowingByte(): string[] {
     const base = this.getBaseByte();
     base[0] = '1';
     base[1] = '0';

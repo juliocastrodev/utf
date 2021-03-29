@@ -50,7 +50,7 @@ import { BytesPipe } from './pipes/bytes.pipe';
     BytesPipe,
   ],
   imports: [BrowserModule, AppRoutingModule, FormsModule],
-  providers: [],
+  providers: [BytesPipe],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

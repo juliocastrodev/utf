@@ -6,10 +6,10 @@
 
 <app-byte-sequence
   [sequence]="char | bytes"
-  colorMode="Normal"
+  [colors]="colors.sequence"
 ></app-byte-sequence>
 
-<p *ngIf="isACII(); else notasciicase">
+<p *ngIf="utf8Service.isACII(char); else notasciicase">
   El carácter entra dentro del rango de los correspondientes a ASCII. Luego, se
   codifica en UTF-8 de la misma manera en la que lo haría en ASCII, es decir, su
   código asociado (en este caso <span>{{ char.codePointAt(0) }}</span
@@ -22,13 +22,13 @@
   </p>
   <app-byte-sequence
     [sequence]="utf8Service.getTemplateBytes(encoded.length)"
-    colorMode="UTF8"
+    [colors]="colors.utf8"
   ></app-byte-sequence>
 
   <p>Vamos rellenando de derecha a izquierda las x's</p>
 
   <app-byte-sequence
     [sequence]="encoded | bytes"
-    colorMode="UTF8"
+    [colors]="colors.utf8"
   ></app-byte-sequence>
 </ng-template>

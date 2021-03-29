@@ -1,4 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
+import {
+  ColorService,
+  SequenceColors,
+} from 'src/app/services/color/color.service';
 import { Utf8Service } from 'src/app/services/utf8/utf8.service';
 import UTF8 from 'utf8';
 
@@ -10,14 +14,15 @@ import UTF8 from 'utf8';
 export class EncodingWizardComponent implements OnInit {
   @Input() char: string;
   encoded: string;
+  colors: SequenceColors;
 
-  constructor(public utf8Service: Utf8Service) {}
+  constructor(
+    public utf8Service: Utf8Service,
+    private colorService: ColorService
+  ) {}
 
   ngOnInit(): void {
     this.encoded = UTF8.encode(this.char);
-  }
-
-  isACII(): boolean {
-    return this.char.codePointAt(0) <= 127;
+    this.colors = this.colorService.getColors(this.char);
   }
 }

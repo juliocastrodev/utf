@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ColorMode, ColorService } from 'src/app/services/color/color.service';
 
 @Component({
   selector: 'app-byte-sequence',
@@ -21,13 +20,9 @@ import { ColorMode, ColorService } from 'src/app/services/color/color.service';
 })
 export class ByteSequenceComponent implements OnInit {
   @Input() sequence: string[][];
-  @Input() colorMode: ColorMode;
+  @Input() colors: string[][];
 
-  colors: string[][];
+  constructor() {}
 
-  constructor(public colorService: ColorService) {}
-
-  ngOnInit(): void {
-    this.colors = this.colorService.getColors(this.sequence, this.colorMode);
-  }
+  ngOnInit(): void {}
 }
