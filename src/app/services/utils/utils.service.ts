@@ -54,4 +54,15 @@ export class UtilsService {
       arr.slice(i * size, i * size + size)
     );
   }
+
+  cleanSpaces(str: string): string {
+    return str.replace(/\s/g, '');
+  }
+
+  equalsArrays(arr1: any[], arr2: any[]): boolean {
+    return (
+      arr1.length === arr2.length &&
+      arr1.every((elem, index) => elem === arr2[index])
+    );
+  }
 }

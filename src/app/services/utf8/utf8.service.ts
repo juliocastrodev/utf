@@ -1,10 +1,20 @@
 import { Injectable } from '@angular/core';
+import { UtilsService } from '../utils/utils.service';
+import UTF8 from 'utf8';
+
+export enum UTF8DecodingError {
+  NotByteSequence,
+  IncorrectASCII,
+  IncorrectFirstByte,
+  IncorrectMiddleBytes,
+  NotExistingUnicode,
+}
 
 @Injectable({
   providedIn: 'root',
 })
 export class Utf8Service {
-  constructor() {}
+  constructor(private utilsService: UtilsService) {}
 
   getTemplateBytes(numOfBytes: number): string[][] {
     return [
@@ -23,7 +33,7 @@ export class Utf8Service {
 
   // 2 -> ["1","1","0","x","x","x","x","x"]
   // 3 -> ["1","1","1","0","x","x","x","x"]
-  // 3 -> ["1","1","1","1","0","x","x","x"]
+  // 4 -> ["1","1","1","1","0","x","x","x"]
   getTemplateFirstByte(numOfBytes: number): string[] {
     const base = this.getBaseByte();
     for (let i = 0; i < numOfBytes; i++) {
@@ -39,5 +49,50 @@ export class Utf8Service {
     base[0] = '1';
     base[1] = '0';
     return base;
+  }
+
+  getDecodingError(binarySequence: string): UTF8DecodingError {
+    if (binarySequence.length % 8 !== 0) {
+      return UTF8DecodingError.NotByteSequence;
+    }
+
+    const bytes = this.utilsService.chunks(binarySequence.split(''), 8);
+    const firstByte = bytes[0];
+
+    if (bytes.length === 1 && firstByte[0] !== '0') {
+      return UTF8DecodingError.IncorrectASCII;
+    }
+
+    const firstByteStartBits = this.getFirstNBits(firstByte, bytes.length + 1),
+      firstByteTemplateStartBits = this.getFirstNBits(
+        this.getTemplateFirstByte(bytes.length),
+        bytes.length + 1
+      );
+    if (
+      !this.utilsService.equalsArrays(
+        firstByteStartBits,
+        firstByteTemplateStartBits
+      )
+    ) {
+      return UTF8DecodingError.IncorrectFirstByte;
+    }
+
+    const restOfBytes = bytes.splice(1);
+    if (restOfBytes.some((byte) => byte[0] !== '1' || byte[1] !== '0')) {
+      return UTF8DecodingError.IncorrectMiddleBytes;
+    }
+
+    try {
+      console.log(UTF8.decode(parseInt(binarySequence, 2).toString(16)));
+    } catch (err) {
+      console.error(err);
+      return UTF8DecodingError.NotExistingUnicode;
+    }
+
+    return null; // no error
+  }
+
+  private getFirstNBits(byte: string[], nBits: number) {
+    return byte.slice(0, nBits);
   }
 }

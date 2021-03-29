@@ -16,7 +16,10 @@
 <p *ngIf="utf8Service.isACII(char); else notasciicase">
   El carácter entra dentro del rango de los correspondientes a ASCII. Luego, se
   codifica en UTF-8 de la misma manera en la que lo haría en ASCII, es decir, su
-  código asociado (en este caso <span>{{ char.codePointAt(0) }}</span
+  código asociado (en este caso
+  <span>{{
+    char | unicode | formatUnicode | substringFromOccurrence: "+"
+  }}</span
   >) en binario, que es justo lo que se puede apreciar arriba
 </p>
 <ng-template #notasciicase>

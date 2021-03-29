@@ -1,0 +1,12 @@
+<input
+  appLineInput
+  type="text"
+  [(ngModel)]="value"
+  (keypress)="handleInteraction($event.key)"
+  (paste)="
+    handleInteraction(
+      utilsService.cleanSpaces($event.clipboardData.getData('Text'))
+    )
+  "
+  (blur)="format()"
+/>
