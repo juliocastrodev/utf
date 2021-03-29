@@ -27,34 +27,47 @@ export class ColorService {
     }
 
     const charBinary = this.bytesPipe.transform(char);
+    const sequenceColors = this.asignColorsToSimpleByteSequence(charBinary);
+    const encodedSequenceLength = UTF8.encode(char).length;
+
+    const numOfBitsToRemoveColor =
+      sequenceColors.length * 8 -
+      this.utf8Service.getTemplateAvailableBits(encodedSequenceLength);
+
+    this.removeColorsFromByte(sequenceColors[0], 0, numOfBitsToRemoveColor);
 
     return {
-      sequence: this.asignColorsToSimpleByteSequence(charBinary),
+      sequence: sequenceColors,
       utf8: this.asignColorsToUTF8Template(
-        charBinary.length,
-        UTF8.encode(char).length
+        sequenceColors.length,
+        encodedSequenceLength
       ),
     };
   }
 
   private asignColorsToSimpleByteSequence(sequence: string[][]): string[][] {
-    const colors = sequence
+    return sequence
       .reverse()
       .map((byte, index) =>
         byte.map(() => this.BASIC_COLORS[this.BASIC_COLORS.length - 1 - index])
       )
       .reverse();
+  }
 
-    // remove colors to utf8 out of range bits of the first byte:
-    // (all bits except the last three. Therefore, the first five)
-    if (colors.length === 3) {
-      const firstByte = colors[0];
-      for (let i = 0; i < 5; i++) {
-        firstByte[i] = null;
-      }
+  private removeColorsFromByte(
+    byteColors: string[],
+    startIndex: number,
+    numOfBits: number
+  ) {
+    let index = startIndex,
+      bitsCount = numOfBits;
+
+    while (bitsCount > 0) {
+      byteColors[index] = null;
+
+      index++;
+      bitsCount--;
     }
-
-    return colors;
   }
 
   private asignColorsToUTF8Template(

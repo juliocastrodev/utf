@@ -51,6 +51,14 @@ export class Utf8Service {
     return base;
   }
 
+  // return the number of "x"'s given an amount of bytes
+  getTemplateAvailableBits(numOfBytes): number {
+    const numOfBitsFromFirstByte = 8 - (numOfBytes + 1);
+    const numOfBitsFromFollowingBytes = 6 * (numOfBytes - 1);
+
+    return numOfBitsFromFirstByte + numOfBitsFromFollowingBytes;
+  }
+
   getDecodingError(binarySequence: string): UTF8DecodingError {
     if (!binarySequence) {
       return null;

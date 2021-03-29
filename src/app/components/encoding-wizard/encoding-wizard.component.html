@@ -32,7 +32,10 @@
     [colors]="colors.utf8"
   ></app-byte-sequence>
 
-  <p>Vamos rellenando de derecha a izquierda las x's</p>
+  <p>
+    Vamos rellenando de derecha a izquierda las x's. Las posiciones que no se
+    utilizan se quedan a 0
+  </p>
 
   <app-byte-sequence
     [sequence]="encoded | bytes"
