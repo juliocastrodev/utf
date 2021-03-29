@@ -26,7 +26,7 @@ export class ColorService {
       return { sequence: null, utf8: null }; // no colors
     }
 
-    const charBinary: string[][] = this.bytesPipe.transform(char);
+    const charBinary = this.bytesPipe.transform(char);
 
     return {
       sequence: this.asignColorsToSimpleByteSequence(charBinary),
@@ -46,17 +46,12 @@ export class ColorService {
       .reverse();
 
     // remove colors to utf8 out of range bits of the first byte:
-    // (positions where there is no "x")
-    if (colors.length > 1) {
+    // (all bits except the last three. Therefore, the first five)
+    if (colors.length === 3) {
       const firstByte = colors[0];
-
-      this.utf8Service
-        .getTemplateFirstByte(sequence.length)
-        .forEach((bit, index) => {
-          if (bit !== 'x') {
-            firstByte[index] = null;
-          }
-        });
+      for (let i = 0; i < 5; i++) {
+        firstByte[i] = null;
+      }
     }
 
     return colors;
@@ -93,44 +88,4 @@ export class ColorService {
       8
     );
   }
-
-  // getColors(sequence: string[][], mode: ColorMode): string[][] {
-  //   switch (mode) {
-  //     case 'Normal':
-  //       return sequence.map((byte, index) =>
-  //         byte.map(
-  //           () => this.BASIC_COLORS[this.BASIC_COLORS.length - 1 - index]
-  //         )
-  //       );
-
-  //     case 'UTF8':
-  //       let n = 6,
-  //         colorIndex = this.BASIC_COLORS.length - 1;
-
-  //       return this.utilsService.chunks(
-  //         this.utf8Service
-  //           .getTemplateBytes(sequence.length)
-  //           .flat()
-  //           .reverse()
-  //           .map((bit) => {
-  //             if (bit !== 'x') {
-  //               return null;
-  //             }
-
-  //             const color = this.BASIC_COLORS[colorIndex];
-  //             if (--n === 0) {
-  //               colorIndex--;
-  //               n = 6;
-  //             }
-
-  //             return color;
-  //           })
-  //           .reverse(),
-  //         8
-  //       );
-
-  //     default:
-  //       return null;
-  //   }
-  // }
 }
