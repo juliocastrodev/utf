@@ -1,10 +1,8 @@
 <p>
   El carácter <span class="simple-font">{{ char }}</span> corresponde con el
-  código Unicode <span>{{ char | unicode | formatUnicode }}</span
+  código Unicode <span>{{ char | unicode | fillWithTil: "0":4 }}</span
   >, la parte de
-  <span>{{
-    char | unicode | formatUnicode | substringFromOccurrence: "+"
-  }}</span>
+  <span>{{ char | unicode | fillWithTil: "0":4 }}</span>
   está en hexadecimal, que en binario es:
 </p>
 
@@ -17,9 +15,7 @@
   El carácter entra dentro del rango de los correspondientes a ASCII. Luego, se
   codifica en UTF-8 de la misma manera en la que lo haría en ASCII, es decir, su
   código asociado (en este caso
-  <span>{{
-    char | unicode | formatUnicode | substringFromOccurrence: "+"
-  }}</span
+  <span>U+{{ char | unicode | fillWithTil: "0":4 }}</span
   >) en binario, que es justo lo que se puede apreciar arriba
 </p>
 <ng-template #notasciicase>
