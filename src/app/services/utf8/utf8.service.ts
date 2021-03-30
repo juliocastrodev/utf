@@ -44,7 +44,7 @@ export class Utf8Service {
   }
 
   // always ["1","0","x","x","x","x","x","x"]
-  private getTemplateFollowingByte(): string[] {
+  public getTemplateFollowingByte(): string[] {
     const base = this.getBaseByte();
     base[0] = '1';
     base[1] = '0';

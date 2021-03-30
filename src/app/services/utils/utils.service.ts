@@ -65,4 +65,12 @@ export class UtilsService {
       arr1.every((elem, index) => elem === arr2[index])
     );
   }
+
+  hexFromBinarySequence(sequence: string[][]): string {
+    return sequence
+      .map((byte) => byte.join(''))
+      .map((byteStr) => parseInt(byteStr, 2).toString(16))
+      .join('')
+      .toUpperCase();
+  }
 }

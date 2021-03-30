@@ -10,11 +10,14 @@
   ></app-incorrect-ascii>
   <app-incorrect-first-byte
     *ngSwitchCase="'IncorrectFirstByte'"
+    [sequence]="byteSequence"
   ></app-incorrect-first-byte>
   <app-incorrect-middle-bytes
     *ngSwitchCase="'IncorrectMiddleBytes'"
+    [sequence]="byteSequence"
   ></app-incorrect-middle-bytes>
   <app-not-existing-unicode
+    [sequence]="byteSequence"
     *ngSwitchCase="'NotExistingUnicode'"
   ></app-not-existing-unicode>
 </ng-container>
