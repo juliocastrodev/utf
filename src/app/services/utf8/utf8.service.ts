@@ -118,4 +118,36 @@ export class Utf8Service {
 
     return UTF8.decode(encodedSequence);
   }
+
+  getValidUTF8Chars(sequence: string): string[] {
+    const res = [];
+
+    let n;
+    for (let index = 0; index < sequence.length; index += n) {
+      n = 1;
+
+      let char;
+      while (!this.isValidUTF8((char = sequence.substr(index, n)))) n++;
+
+      res.push(char);
+    }
+
+    return res;
+  }
+
+  isValidUTF8(char: string): boolean {
+    try {
+      return char === UTF8.decode(UTF8.encode(char));
+    } catch {
+      return false;
+    }
+  }
+
+  hexFromBinarySequence(sequence: string[][]): string {
+    return sequence
+      .map((byte) => byte.join(''))
+      .map((byteStr) => parseInt(byteStr, 2).toString(16))
+      .join('')
+      .toUpperCase();
+  }
 }

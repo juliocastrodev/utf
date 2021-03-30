@@ -7,7 +7,7 @@ import { UtilsService } from 'src/app/services/utils/utils.service';
   template: `<div>
     No se ha podido decodificar la secuencia. Probablemente no hay ningún
     carácter Unicode asociado al hexadecimal 0x{{
-      utilsService.hexFromBinarySequence(getSequenceInfo())
+      utf8Service.hexFromBinarySequence(getSequenceInfo())
     }}
   </div>`,
 })
@@ -15,7 +15,7 @@ export class NotExistingUnicodeComponent implements OnInit {
   @Input() sequence: string[][];
 
   constructor(
-    private utf8Service: Utf8Service,
+    public utf8Service: Utf8Service,
     public utilsService: UtilsService
   ) {}
 

@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Utf8Service } from 'src/app/services/utf8/utf8.service';
 import { UtilsService } from 'src/app/services/utils/utils.service';
 import UTF8 from 'utf8';
 
@@ -27,7 +28,7 @@ export class SingleCharInputComponent implements OnInit {
   @Input() value: string = '';
   @Output() valueChange = new EventEmitter<string>();
 
-  constructor(private utilsService: UtilsService) {}
+  constructor(private utf8Service: Utf8Service) {}
 
   ngOnInit(): void {}
 
@@ -39,6 +40,6 @@ export class SingleCharInputComponent implements OnInit {
   }
 
   getSingleCharUTF8(value: string) {
-    return value ? this.utilsService.getValidUTF8Chars(value)[0] : null;
+    return value ? this.utf8Service.getValidUTF8Chars(value)[0] : null;
   }
 }

@@ -1,14 +1,15 @@
 import { Pipe, PipeTransform } from '@angular/core';
+import { Utf8Service } from '../services/utf8/utf8.service';
 import { UtilsService } from '../services/utils/utils.service';
 
 @Pipe({
   name: 'bytes',
 })
 export class BytesPipe implements PipeTransform {
-  constructor(private utilsService: UtilsService) {}
+  constructor(private utf8Service: Utf8Service) {}
 
   transform(sequence: string): string[][] {
-    return this.utilsService
+    return this.utf8Service
       .getValidUTF8Chars(sequence)
       .map(this.getBytesFromChar)
       .flat();

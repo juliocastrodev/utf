@@ -4,7 +4,7 @@ import UTF8 from 'utf8';
 
 @Injectable({ providedIn: 'root' })
 export class UtilsService {
-  //The maximum is inclusive and the minimum is inclusive
+  // min and max are inclusive
   randomInt(min: number, max: number) {
     min = Math.ceil(min);
     max = Math.floor(max);
@@ -25,30 +25,6 @@ export class UtilsService {
     ];
   }
 
-  getValidUTF8Chars(sequence: string): string[] {
-    const res = [];
-
-    let n;
-    for (let index = 0; index < sequence.length; index += n) {
-      n = 1;
-
-      let char;
-      while (!this.isValidUTF8((char = sequence.substr(index, n)))) n++;
-
-      res.push(char);
-    }
-
-    return res;
-  }
-
-  isValidUTF8(char: string): boolean {
-    try {
-      return char === UTF8.decode(UTF8.encode(char));
-    } catch {
-      return false;
-    }
-  }
-
   chunks(arr: any[], size: number): any[][] {
     return Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
       arr.slice(i * size, i * size + size)
@@ -64,13 +40,5 @@ export class UtilsService {
       arr1.length === arr2.length &&
       arr1.every((elem, index) => elem === arr2[index])
     );
-  }
-
-  hexFromBinarySequence(sequence: string[][]): string {
-    return sequence
-      .map((byte) => byte.join(''))
-      .map((byteStr) => parseInt(byteStr, 2).toString(16))
-      .join('')
-      .toUpperCase();
   }
 }
