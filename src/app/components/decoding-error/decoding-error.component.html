@@ -4,8 +4,17 @@
     [sequence]="byteSequence"
   >
   </app-not-byte-sequence>
-  <div *ngSwitchCase="'IncorrectASCII'">ASCII</div>
-  <div *ngSwitchCase="'IncorrectFirstByte'">First</div>
-  <div *ngSwitchCase="'IncorrectMiddleBytes'">Following</div>
-  <div *ngSwitchCase="'NotExistingUnicode'">NotExisting</div>
+  <app-incorrect-ascii
+    *ngSwitchCase="'IncorrectASCII'"
+    [sequence]="byteSequence"
+  ></app-incorrect-ascii>
+  <app-incorrect-first-byte
+    *ngSwitchCase="'IncorrectFirstByte'"
+  ></app-incorrect-first-byte>
+  <app-incorrect-middle-bytes
+    *ngSwitchCase="'IncorrectMiddleBytes'"
+  ></app-incorrect-middle-bytes>
+  <app-not-existing-unicode
+    *ngSwitchCase="'NotExistingUnicode'"
+  ></app-not-existing-unicode>
 </ng-container>

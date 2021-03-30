@@ -6,7 +6,7 @@
   ></app-decoding-error>
 
   <ng-container *ngIf="!decodingError">
-    <app-char>{{ decodedChar }}</app-char>
+    <app-char [char]="decodedChar"></app-char>
     <app-unicode-reference-button
       [char]="decodedChar"
     ></app-unicode-reference-button>

@@ -30,6 +30,10 @@ import { DecodingErrorComponent } from './components/decoding-error/decoding-err
 import { CharComponent } from './components/char/char.component';
 import { DecodingWizardComponent } from './components/decoding-wizard/decoding-wizard.component';
 import { NotByteSequenceComponent } from './components/decoding-error/not-byte-sequence/not-byte-sequence.component';
+import { IncorrectAsciiComponent } from './components/decoding-error/incorrect-ascii/incorrect-ascii.component';
+import { IncorrectFirstByteComponent } from './components/decoding-error/incorrect-first-byte/incorrect-first-byte.component';
+import { IncorrectMiddleBytesComponent } from './components/decoding-error/incorrect-middle-bytes/incorrect-middle-bytes.component';
+import { NotExistingUnicodeComponent } from './components/decoding-error/not-existing-unicode/not-existing-unicode.component';
 
 @NgModule({
   declarations: [
@@ -60,6 +64,10 @@ import { NotByteSequenceComponent } from './components/decoding-error/not-byte-s
     CharComponent,
     DecodingWizardComponent,
     NotByteSequenceComponent,
+    IncorrectAsciiComponent,
+    IncorrectFirstByteComponent,
+    IncorrectMiddleBytesComponent,
+    NotExistingUnicodeComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, FormsModule],
   providers: [BytesPipe],
