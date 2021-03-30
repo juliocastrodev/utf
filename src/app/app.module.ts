@@ -31,6 +31,10 @@ import { IncorrectFirstByteComponent } from './components/decoding-error/incorre
 import { IncorrectMiddleBytesComponent } from './components/decoding-error/incorrect-middle-bytes/incorrect-middle-bytes.component';
 import { NotExistingUnicodeComponent } from './components/decoding-error/not-existing-unicode/not-existing-unicode.component';
 import { FillWithTilPipe } from './pipes/fill-with-til.pipe';
+import { BinaryService } from './services/binary/binary.service';
+import { ColorService } from './services/color/color.service';
+import { Utf8Service } from './services/utf8/utf8.service';
+import { UtilsService } from './services/utils/utils.service';
 
 @NgModule({
   declarations: [

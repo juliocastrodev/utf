@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { ApplyStylesParams } from './utils.service.types';
-import UTF8 from 'utf8';
 
 @Injectable({ providedIn: 'root' })
 export class UtilsService {
+  constructor() {}
+
   // min and max are inclusive
   randomInt(min: number, max: number) {
     min = Math.ceil(min);

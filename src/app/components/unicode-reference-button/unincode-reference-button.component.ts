@@ -3,9 +3,9 @@ import { Component, Input, OnInit } from '@angular/core';
 @Component({
   selector: 'app-unicode-reference-button',
   template: `
-    <app-button (click)="openUnicodeReference()">{{
-      char | unicode | fillWithTil: '0':4
-    }}</app-button>
+    <app-button (click)="openUnicodeReference()"
+      >U+{{ char | unicode | fillWithTil: '0':4 }}</app-button
+    >
   `,
   styles: [
     `
