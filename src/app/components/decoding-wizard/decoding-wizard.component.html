@@ -2,6 +2,7 @@
   <app-decoding-error
     *ngIf="decodingError"
     [error]="decodingError"
+    [byteSequence]="utilsService.chunks(binarySequence.split(''), 8)"
   ></app-decoding-error>
 
   <ng-container *ngIf="!decodingError">

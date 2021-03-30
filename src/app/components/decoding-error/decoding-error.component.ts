@@ -8,8 +8,11 @@ import { UTF8DecodingError } from 'src/app/services/utf8/utf8.service';
 })
 export class DecodingErrorComponent implements OnInit {
   @Input() error: UTF8DecodingError;
+  @Input() byteSequence: string[][];
 
   constructor() {}
 
   ngOnInit(): void {}
+
+  ngOnChanges() {}
 }

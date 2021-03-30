@@ -3,11 +3,11 @@ import { UtilsService } from '../utils/utils.service';
 import UTF8 from 'utf8';
 
 export enum UTF8DecodingError {
-  NotByteSequence = 1,
-  IncorrectASCII,
-  IncorrectFirstByte,
-  IncorrectMiddleBytes,
-  NotExistingUnicode,
+  NotByteSequence = 'NotByteSequence',
+  IncorrectASCII = 'IncorrectASCII',
+  IncorrectFirstByte = 'IncorrectFirstByte',
+  IncorrectMiddleBytes = 'IncorrectMiddleBytes',
+  NotExistingUnicode = 'NotExistingUnicode',
 }
 
 @Injectable({

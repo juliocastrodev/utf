@@ -3,6 +3,7 @@ import {
   UTF8DecodingError,
   Utf8Service,
 } from 'src/app/services/utf8/utf8.service';
+import { UtilsService } from 'src/app/services/utils/utils.service';
 
 @Component({
   selector: 'app-decoding-wizard',
@@ -15,7 +16,10 @@ export class DecodingWizardComponent implements OnChanges {
   decodingError: UTF8DecodingError;
   decodedChar: string;
 
-  constructor(public utf8Service: Utf8Service) {}
+  constructor(
+    public utf8Service: Utf8Service,
+    public utilsService: UtilsService
+  ) {}
 
   ngOnChanges(): void {
     if (!this.binarySequence) return;

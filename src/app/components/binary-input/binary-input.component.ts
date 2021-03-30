@@ -24,10 +24,14 @@ export class BinaryInputComponent implements OnInit {
       return false;
     }
 
-    this.change.emit();
+    const enteredSequenceIsValid = /^([0-1]{1,})$/.test(entered);
+
+    if (enteredSequenceIsValid) {
+      this.change.emit();
+    }
 
     // if false the entered string is ignored
-    return /^([0-1]{1,})$/.test(entered);
+    return enteredSequenceIsValid;
   }
 
   format() {

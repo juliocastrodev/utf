@@ -1,1 +1,11 @@
-<p>decoding-error works!</p>
+<ng-container [ngSwitch]="error">
+  <app-not-byte-sequence
+    *ngSwitchCase="'NotByteSequence'"
+    [sequence]="byteSequence"
+  >
+  </app-not-byte-sequence>
+  <div *ngSwitchCase="'IncorrectASCII'">ASCII</div>
+  <div *ngSwitchCase="'IncorrectFirstByte'">First</div>
+  <div *ngSwitchCase="'IncorrectMiddleBytes'">Following</div>
+  <div *ngSwitchCase="'NotExistingUnicode'">NotExisting</div>
+</ng-container>

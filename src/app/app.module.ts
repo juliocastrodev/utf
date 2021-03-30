@@ -29,6 +29,7 @@ import { BinaryInputComponent } from './components/binary-input/binary-input.com
 import { DecodingErrorComponent } from './components/decoding-error/decoding-error.component';
 import { CharComponent } from './components/char/char.component';
 import { DecodingWizardComponent } from './components/decoding-wizard/decoding-wizard.component';
+import { NotByteSequenceComponent } from './components/decoding-error/not-byte-sequence/not-byte-sequence.component';
 
 @NgModule({
   declarations: [
@@ -58,6 +59,7 @@ import { DecodingWizardComponent } from './components/decoding-wizard/decoding-w
     DecodingErrorComponent,
     CharComponent,
     DecodingWizardComponent,
+    NotByteSequenceComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, FormsModule],
   providers: [BytesPipe],
