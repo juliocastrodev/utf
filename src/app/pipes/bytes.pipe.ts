@@ -1,5 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { BinaryService } from '../services/binary/binary.service';
+import { Byte } from '../services/binary/binary.service.types';
 import { Utf8Service } from '../services/utf8/utf8.service';
 
 @Pipe({

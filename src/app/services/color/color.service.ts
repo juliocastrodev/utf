@@ -101,4 +101,21 @@ export class ColorService {
       8
     );
   }
+
+  colorsToHighlightUTF8Positions(
+    numOfBytes: number,
+    target: 'template' | 'info'
+  ): string[][] {
+    let colorIndex = this.BASIC_COLORS.length - 1;
+    return this.utf8Service.getTemplateBytes(numOfBytes).map((byte) => {
+      const byteColors = byte.map((bit) =>
+        (bit === 'x' && target === 'info') ||
+        (bit !== 'x' && target === 'template')
+          ? this.BASIC_COLORS[colorIndex]
+          : null
+      );
+      colorIndex--;
+      return byteColors;
+    });
+  }
 }

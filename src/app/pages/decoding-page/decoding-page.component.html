@@ -3,7 +3,7 @@
 
   <app-binary-input
     (blur)="binarySequence = $event"
-    (change)="showDecodingButton = true"
+    (change)="showDecodingButton = !!$event"
   ></app-binary-input>
 
   <app-decoding-wizard

@@ -4,9 +4,11 @@ import { Byte } from './binary.service.types';
 
 @Injectable({ providedIn: 'root' })
 export class BinaryService {
-  constructor() {}
+  constructor(private utilsService: UtilsService) {}
 
-  toBinarySequence(char: string) {}
+  fromBinarySequenceToBytes(sequence: string): Byte[] {
+    return this.utilsService.chunks(sequence.split(''), 8) as any;
+  }
 
   toBytes(char: string): Byte[] {
     let charInBinaryStr = char.codePointAt(0).toString(2);
@@ -23,4 +25,15 @@ export class BinaryService {
 
     return res;
   }
+
+  removeStartingEmptyBytes(bytes: Byte[]): Byte[] {
+    // single byte case (0 value)
+    if (bytes.length === 1) return bytes;
+
+    let resIndex = 0;
+    while (bytes[resIndex].every((bit) => bit === '0')) resIndex++;
+    return bytes.slice(resIndex);
+  }
+
+  value(bytes: Byte[]) {}
 }

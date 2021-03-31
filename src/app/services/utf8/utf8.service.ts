@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { UtilsService } from '../utils/utils.service';
 import UTF8 from 'utf8';
+import { Byte } from '../binary/binary.service.types';
 
 export enum UTF8DecodingError {
   NotByteSequence = 'NotByteSequence',
@@ -149,5 +150,23 @@ export class Utf8Service {
       .map((byteStr) => parseInt(byteStr, 2).toString(16))
       .join('')
       .toUpperCase();
+  }
+
+  getInfoFromEncodedUT8BinarySequence(sequence: Byte[]): Byte[] {
+    const reverseFlatSequence = sequence.flat().reverse();
+    let info = [];
+    this.getTemplateBytes(sequence.length)
+      .flat()
+      .reverse()
+      .forEach((bit, index) => {
+        if (bit === 'x') {
+          info = [reverseFlatSequence[index], ...info];
+        }
+      });
+
+    while (info.length % 8 !== 0) {
+      info = ['0', ...info];
+    }
+    return this.utilsService.chunks(info, 8) as any;
   }
 }

@@ -1,4 +1,5 @@
 <input
+  #input
   appLineInput
   type="text"
   [(ngModel)]="value"
@@ -8,5 +9,6 @@
       utilsService.cleanSpaces($event.clipboardData.getData('Text'))
     )
   "
+  (input)="change.emit($event.target.value)"
   (blur)="format()"
 />

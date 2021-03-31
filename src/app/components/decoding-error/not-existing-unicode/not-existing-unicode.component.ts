@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Byte } from 'src/app/services/binary/binary.service.types';
 import { Utf8Service } from 'src/app/services/utf8/utf8.service';
 import { UtilsService } from 'src/app/services/utils/utils.service';
 
@@ -11,7 +12,7 @@ import { UtilsService } from 'src/app/services/utils/utils.service';
   </div>`,
 })
 export class NotExistingUnicodeComponent implements OnInit {
-  @Input() sequence: string[][];
+  @Input() sequence: Byte[];
   sequenceHex: string;
 
   constructor(
@@ -21,27 +22,7 @@ export class NotExistingUnicodeComponent implements OnInit {
 
   ngOnInit(): void {
     this.sequenceHex = this.utf8Service.hexFromBinarySequence(
-      this.getSequenceInfo()
+      this.utf8Service.getInfoFromEncodedUT8BinarySequence(this.sequence)
     );
-  }
-
-  getSequenceInfo(): string[][] {
-    const reverseFlatSequence = this.sequence.flat().reverse();
-    let info = [];
-    this.utf8Service
-      .getTemplateBytes(this.sequence.length)
-      .flat()
-      .reverse()
-      .forEach((bit, index) => {
-        if (bit === 'x') {
-          info = [reverseFlatSequence[index], ...info];
-        }
-      });
-
-    while (info.length % 8 !== 0) {
-      info = ['0', ...info];
-    }
-
-    return this.utilsService.chunks(info, 8);
   }
 }

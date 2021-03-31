@@ -6,9 +6,9 @@
   ></app-decoding-error>
 
   <ng-container *ngIf="!decodingError">
-    <app-char [char]="decodedChar"></app-char>
-    <app-unicode-reference-button
-      [char]="decodedChar"
-    ></app-unicode-reference-button>
+    <app-decoding-steps
+      [binarySequence]="binarySequence"
+      [decodedChar]="decodedChar"
+    ></app-decoding-steps>
   </ng-container>
 </app-flex>

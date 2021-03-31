@@ -1,4 +1,12 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { UtilsService } from 'src/app/services/utils/utils.service';
 
 @Component({
@@ -11,7 +19,7 @@ export class BinaryInputComponent implements OnInit {
 
   value: string = '';
   @Output() blur = new EventEmitter<string>();
-  @Output() change = new EventEmitter<void>();
+  @Output() change = new EventEmitter<string>();
 
   constructor(public utilsService: UtilsService) {}
 
@@ -25,10 +33,6 @@ export class BinaryInputComponent implements OnInit {
     }
 
     const enteredSequenceIsValid = /^([0-1]{1,})$/.test(entered);
-
-    if (enteredSequenceIsValid) {
-      this.change.emit();
-    }
 
     // if false the entered string is ignored
     return enteredSequenceIsValid;
