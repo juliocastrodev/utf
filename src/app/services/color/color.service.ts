@@ -14,7 +14,7 @@ export type SequenceColors = {
   providedIn: 'root',
 })
 export class ColorService {
-  readonly BASIC_COLORS = ['red', 'green', 'blue'];
+  readonly BASIC_COLORS = ['purple', 'red', 'green', 'blue'];
   constructor(
     private utf8Service: Utf8Service,
     private utilsService: UtilsService,
@@ -102,20 +102,31 @@ export class ColorService {
     );
   }
 
-  colorsToHighlightUTF8Positions(
-    numOfBytes: number,
-    target: 'template' | 'info'
-  ): string[][] {
-    let colorIndex = this.BASIC_COLORS.length - 1;
+  colorsToHighlightUTF8InfoPositions(numOfBytes: number): string[][] {
+    let colorIndex = 0;
     return this.utf8Service.getTemplateBytes(numOfBytes).map((byte) => {
       const byteColors = byte.map((bit) =>
-        (bit === 'x' && target === 'info') ||
-        (bit !== 'x' && target === 'template')
-          ? this.BASIC_COLORS[colorIndex]
-          : null
+        bit === 'x' ? this.BASIC_COLORS[colorIndex] : null
       );
-      colorIndex--;
+      colorIndex++;
       return byteColors;
     });
+  }
+
+  colorsForUTF8Info(numOfInitialBytes: number): string[][] {
+    // remove "middle" nulls
+    let colorsToHighlighPositions = this.colorsToHighlightUTF8InfoPositions(
+      numOfInitialBytes
+    )
+      .flat()
+      .filter((color) => !!color);
+
+    // fill with nulls at the beginning
+    colorsToHighlighPositions = [
+      ...new Array(8 - (colorsToHighlighPositions.length % 8)).fill(null),
+      ...colorsToHighlighPositions,
+    ];
+
+    return this.utilsService.chunks(colorsToHighlighPositions, 8);
   }
 }

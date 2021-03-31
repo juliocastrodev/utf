@@ -19,7 +19,7 @@ export class BinaryInputComponent implements OnInit {
 
   value: string = '';
   @Output() blur = new EventEmitter<string>();
-  @Output() change = new EventEmitter<string>();
+  @Output() userInteraction = new EventEmitter<string>();
 
   constructor(public utilsService: UtilsService) {}
 

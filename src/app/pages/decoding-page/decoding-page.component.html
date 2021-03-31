@@ -3,19 +3,21 @@
 
   <app-binary-input
     (blur)="binarySequence = $event"
-    (change)="showDecodingButton = !!$event"
+    (userInteraction)="inputHasInfo = !!$event"
   ></app-binary-input>
 
   <app-decoding-wizard
-    *ngIf="showDecoding"
+    *ngIf="showDecoding && inputHasInfo"
     [binarySequence]="binarySequence"
   ></app-decoding-wizard>
 
   <app-flex class="menu" gap="1rem">
-    <app-button *ngIf="showDecodingButton" (click)="showDecoding = true">
+    <app-button *ngIf="inputHasInfo" (click)="showDecoding = true">
       Decodificar
     </app-button>
-    <app-button *ngIf="showDecoding" (click)="reset()"> Reiniciar </app-button>
+    <app-button *ngIf="showDecoding && inputHasInfo" (click)="reset()">
+      Reiniciar
+    </app-button>
     <app-button routerLink="/">Volver</app-button>
     <app-hover-info
       >Es posible que algunos caracteres, especialmente los menos frecuentes, no

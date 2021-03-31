@@ -4,9 +4,8 @@
     <app-byte-sequence
       [sequence]="binarySequenceBytes"
       [colors]="
-        colorService.colorsToHighlightUTF8Positions(
-          binarySequenceBytes.length,
-          'info'
+        colorService.colorsToHighlightUTF8InfoPositions(
+          binarySequenceBytes.length
         )
       "
     ></app-byte-sequence>
@@ -14,7 +13,10 @@
 
   <app-flex direction="column" gap="0.5rem" [centered]="false">
     <p>De la cual extraemos la siguiente información:</p>
-    <app-byte-sequence [sequence]="sequenceInfo"></app-byte-sequence>
+    <app-byte-sequence
+      [sequence]="sequenceInfo"
+      [colors]="colorService.colorsForUTF8Info(binarySequenceBytes.length)"
+    ></app-byte-sequence>
   </app-flex>
 
   <div>

@@ -13,7 +13,7 @@ export class DecodingPageComponent implements OnInit {
 
   binarySequence: string;
   showDecoding: boolean;
-  showDecodingButton: boolean = false;
+  inputHasInfo: boolean = false;
 
   constructor(public utf8Service: Utf8Service) {}
 
@@ -21,7 +21,7 @@ export class DecodingPageComponent implements OnInit {
 
   reset() {
     this.showDecoding = false;
-    this.showDecodingButton = false;
+    this.inputHasInfo = false;
     this.binarySequence = '';
     this.binaryInput.value = '';
   }
