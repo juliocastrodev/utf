@@ -17,5 +17,10 @@
     </app-button>
     <app-button *ngIf="showDecoding" (click)="reset()"> Reiniciar </app-button>
     <app-button routerLink="/">Volver</app-button>
+    <app-hover-info
+      >Es posible que algunos caracteres, especialmente los menos frecuentes, no
+      estén soportados por la fuente que usamos. Esto puede ocasionar que se
+      muestre un símbolo parecido al siguiente: ☐</app-hover-info
+    >
   </app-flex>
 </app-center>

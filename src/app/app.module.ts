@@ -35,6 +35,7 @@ import { BinaryService } from './services/binary/binary.service';
 import { ColorService } from './services/color/color.service';
 import { Utf8Service } from './services/utf8/utf8.service';
 import { UtilsService } from './services/utils/utils.service';
+import { HoverInfoComponent } from './components/hover-info/hover-info.component';
 
 @NgModule({
   declarations: [
@@ -67,6 +68,7 @@ import { UtilsService } from './services/utils/utils.service';
     IncorrectMiddleBytesComponent,
     NotExistingUnicodeComponent,
     FillWithTilPipe,
+    HoverInfoComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, FormsModule],
   providers: [BytesPipe],
