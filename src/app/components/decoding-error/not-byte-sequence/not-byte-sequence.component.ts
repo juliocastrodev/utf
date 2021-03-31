@@ -3,15 +3,17 @@ import { Component, Input, OnChanges, OnInit } from '@angular/core';
 @Component({
   selector: 'app-not-byte-sequence',
   template: `
-    <div>Por favor introduce una secuencia de bytes (bloques de 8 bits)</div>
-    <app-byte-sequence
-      [sequence]="displaySequence"
-      [colors]="displayColors"
-    ></app-byte-sequence>
-    <div>
-      Falta rellenar las posiciones marcadas con x's ({{ numOfMissingBits }} en
-      total)
-    </div>
+    <app-flex direction="column" gap="1rem">
+      <div>Por favor introduce una secuencia de bytes (bloques de 8 bits)</div>
+      <app-byte-sequence
+        [sequence]="displaySequence"
+        [colors]="displayColors"
+      ></app-byte-sequence>
+      <div>
+        Falta rellenar las posiciones marcadas con x's ({{ numOfMissingBits }}
+        en total)
+      </div>
+    </app-flex>
   `,
 })
 export class NotByteSequenceComponent implements OnChanges {

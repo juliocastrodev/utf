@@ -4,18 +4,20 @@ import { Utf8Service } from 'src/app/services/utf8/utf8.service';
 @Component({
   selector: 'app-incorrect-first-byte',
   template: `
-    <div>
-      Ya que la secuencia tiene {{ sequence.length }}
-      bytes. Es necesario que el primero tenga la siguiente estructura:
-    </div>
-    <app-byte-sequence
-      [sequence]="displayTemplate"
-      [colors]="displayColors"
-    ></app-byte-sequence>
-    <div>
-      Ahora mismo se tiene "{{ getTemplateStartBits(sequence) }}" y debería ser
-      "{{ getTemplateStartBits(displayTemplate) }}"
-    </div>
+    <app-flex direction="column" gap="1rem">
+      <div>
+        Ya que la secuencia tiene {{ sequence.length }}
+        bytes. Es necesario que el primero tenga la siguiente estructura:
+      </div>
+      <app-byte-sequence
+        [sequence]="displayTemplate"
+        [colors]="displayColors"
+      ></app-byte-sequence>
+      <div>
+        Ahora mismo se tiene "{{ getTemplateStartBits(sequence) }}" y debería
+        ser "{{ getTemplateStartBits(displayTemplate) }}"
+      </div>
+    </app-flex>
   `,
 })
 export class IncorrectFirstByteComponent implements OnInit {

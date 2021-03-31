@@ -1,7 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Utf8Service } from 'src/app/services/utf8/utf8.service';
-import { UtilsService } from 'src/app/services/utils/utils.service';
-import UTF8 from 'utf8';
 
 @Component({
   selector: 'app-single-char-input',

@@ -6,20 +6,24 @@ import { UtilsService } from 'src/app/services/utils/utils.service';
   selector: 'app-not-existing-unicode',
   template: `<div>
     No se ha podido decodificar la secuencia. Probablemente no hay ningún
-    carácter Unicode asociado al hexadecimal 0x{{
-      utf8Service.hexFromBinarySequence(getSequenceInfo())
-    }}
+    carácter Unicode asociado al hexadecimal 0x{{ sequenceHex }}, es decir, con
+    código U+{{ sequenceHex }}
   </div>`,
 })
 export class NotExistingUnicodeComponent implements OnInit {
   @Input() sequence: string[][];
+  sequenceHex: string;
 
   constructor(
     public utf8Service: Utf8Service,
     public utilsService: UtilsService
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.sequenceHex = this.utf8Service.hexFromBinarySequence(
+      this.getSequenceInfo()
+    );
+  }
 
   getSequenceInfo(): string[][] {
     const reverseFlatSequence = this.sequence.flat().reverse();

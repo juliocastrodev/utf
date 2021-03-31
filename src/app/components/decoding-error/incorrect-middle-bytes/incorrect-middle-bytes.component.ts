@@ -4,16 +4,18 @@ import { Utf8Service } from 'src/app/services/utf8/utf8.service';
 @Component({
   selector: 'app-incorrect-middle-bytes',
   template: `
-    <div>
-      Cuando se tienen varios bytes, todos los que no son el primero han de
-      comenzar con "10". Siguiendo la siguiente estructura:
-    </div>
-    <app-byte [byte]="utf8Service.getTemplateFollowingByte()"></app-byte>
-    <div>En la secuencia que tenemos, ocurre lo siguiente:</div>
-    <ng-container *ngFor="let displayElem of displaySequence">
-      <div>El {{ displayElem.label }} byte está incorrecto:</div>
-      <app-byte [byte]="displayElem.byte" [colors]="displayColors"></app-byte>
-    </ng-container>
+    <app-flex direction="column" gap="1rem">
+      <div>
+        Cuando se tienen varios bytes, todos los que no son el primero han de
+        comenzar con "10". Siguiendo la siguiente estructura:
+      </div>
+      <app-byte [byte]="utf8Service.getTemplateFollowingByte()"></app-byte>
+      <div>En la secuencia que tenemos, ocurre lo siguiente:</div>
+      <ng-container *ngFor="let displayElem of displaySequence">
+        <div>El {{ displayElem.label }} byte está incorrecto:</div>
+        <app-byte [byte]="displayElem.byte" [colors]="displayColors"></app-byte>
+      </ng-container>
+    </app-flex>
   `,
 })
 export class IncorrectMiddleBytesComponent implements OnChanges {

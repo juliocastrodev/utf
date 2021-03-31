@@ -18,12 +18,12 @@ export class UtilsService {
     });
   }
 
-  readonly POSSIBLE_CHARS =
-    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  randomChar() {
-    return this.POSSIBLE_CHARS[
-      this.randomInt(0, this.POSSIBLE_CHARS.length - 1)
-    ];
+  // String.fromCodePoint uses UTF-16 Big Indian encoding.
+  // The number 591 corresponds to the last character of the
+  // B extended latin plane
+  readonly MAX_UNICODE = 591;
+  randomChar(): string {
+    return String.fromCodePoint(this.randomInt(0, this.MAX_UNICODE));
   }
 
   chunks(arr: any[], size: number): any[][] {

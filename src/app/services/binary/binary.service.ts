@@ -2,11 +2,9 @@ import { Injectable } from '@angular/core';
 import { UtilsService } from '../utils/utils.service';
 import { Byte } from './binary.service.types';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class BinaryService {
-  constructor(public utilsService: UtilsService) {}
+  constructor() {}
 
   toBinarySequence(char: string) {}
 
