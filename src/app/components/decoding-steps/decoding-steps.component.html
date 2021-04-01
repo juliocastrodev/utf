@@ -22,9 +22,14 @@
   <div>
     <p>
       Que corresponde con el hexadecimal
-      <span>0x{{ decodedChar | unicode | fillWithTil: "0":sequenceInfo.length*2 }}</span
+      <span
+        >0x{{
+          decodedChar
+            | unicode
+            | fillWithTil: "0":math.max(sequenceInfo.length * 2, 4)
+        }}</span
       >, es decir, con el código Unicode
-      <span>U+{{ decodedChar | unicode | fillWithTil: "0":sequenceInfo.length*2 }}</span
+      <span>U+{{ decodedChar | unicode | fillWithTil: "0":4 }}</span
       >, que tiene asignado el carácter <span>{{ decodedChar }}</span>
     </p>
   </div>

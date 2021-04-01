@@ -15,6 +15,8 @@ export class DecodingStepsComponent implements OnChanges {
   binarySequenceBytes: Byte[];
   sequenceInfo: Byte[];
 
+  math = Math;
+
   constructor(
     public utf8Service: Utf8Service,
     public binaryService: BinaryService,
