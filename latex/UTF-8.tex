@@ -11,7 +11,7 @@
 \renewcommand{\contentsname}{Tabla de contenidos}
 \renewcommand{\refname}{Referencias}
 
-\title{\vspace{-1.7cm}\textbf{Codificación UTF-8}}
+\title{\vspace{-2cm}\textbf{Codificación UTF-8}}
 \author{Diego José Abengózar Vilar, Julio César Castro López}
 \date{26/3/2021}
 
@@ -29,7 +29,7 @@ en un código llamado ASCII.
 
 \begin{figure}[h]
   \centering
-  \includegraphics[width=1.0\textwidth]{ascii.jpeg}
+  \includegraphics[width=0.8\textwidth]{ascii.jpeg}
   \caption{Tabla ASCII}
 \end{figure}
 
@@ -38,11 +38,11 @@ vendedores de PC de la época empezaron a darle uso a este último bit para
 permitir, por ejemplo, el uso de letras con tilde en el caso de muchos países
 europeos, o caracteres hebreos en los ordenadores vendidos en Israel. En muchos
 PCs europeos el carácter 130 se visualizaba como `é'' mientras que en los
-ordenadores de Israel se visualizaba como `\cjRL{g}''. Esto tenía el problema de
-que, si se enviaba un documento codificado en un ordenador con una cierta
-especificación a otro con una especificación distinta, se producían traducciones
-erróneas. El problema era aún mayor en países asiáticos, ya que el número de
-símbolos de sus lenguajes no cabían en 8 bits.
+ordenadores de Israel se visualizaba como `\cjRL{g}'' \cite{historia}. Esto
+tenía el problema de que, si se enviaba un documento codificado en un ordenador
+con una cierta especificación a otro con una especificación distinta, se
+producían traducciones erróneas. El problema era aún mayor en países asiáticos,
+ya que el número de símbolos de sus lenguajes no cabían en 8 bits.
 
 Con la llegada de Internet, esta codificación era insuficiente y en 1991 surgió
 \textit{Unicode} para includir todos los caracteres de cualquier sistema de
@@ -131,7 +131,7 @@ que da cabida a más de un millón de caracteres.
         cuando corresponda y completando con $0$ si es necesario.
 \end{enumerate}
 
-\paragraph\*{Ejemplo}
+\paragraph*{Ejemplo}
 
 Si queremos codificar $U+2764$, primero observamos que $0x0800 < 0x2764 <
   0xFFFF$, y por tanto tiene 3 octetos:
@@ -155,7 +155,7 @@ significativas:
         en ese mismo orden, es decir, empezando por los bits menos significativos.
 \end{enumerate}
 
-\paragraph\*{Ejemplo}
+\paragraph*{Ejemplo}
 
 Si nos dan $111000101000100010011110$, determinamos que tiene 3 bloques ya que
 empieza por $111$ e identificamos los bits que codifican la información:
@@ -203,7 +203,8 @@ repositorio público:
 Hemos aprovechado el servicio gratuito de hospedaje de aplicaciones web de
 GitLab, para que así esta sea accesible por cualquier persona que disponga de un
 navegador web. Para poder usarla basta ir a la siguiente dirección:
-\href{https://codificacion-criptografia.gitlab.io/utf/}{https://codificacion-criptografia.gitlab.io/utf/}.
+
+\[\href{https://codificacion-criptografia.gitlab.io/utf/}{\textbf{https://codificacion-criptografia.gitlab.io/utf/}}\]
 
 \subsection{Implementación}
 Más allá de las tareas relacionadas con las propias interfaces gráficas
@@ -211,12 +212,12 @@ Más allá de las tareas relacionadas con las propias interfaces gráficas
 que respecta al propio proceso de codificación y decodificación, nos hemos
 apoyado en la librería utf8.js \cite{utf8-npm}, la cual hemos utilizado
 principalmente para facilitar la tarea de obtención de la representación binaria
-de los caracteres codificados y, también, para detectar errores en el proceso de
+de los caracteres codificados y, también para detectar errores en el proceso de
 decodificación relacionados con secuencias no asignadas por Unicode. No
 obstante, toda la parte visual correspondiente al coloreado de posiciones
 importantes, detección de otros errores en la decodificación, entre otras
 tareas, se han llevado a cabo por implementación propia, la cual se puede
-apreciar en el repositorio público que acabamos de comentar.
+localizar en el repositorio público que acabamos de comentar.
 
 \subsection{Visualización}
 La aplicación cuenta principalmente con dos funcionalidades: codificación y
@@ -226,7 +227,7 @@ Empezando por la parte de codificación, contamos con una pantalla en la que nos
 pide ingresar un carácter cualquiera. Este proceso cuenta con validación: solo
 se permite ingresar un único carácter. Además, como en el resto de partes de la
 aplicación, el contenido es dinámico, si no hay carácter introducido o no es
-válido la información correspondiente no se va a mostrar y las opciones
+válido entonces la información correspondiente no se va a mostrar y las opciones
 asociadas se deshabilitarán.
 
 Una vez introducimos un carácter se nos mostrará el código Unicode asociado y se
@@ -237,28 +238,29 @@ carácter introducido, esto lo conseguimos redirigiendo, si hace click en la caj
 en cuestión, a la entrada correspondiente de la aplicación Unicode Character
 Table \cite{unicode-table-source}.
 
-Si hacemos click en el botón de codificar, podremos ver, mediante una serie de
-pasos, el proceso para representar el carácter introducido en utf-8, que,
-dependiendo del carácter se requerirán más o menos bytes. En cualquier caso,
-salvo cuando el carácter entra dentro del rango de ASCII, podremos ver
-resaltados con colores las posiciones importantes del proceso, así como pequeñas
-explicaciones de lo que se está haciendo. Podemos encontrar un ejemplo en la
-figura \ref{fig:codificacion-ejemplo}
-
-\begin{figure}[h]
+\begin{figure}[h!]
   \centering
-  \includegraphics[width=1.0\textwidth]{codificacion.png}
+  \makebox[\textwidth][c]{\includegraphics[width=1.0\textwidth]{codificacion.png}}
   \caption{Página de Codificación}
   \label{fig:codificacion}
 \end{figure}
 
-\begin{figure}[h]
+Si hacemos click en el botón de codificar, podremos ver, mediante una serie de
+pasos, el proceso para representar el carácter introducido en UTF-8, que,
+dependiendo del carácter se requerirán más o menos bytes. En cualquier caso,
+salvo cuando el carácter entra dentro del rango de ASCII, podremos ver
+resaltados con colores las posiciones importantes del proceso, así como breves
+explicaciones de lo que se está haciendo. Podemos encontrar un ejemplo en la
+figura \ref{fig:codificacion-ejemplo}.
+
+\begin{figure}[h!]
   \centering
-  \includegraphics[width=1.0\textwidth]{codificacion-ejemplo.png}
+  \makebox[\textwidth][c]{\includegraphics[width=1.5\textwidth]{codificacion-ejemplo.png}}
   \caption{Codificación de un carácter}
   \label{fig:codificacion-ejemplo}
 \end{figure}
 
+\newpage
 Por otra parte, en cuanto a la sección de decodificación, se dispone otra vez
 con un campo para introducir información, esta vez una secuencia de bits. Dicho
 campo, al igual que antes, cuenta con su propia lógica de validación: no se
@@ -272,11 +274,18 @@ Además, también se permite pegar alguna secuencia de bits que tengamos en el
 portapapeles. De hecho, para comprobar que la aplicación se comportaba
 correctamente hemos probado a codificar un carácter, copiado la secuencia de
 bits devuelta por el programa y comprobado que la decodificación de esa misma
-secuencia devolvía el carácter del principio. Podemos apreciar la página en la
+secuencia devolvía el carácter del principio. Podemos observar la página en la
 figura \ref{fig:decodificacion}.
 
+\begin{figure}[h!]
+  \centering
+  \makebox[\textwidth][c]{\includegraphics[width=1.5\textwidth]{decodificacion.png}}
+  \caption{Página de decodificación}
+  \label{fig:decodificacion}
+\end{figure}
+
 Aparte de las validaciones puede ocurrir que la secuencia de bits introducida no
-corresponda con una secuencia utf-8 válida, esto se puede manifestar de
+corresponda con una secuencia UTF-8 válida, esto se puede manifestar de
 diferentes formas: el número de bits no es una secuencia de bytes (no es
 múltiplo de 8), el primer byte no tiene la cabecera correcta, los bytes
 intermedios no tienen la cabecera correcta, las secuencias de un byte
@@ -284,11 +293,18 @@ intermedios no tienen la cabecera correcta, las secuencias de un byte
 el código Unicode que se puede extraer de la secuencia no se encuentra asignado
 a algún carácter. Todos y cada uno de estos errores, salvo el último, cuentan
 con una pequeña explicación para poder solucionarlo, así como un pequeño apoyo
-visual, el cual varía dependiendo del error. Podemos apreciar un ejemplo en la
+visual, el cual varía dependiendo del error. Podemos ver un ejemplo en la
 figura \ref{fig:decodificacion-ejemplo-ko}.
 
+\begin{figure}[h!]
+  \centering
+  \makebox[\textwidth][c]{\includegraphics[width=1.35\textwidth]{decodificacion-ko.png}}
+  \caption{Error en decodificación de un carácter}
+  \label{fig:decodificacion-ejemplo-ko}
+\end{figure}
+
 Finalmente, cuando la secuencia es correcta, y, de forma análoga al proceso de
-codificación se ilustra el proceso con una serie de pasos y colores que resaltan
+codificación, se ilustra el proceso con una serie de pasos y colores que resaltan
 las posiciones importantes. Por otra parte, mostramos el carácter asociado y, de
 nuevo, una referencia a la entrada correspondiente en Unicode Table Source
 \cite{unicode-table-source}. Podemos apreciar un ejemplo en la figura
@@ -299,29 +315,17 @@ muestre, como sustitución, un símbolo parecido a este: $\square$. Esto lo indi
 también al usuario con un pequeño botón de información junto con la botonera de
 funcionalidades.
 
-\begin{figure}[h]
+\begin{figure}[h!]
   \centering
-  \includegraphics[width=1.0\textwidth]{decodificacion.png}
-  \caption{Página de decodificación}
-  \label{fig:decodificacion}
-\end{figure}
-
-\begin{figure}[h]
-  \centering
-  \includegraphics[width=1.0\textwidth]{decodificacion-ko.png}
-  \caption{Error en decodificación de un carácter}
-  \label{fig:decodificacion-ejemplo-ko}
-\end{figure}
-
-\begin{figure}[h]
-  \centering
-  \includegraphics[width=1.0\textwidth]{decodificacion-ok.png}
+  \makebox[\textwidth][c]{\includegraphics[width=1.35\textwidth]{decodificacion-ok.png}}
   \caption{Decodificación de un carácter}
   \label{fig:decodificacion-ejemplo-ok}
 \end{figure}
 
+\newpage
 \section{Aportaciones personales y conclusiones}
-Este es el título de la sección que propone el profesor. A saber qué poner xD.
+
+Ha sido un trabajo muy enriquecedor que nos ha servido para entender cómo funciona uno de los sistemas de codificación más extendidos actualmente.
 
 \addcontentsline{toc}{section}{Referencias}
 \begin{thebibliography}{9}
@@ -337,11 +341,11 @@ Este es el título de la sección que propone el profesor. A saber qué poner xD
 
   \bibitem{utf8-npm}
   Librería utf8.js,
-  \href{https://github.com/mathiasbynens/utf8.js}{https://github.com/mathiasbynens/utf8.js}.
+  \href{https://github.com/mathiasbynens/utf8.js}{\texttt{https://github.com/mathiasbynens/utf8.js}}
 
   \bibitem{unicode-table-source}
   Unicode Character Table,
-  \href{https://unicode-table.com/}{https://unicode-table.com/}.
+  \href{https://unicode-table.com/}{\texttt{https://unicode-table.com/}}
 
 \end{thebibliography}
 
