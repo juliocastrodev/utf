@@ -13,19 +13,23 @@
   }
 
   h1 {
-    @apply font-bold text-4xl sm:text-6xl;
+    @apply font-bold text-5xl sm:text-7xl;
   }
 
   h2 {
-    @apply font-bold text-2xl sm:text-4xl;
+    @apply font-bold text-4xl sm:text-6xl;
+  }
+
+  button {
+    @apply font-normal text-4xl sm:text-6xl;
   }
 
   p,
   span {
-    @apply font-normal text-xs sm:text-base;
+    @apply font-normal text-xl sm:text-2xl;
   }
 
   a {
-    @apply font-medium text-xs sm:text-base;
+    @apply font-medium text-xl sm:text-2xl;
   }
 }

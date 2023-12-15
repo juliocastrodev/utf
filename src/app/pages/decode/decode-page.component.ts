@@ -3,9 +3,9 @@ import { FullScreenComponent } from '../../shared/components/fullscreen/fullscre
 
 @Component({
   template: `<utf-fullscreen>
-    <h1>Decoding</h1>
+    <h1 class="font-retro">Decode</h1>
   </utf-fullscreen>`,
   standalone: true,
   imports: [FullScreenComponent],
 })
-export class DecodingPageComponent {}
+export class DecodePageComponent {}
