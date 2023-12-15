@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common'
 import { RouterOutlet } from '@angular/router'
 
 @Component({
-  selector: 'app-root',
+  selector: 'utf-root',
   template: '<router-outlet />',
   standalone: true,
   imports: [CommonModule, RouterOutlet],
