@@ -1,7 +1,11 @@
 import { Component } from '@angular/core'
+import { FullScreenComponent } from '../../shared/components/fullscreen/fullscreen.component'
 
 @Component({
-  template: '<h1>404 Not found</h1>',
+  template: `<utf-fullscreen>
+    <h1>Not Found</h1>
+  </utf-fullscreen>`,
   standalone: true,
+  imports: [FullScreenComponent],
 })
 export class NotFound404PageComponent {}
