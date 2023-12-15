@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import "@fontsource/bebas-neue";
+@import "@fontsource/press-start-2p";
+
+@layer base {
+  body {
+    @apply font-standard;
+    @apply bg-background;
+    @apply text-primary;
+  }
+
+  h1 {
+    @apply font-bold text-4xl sm:text-6xl;
+  }
+
+  h2 {
+    @apply font-bold text-2xl sm:text-4xl;
+  }
+
+  p,
+  span {
+    @apply font-normal text-xs sm:text-base;
+  }
+
+  a {
+    @apply font-medium text-xs sm:text-base;
+  }
+}
