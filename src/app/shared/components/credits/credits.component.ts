@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common'
 import { Component } from '@angular/core'
+import { LinkComponent } from '../link/link.component'
 
 @Component({
   standalone: true,
   selector: 'utf-credits',
-  imports: [CommonModule],
+  imports: [CommonModule, LinkComponent],
   template: `
     <div
       [ngClass]="[
@@ -18,12 +19,13 @@ import { Component } from '@angular/core'
       <p>
         Trabajo realizado para la asignatura Teoría de Códigos y Criptografía
         para el grado
-        <a href="https://www.fi.upm.es/?id=gradomatematicasinformatica"
-          >Matemáticas e Informática</a
+        <utf-link href="https://www.fi.upm.es/?id=gradomatematicasinformatica"
+          >Matemáticas e Informática</utf-link
         >
         de la
-        <a href="https://www.upm.es/">Universidad Politécnica de Madrid</a>, por
-        parte de los alumnos:
+        <utf-link href="https://www.upm.es/"
+          >Universidad Politécnica de Madrid</utf-link
+        >, por parte de los alumnos:
       </p>
 
       <p class="text-4xl">Julio César Castro López</p>

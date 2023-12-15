@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, Input } from '@angular/core'
+import { Component } from '@angular/core'
 
 @Component({
   standalone: true,
@@ -14,13 +14,13 @@ import { Component, Input } from '@angular/core'
     [ngClass]="[
       'w-full',
       'py-4 px-8',
+      'outline-none',
       'border-2 border-solid border-primary',
-      'hover:text-background hover:bg-primary'
+      'hover:text-background hover:bg-primary',
+      'focus-within:text-background focus-within:bg-primary'
     ]"
   >
-    {{ label }}
+    <ng-content />
   </button>`,
 })
-export class ButtonComponent {
-  @Input() label = ''
-}
+export class ButtonComponent {}

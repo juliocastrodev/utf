@@ -24,12 +24,9 @@
     @apply font-normal text-4xl sm:text-6xl;
   }
 
+  a,
   p,
   span {
     @apply font-normal text-xl sm:text-2xl;
-  }
-
-  a {
-    @apply underline cursor-pointer font-medium text-xl sm:text-2xl;
   }
 }
