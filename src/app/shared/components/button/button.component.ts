@@ -4,6 +4,7 @@ import { Component, Input } from '@angular/core'
 @Component({
   standalone: true,
   selector: 'utf-button',
+  imports: [CommonModule],
   styles: `
     :host {
       width: 100%;
@@ -19,7 +20,6 @@ import { Component, Input } from '@angular/core'
   >
     {{ label }}
   </button>`,
-  imports: [CommonModule],
 })
 export class ButtonComponent {
   @Input() label = ''

@@ -30,6 +30,6 @@
   }
 
   a {
-    @apply font-medium text-xl sm:text-2xl;
+    @apply underline cursor-pointer font-medium text-xl sm:text-2xl;
   }
 }
