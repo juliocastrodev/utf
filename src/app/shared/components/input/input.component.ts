@@ -8,7 +8,7 @@ import { FormsModule } from '@angular/forms'
   imports: [CommonModule, FormsModule],
   styles: `
     :host {
-      width: 100%;
+      @apply block w-full;
     }
   `,
   template: `
