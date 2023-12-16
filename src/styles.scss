@@ -20,7 +20,11 @@
     @apply font-bold text-4xl sm:text-6xl;
   }
 
-  button {
+  h3 {
+    @apply font-bold text-3xl sm:text-5xl;
+  }
+
+  button, input {
     @apply font-normal text-4xl sm:text-6xl;
   }
 

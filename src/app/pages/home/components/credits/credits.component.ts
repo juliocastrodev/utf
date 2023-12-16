@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common'
 import { Component } from '@angular/core'
-import { LinkComponent } from '../link/link.component'
+import { LinkComponent } from '../../../../shared/components/link/link.component'
 
 @Component({
   standalone: true,

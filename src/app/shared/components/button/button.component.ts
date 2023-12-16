@@ -17,7 +17,7 @@ import { Component } from '@angular/core'
       'outline-none',
       'border-2 border-solid border-primary',
       'hover:text-background hover:bg-primary',
-      'focus-within:text-background focus-within:bg-primary'
+      'focus:text-background focus:bg-primary'
     ]"
   >
     <ng-content />
