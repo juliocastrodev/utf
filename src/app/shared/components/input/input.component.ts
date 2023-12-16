@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common'
-import { Component, Input } from '@angular/core'
+import { Component, EventEmitter, Input, Output } from '@angular/core'
+import { FormsModule } from '@angular/forms'
 
 @Component({
   standalone: true,
   selector: 'utf-input',
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   styles: `
     :host {
       width: 100%;
@@ -12,6 +13,8 @@ import { Component, Input } from '@angular/core'
   `,
   template: `
     <input
+      [ngModel]="value"
+      (ngModelChange)="valueChange.emit($event)"
       [ngClass]="[
         'w-full',
         'outline-none',
@@ -26,4 +29,7 @@ import { Component, Input } from '@angular/core'
 })
 export class InputComponent {
   @Input() maxLength = 99_999
+
+  @Input() value = ''
+  @Output() valueChange = new EventEmitter<string>()
 }
