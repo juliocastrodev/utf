@@ -9,6 +9,7 @@ import {
   EncodingResult,
   EncodingService,
 } from '../../shared/services/encoding/encoding.service'
+import { ExplanationComponent } from './components/explanation/explanation.component'
 
 @Component({
   standalone: true,
@@ -19,6 +20,7 @@ import {
     NavigateDirective,
     InputComponent,
     SectionComponent,
+    ExplanationComponent,
   ],
   template: ` <utf-fullscreen>
     <h1 class="font-retro">Encode</h1>
@@ -30,15 +32,7 @@ import {
       </div>
 
       @if (isEncoded()) {
-        @for (codepoint of encodingResult?.codepoints; track $index) {
-          <utf-section>
-            <h3>{{ codepoint.original.getOriginalText() }}</h3>
-            <h3>{{ codepoint.encoded }}</h3>
-          </utf-section>
-        }
-        <utf-section>
-          <h3>Final result: {{ encodingResult?.encodedText }}</h3>
-        </utf-section>
+        <utf-explanation [encoding]="encodingResult!" />
       }
 
       <div class="mt-auto flex gap-5">

@@ -2,17 +2,17 @@ import { Bit } from '../Bit'
 import { Codepoint } from '../Codepoint'
 
 export class Utf8Encoder {
-  static encodeText(text: string) {
-    return Codepoint.from(text).map((codepoint) =>
+  static encodeText(text: string): Bit[] {
+    return Codepoint.from(text).flatMap((codepoint) =>
       this.encodeCodepoint(codepoint),
     )
   }
 
-  static encodeCodepoint(codepoint: Codepoint) {
+  static encodeCodepoint(codepoint: Codepoint): Bit[] {
     return this.encodeBits(codepoint.toBinary())
   }
 
-  static encodeBits(bits: Bit[]) {
+  static encodeBits(bits: Bit[]): Bit[] {
     const template = this.templateFor(bits)
 
     let currentBit = bits.length - 1
@@ -27,7 +27,7 @@ export class Utf8Encoder {
       }
     }
 
-    return template
+    return template as Bit[]
   }
 
   private static templateFor(bits: Bit[]) {
@@ -38,8 +38,6 @@ export class Utf8Encoder {
     if (bitsCount <= 16) return '1110xxxx10xxxxxx10xxxxxx'.split('')
     if (bitsCount <= 21) return '11110xxx10xxxxxx10xxxxxx10xxxxxx'.split('')
 
-    throw new Error(
-      `Binary sequence ${bits} too big to encode with utf-8`,
-    )
+    throw new Error(`Binary sequence ${bits} too big to encode with utf-8`)
   }
 }

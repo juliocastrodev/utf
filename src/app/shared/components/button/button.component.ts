@@ -7,7 +7,7 @@ import { Component } from '@angular/core'
   imports: [CommonModule],
   styles: `
     :host {
-      width: 100%;
+      @apply w-full;
     }
   `,
   template: ` <button

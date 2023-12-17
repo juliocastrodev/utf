@@ -15,12 +15,11 @@ import { NavigateDirective } from '../../shared/directives/navigate.directive'
   template: `<utf-fullscreen>
     <h1 class="font-retro">UTF-8</h1>
 
-    <div class="my-10 flex flex-col gap-5">
+    <div class="mt-20 grow flex flex-col gap-5 max-w-xl">
       <utf-button utfNavigate="encode">Codificacion</utf-button>
       <utf-button utfNavigate="decode">Decodificacion</utf-button>
+      <utf-credits class="mt-auto" />
     </div>
-
-    <utf-credits class="mt-auto max-w-xl" />
   </utf-fullscreen>`,
 })
 export class HomePageComponent {}

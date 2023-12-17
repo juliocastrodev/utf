@@ -15,6 +15,6 @@ export class EncodingService {
 
     console.log(codepoints)
 
-    return { encodedText, codepoints }
+    return { originalText: text, encodedText, codepoints }
   }
 }
