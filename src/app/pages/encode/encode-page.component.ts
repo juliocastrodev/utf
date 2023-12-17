@@ -5,6 +5,8 @@ import { RouterModule } from '@angular/router'
 import { NavigateDirective } from '../../shared/directives/navigate.directive'
 import { InputComponent } from '../../shared/components/input/input.component'
 import { SectionComponent } from '../../shared/components/section/section.component'
+import { EncodingService } from '../../shared/services/encoding/encoding.service'
+import { Utf8EncodedCodepoint } from '../../shared/services/encoding/Utf8EncodedCodepoint'
 
 @Component({
   standalone: true,
@@ -22,37 +24,28 @@ import { SectionComponent } from '../../shared/components/section/section.compon
     <div class="mt-20 grow flex flex-col gap-12">
       <div class="flex flex-col gap-2 items-center">
         <h3 class="text-secondary">Introduce algo</h3>
-        <utf-input
-          class="max-w-[5rem]"
-          [(value)]="textToEncode"
-          [maxLength]="1"
-        />
+        <utf-input [disabled]="isEncoded()" [(value)]="textToEncode" />
       </div>
 
-      @if (encodedText) {
-        <utf-section class="max-w-4xl [&_*]:text-secondary">
-          <h2>Bueno esto</h2>
-
-          <h3>The encoded text is [{{ encodedText }}]</h3>
-
-          <p>
-            llorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem
-            lorem llorem lorem lorem lorem lorem lorem lorem lorem lorem lorem
-            lorem lorem llorem lorem lorem lorem lorem lorem lorem lorem lorem
-            lorem lorem lorem lorem lorem lorem orem lorem lorem lorem lorem
-            lorem orem lorem lorem lorem lorem lorem orem lorem lorem
-          </p>
+      @if (isEncoded()) {
+        @for (encodedCodepoint of encodedCodepoints; track $index) {
+          <utf-section>
+            <h3>{{ encodedCodepoint.getOriginalText() }}</h3>
+          </utf-section>
+        }
+        <utf-section>
+          <h3>Final result: {{ encodedText }}</h3>
         </utf-section>
       }
 
       <div class="mt-auto flex gap-5">
         <utf-button utfNavigate="/">Back</utf-button>
 
-        @if (textToEncode && !encodedText) {
+        @if (textToEncode && !isEncoded()) {
           <utf-button (click)="encode()">Encode</utf-button>
         }
 
-        @if (encodedText) {
+        @if (isEncoded()) {
           <utf-button (click)="reestart()">Restart</utf-button>
         }
       </div>
@@ -61,14 +54,28 @@ import { SectionComponent } from '../../shared/components/section/section.compon
 })
 export class EncodePageComponent {
   textToEncode = ''
+
   encodedText = ''
+  encodedCodepoints: Utf8EncodedCodepoint[] = []
+
+  constructor(private encodingService: EncodingService) {}
+
+  isEncoded() {
+    return this.encodedText.length > 0 && this.encodedCodepoints.length > 0
+  }
 
   encode() {
-    this.encodedText = 'awita'
+    const { encodedText, encodedCodepoints } = this.encodingService.encode(
+      this.textToEncode,
+    )
+
+    this.encodedText = encodedText
+    this.encodedCodepoints = encodedCodepoints
   }
 
   reestart() {
     this.textToEncode = ''
     this.encodedText = ''
+    this.encodedCodepoints = []
   }
 }

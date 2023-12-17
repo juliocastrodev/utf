@@ -15,21 +15,22 @@ import { FormsModule } from '@angular/forms'
     <input
       [ngModel]="value"
       (ngModelChange)="valueChange.emit($event)"
+      [disabled]="disabled"
       [ngClass]="[
         'w-full',
         'outline-none',
         'bg-background',
-        'text-center font-mono',
+        'text-center font-serif',
         'border-b-primary border-b-2',
-        'hover:border-b-4 focus:border-b-4'
+        'hover:border-b-4 focus:border-b-4',
+        'disabled:opacity-50'
       ]"
-      [maxLength]="maxLength"
     />
   `,
 })
 export class InputComponent {
-  @Input() maxLength = 99_999
-
   @Input() value = ''
   @Output() valueChange = new EventEmitter<string>()
+
+  @Input() disabled = false
 }
