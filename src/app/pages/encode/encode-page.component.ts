@@ -5,8 +5,10 @@ import { RouterModule } from '@angular/router'
 import { NavigateDirective } from '../../shared/directives/navigate.directive'
 import { InputComponent } from '../../shared/components/input/input.component'
 import { SectionComponent } from '../../shared/components/section/section.component'
-import { EncodingService } from '../../shared/services/encoding/encoding.service'
-import { Utf8EncodedCodepoint } from '../../shared/services/encoding/Utf8EncodedCodepoint'
+import {
+  EncodingResult,
+  EncodingService,
+} from '../../shared/services/encoding/encoding.service'
 
 @Component({
   standalone: true,
@@ -28,13 +30,14 @@ import { Utf8EncodedCodepoint } from '../../shared/services/encoding/Utf8Encoded
       </div>
 
       @if (isEncoded()) {
-        @for (encodedCodepoint of encodedCodepoints; track $index) {
+        @for (codepoint of encodingResult?.codepoints; track $index) {
           <utf-section>
-            <h3>{{ encodedCodepoint.getOriginalText() }}</h3>
+            <h3>{{ codepoint.original.getOriginalText() }}</h3>
+            <h3>{{ codepoint.encoded }}</h3>
           </utf-section>
         }
         <utf-section>
-          <h3>Final result: {{ encodedText }}</h3>
+          <h3>Final result: {{ encodingResult?.encodedText }}</h3>
         </utf-section>
       }
 
@@ -54,28 +57,20 @@ import { Utf8EncodedCodepoint } from '../../shared/services/encoding/Utf8Encoded
 })
 export class EncodePageComponent {
   textToEncode = ''
-
-  encodedText = ''
-  encodedCodepoints: Utf8EncodedCodepoint[] = []
+  encodingResult?: EncodingResult
 
   constructor(private encodingService: EncodingService) {}
 
   isEncoded() {
-    return this.encodedText.length > 0 && this.encodedCodepoints.length > 0
+    return Boolean(this.encodingResult)
   }
 
   encode() {
-    const { encodedText, encodedCodepoints } = this.encodingService.encode(
-      this.textToEncode,
-    )
-
-    this.encodedText = encodedText
-    this.encodedCodepoints = encodedCodepoints
+    this.encodingResult = this.encodingService.encodeText(this.textToEncode)
   }
 
   reestart() {
     this.textToEncode = ''
-    this.encodedText = ''
-    this.encodedCodepoints = []
+    this.encodingResult = undefined
   }
 }

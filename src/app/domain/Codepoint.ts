@@ -1,3 +1,5 @@
+import { Bit } from "./Bit"
+
 export class Codepoint {
   private constructor(
     private codepointInHex: string,
@@ -19,6 +21,10 @@ export class Codepoint {
 
   getOriginalText() {
     return this.originalText
+  }
+
+  toBinary() {
+    return parseInt(this.codepointInHex, 16).toString(2).split("") as Bit[]
   }
 
   toString() {

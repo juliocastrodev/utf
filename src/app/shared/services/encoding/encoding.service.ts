@@ -1,17 +1,20 @@
 import { Injectable } from '@angular/core'
-import { Codepoint } from './Codepoint'
-import { Utf8EncodedCodepoint } from './Utf8EncodedCodepoint'
+import { Codepoint } from '../../../domain/Codepoint'
+import { Utf8Encoder } from '../../../domain/encoding/Utf8Encoder'
+
+export type EncodingResult = ReturnType<EncodingService['encodeText']>
 
 @Injectable({ providedIn: 'root' })
 export class EncodingService {
-  encode(text: string) {
-    const encodedCodepoints = Codepoint.from(text).map(
-      Utf8EncodedCodepoint.encode,
-    )
-    const encodedText = encodedCodepoints
-      .map((encodedCodepoint) => encodedCodepoint.getUtf8Encoded())
-      .join("__")
+  encodeText(text: string) {
+    const codepoints = Codepoint.from(text).map((codepoint) => ({
+      original: codepoint,
+      encoded: Utf8Encoder.encodeCodepoint(codepoint),
+    }))
+    const encodedText = codepoints.map(({ encoded }) => encoded).join(' | ')
 
-    return { encodedText, encodedCodepoints }
+    console.log(codepoints)
+
+    return { encodedText, codepoints }
   }
 }
