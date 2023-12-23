@@ -1,12 +1,16 @@
-import { Component } from '@angular/core'
+import { CommonModule } from '@angular/common'
+import { Component, Input } from '@angular/core'
 
 @Component({
   standalone: true,
   selector: 'utf-section',
+  imports: [CommonModule],
   template: `
-    <section class="p-4 border-4 border-dotted border-primary">
+    <section [ngClass]="['p-4 border-4 border-dotted border-primary', class]">
       <ng-content />
     </section>
   `,
 })
-export class SectionComponent {}
+export class SectionComponent {
+  @Input() 'class' = ''
+}

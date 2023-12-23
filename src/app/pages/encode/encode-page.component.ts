@@ -1,4 +1,4 @@
-import { Component } from '@angular/core'
+import { Component, HostListener } from '@angular/core'
 import { FullScreenComponent } from '../../shared/components/fullscreen/fullscreen.component'
 import { ButtonComponent } from '../../shared/components/button/button.component'
 import { RouterModule } from '@angular/router'
@@ -59,7 +59,10 @@ export class EncodePageComponent {
     return Boolean(this.encodingResult)
   }
 
+  @HostListener('keydown.enter')
   encode() {
+    if (!this.textToEncode || this.isEncoded()) return
+
     this.encodingResult = this.encodingService.encodeText(this.textToEncode)
   }
 

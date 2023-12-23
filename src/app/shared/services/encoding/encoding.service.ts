@@ -11,9 +11,9 @@ export class EncodingService {
       original: codepoint,
       encoded: Utf8Encoder.encodeCodepoint(codepoint),
     }))
-    const encodedText = codepoints.map(({ encoded }) => encoded).join(' | ')
+    const encodedText = codepoints.flatMap(({ encoded }) => encoded)
 
-    console.log(codepoints)
+    console.log({ codepoints, encodedText })
 
     return { originalText: text, encodedText, codepoints }
   }
