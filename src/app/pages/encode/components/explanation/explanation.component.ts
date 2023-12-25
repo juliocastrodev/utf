@@ -1,12 +1,12 @@
 import { Component, Input } from '@angular/core'
 import { SectionComponent } from '../../../../shared/components/section/section.component'
 import { EncodedCodepoint } from '../../../../domain/encoding/EncodedCodepoint'
-import { BinaryComponent } from '../../../../shared/components/binary/binary.component'
+import { SequenceComponent } from '../../../../shared/components/sequence/sequence.component'
 
 @Component({
   standalone: true,
   selector: 'utf-explanation',
-  imports: [SectionComponent, BinaryComponent],
+  imports: [SectionComponent, SequenceComponent],
   template: `
     <utf-section class="flex flex-col gap-4">
       <div class="flex gap-2">
@@ -28,7 +28,7 @@ import { BinaryComponent } from '../../../../shared/components/binary/binary.com
         >, este código está en hexadecimal, pero si lo pasamos a binario sería:
       </p>
 
-      <utf-binary [bits]="encodedCodepoint.getCodepoint().toBinary()" />
+      <utf-sequence [show]="encodedCodepoint.getCodepoint().toBinary()" />
 
       @switch (encodedCodepoint.countEncodingBytes()) {
         @case (1) {
@@ -44,15 +44,17 @@ import { BinaryComponent } from '../../../../shared/components/binary/binary.com
         }
 
         @case (2) {
-          <p>Dos bytes</p>
+          <p>Para codificarlo en UTF-8 necesitamos un total de 2 bytes</p>
+
+          <utf-sequence show="110xxxxx10xxxxxx" [groupSize]="8" />
         }
 
         @case (3) {
-          <p>Tres bytes</p>
+          <p>Para codificarlo en UTF-8 necesitamos un total de 3 bytes</p>
         }
 
         @case (4) {
-          <p>Cuatro bytes</p>
+          <p>Para codificarlo en UTF-8 necesitamos un total de 4 bytes</p>
         }
       }
     </utf-section>
