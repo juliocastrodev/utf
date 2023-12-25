@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core'
 import { SectionComponent } from '../../../../shared/components/section/section.component'
 import { ButtonComponent } from '../../../../shared/components/button/button.component'
-import { Bit } from '../../../../domain/Bit'
+import { Bit, groupInBytes } from '../../../../domain/Binary'
 import { EncodedText } from '../../../../domain/encoding/EncodedText'
 import { EncodedCodepoint } from '../../../../domain/encoding/EncodedCodepoint'
 
@@ -19,7 +19,10 @@ import { EncodedCodepoint } from '../../../../domain/encoding/EncodedCodepoint'
       </p>
 
       <ol class="flex flex-wrap gap-2">
-        @for (encodedCodepoint of encodedText.getEncodedCodepoints(); track $index) {
+        @for (
+          encodedCodepoint of encodedText.getEncodedCodepoints();
+          track $index
+        ) {
           <ul class="max-w-sm">
             <utf-button (click)="selectcodepoint.emit(encodedCodepoint)">
               <h3 class="font-serif">
@@ -45,11 +48,7 @@ export class ResultComponent {
 
   // TODO: maybe move to a pipe
   showPrettyBits(bits: Bit[]) {
-    const bytes: Bit[][] = []
-    for (let i = 0; i < bits.length; i += 8) {
-      const byte = bits.slice(i, i + 8)
-      bytes.push(byte)
-    }
+    const bytes = groupInBytes(bits)
 
     return bytes.map((bits) => bits.join('')).join(' ')
   }

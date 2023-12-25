@@ -1,4 +1,4 @@
-import { Bit } from '../Bit'
+import { Bit } from '../Binary'
 
 export class Utf8Encoder {
   static encodeBits(bits: Bit[]): Bit[] {

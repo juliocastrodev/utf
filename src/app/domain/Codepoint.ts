@@ -1,4 +1,4 @@
-import { Bit } from "./Bit"
+import { Bit } from "./Binary"
 
 export class Codepoint {
   private constructor(

@@ -1,11 +1,12 @@
 import { Component, Input } from '@angular/core'
 import { SectionComponent } from '../../../../shared/components/section/section.component'
 import { EncodedCodepoint } from '../../../../domain/encoding/EncodedCodepoint'
+import { BinaryComponent } from '../../../../shared/components/binary/binary.component'
 
 @Component({
   standalone: true,
   selector: 'utf-explanation',
-  imports: [SectionComponent],
+  imports: [SectionComponent, BinaryComponent],
   template: `
     <utf-section class="flex flex-col gap-4">
       <div class="flex gap-2">
@@ -13,6 +14,10 @@ import { EncodedCodepoint } from '../../../../domain/encoding/EncodedCodepoint'
         <h3 class="font-serif">
           {{ encodedCodepoint.getCodepoint().getOriginalText() }}
         </h3>
+      </div>
+
+      <div>
+        <utf-binary [bits]="encodedCodepoint.getEncoding()" />
       </div>
 
       <p>

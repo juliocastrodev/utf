@@ -1,4 +1,4 @@
-import { Bit } from '../Bit'
+import { Bit } from '../Binary'
 import { Codepoint } from '../Codepoint'
 import { EncodedCodepoint } from './EncodedCodepoint'
 
