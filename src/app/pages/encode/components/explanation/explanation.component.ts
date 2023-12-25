@@ -1,14 +1,19 @@
 import { Component, Input } from '@angular/core'
-import { Codepoint } from '../../../../domain/Codepoint'
 import { SectionComponent } from '../../../../shared/components/section/section.component'
+import { EncodedCodepoint } from '../../../../domain/encoding/EncodedCodepoint'
 
 @Component({
   standalone: true,
   selector: 'utf-explanation',
   imports: [SectionComponent],
   template: `
-    <utf-section>
-      <p>Codepoint: {{ codepoint.getOriginalText() }}</p>
+    <utf-section class="flex flex-col gap-4">
+      <div class="flex gap-2">
+        <h3>Encoding of</h3>
+        <h3 class="font-serif">
+          {{ encodedCodepoint.getCodepoint().getOriginalText() }}
+        </h3>
+      </div>
 
       <p>
         Lorem Ipsum is simply dummy text of the printing and typesetting
@@ -49,5 +54,5 @@ import { SectionComponent } from '../../../../shared/components/section/section.
   `,
 })
 export class ExplanationComponent {
-  @Input({ required: true }) codepoint!: Codepoint
+  @Input({ required: true }) encodedCodepoint!: EncodedCodepoint
 }

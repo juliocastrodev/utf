@@ -1,9 +1,9 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core'
-import { EncodingResult } from '../../../../shared/services/encoding/encoding.service'
 import { SectionComponent } from '../../../../shared/components/section/section.component'
 import { ButtonComponent } from '../../../../shared/components/button/button.component'
 import { Bit } from '../../../../domain/Bit'
-import { Codepoint } from '../../../../domain/Codepoint'
+import { EncodedText } from '../../../../domain/encoding/EncodedText'
+import { EncodedCodepoint } from '../../../../domain/encoding/EncodedCodepoint'
 
 @Component({
   selector: 'utf-result',
@@ -13,19 +13,19 @@ import { Codepoint } from '../../../../domain/Codepoint'
     <utf-section class="flex flex-col gap-4">
       <p>
         El texto
-        <span class="font-serif">"{{ encoding.originalText }}"</span> está
-        compuesto por un número total de
-        {{ encoding.codepoints.length }} codepoints:
+        <span class="font-serif">"{{ encodedText.getOriginalText() }}"</span>
+        está compuesto por un número total de
+        {{ encodedText.countCodepoints() }} codepoints:
       </p>
 
       <ol class="flex flex-wrap gap-2">
-        @for (codepoint of encoding.codepoints; track $index) {
+        @for (encodedCodepoint of encodedText.getEncodedCodepoints(); track $index) {
           <ul class="max-w-sm">
-            <utf-button (click)="selectcodepoint.emit(codepoint.original)">
+            <utf-button (click)="selectcodepoint.emit(encodedCodepoint)">
               <h3 class="font-serif">
-                {{ codepoint.original.getOriginalText() }}
+                {{ encodedCodepoint.getCodepoint().getOriginalText() }}
               </h3>
-              <h3>{{ codepoint.original }}</h3>
+              <h3>{{ encodedCodepoint.getCodepoint().toString() }}</h3>
             </utf-button>
           </ul>
         }
@@ -33,13 +33,15 @@ import { Codepoint } from '../../../../domain/Codepoint'
 
       <p>El resultado final es:</p>
 
-      <h3 class="text-secondary">{{ showPrettyBits(encoding.encodedText) }}</h3>
+      <h3 class="text-secondary">
+        {{ showPrettyBits(encodedText.getEncoding()) }}
+      </h3>
     </utf-section>
   `,
 })
 export class ResultComponent {
-  @Input({ required: true }) encoding!: EncodingResult
-  @Output() selectcodepoint = new EventEmitter<Codepoint>()
+  @Input({ required: true }) encodedText!: EncodedText
+  @Output() selectcodepoint = new EventEmitter<EncodedCodepoint>()
 
   // TODO: maybe move to a pipe
   showPrettyBits(bits: Bit[]) {

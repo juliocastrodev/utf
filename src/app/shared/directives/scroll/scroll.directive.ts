@@ -11,7 +11,7 @@ import {
   standalone: true,
 })
 export class ScrollDirective implements OnChanges {
-  @Input({ alias: 'utfScroll' }) dependency?: unknown
+  @Input({ alias: 'utfScroll' }) dependency?: { dependsOn: unknown } | string
 
   constructor(private elementRef: ElementRef<HTMLElement>) {}
 

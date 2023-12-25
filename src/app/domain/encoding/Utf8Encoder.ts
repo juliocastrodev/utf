@@ -1,17 +1,6 @@
 import { Bit } from '../Bit'
-import { Codepoint } from '../Codepoint'
 
 export class Utf8Encoder {
-  static encodeText(text: string): Bit[] {
-    return Codepoint.from(text).flatMap((codepoint) =>
-      this.encodeCodepoint(codepoint),
-    )
-  }
-
-  static encodeCodepoint(codepoint: Codepoint): Bit[] {
-    return this.encodeBits(codepoint.toBinary())
-  }
-
   static encodeBits(bits: Bit[]): Bit[] {
     const template = this.templateFor(bits)
 
