@@ -1,52 +1,53 @@
 import { Component, Input } from '@angular/core'
-import { EncodingResult } from '../../../../shared/services/encoding/encoding.service'
+import { Codepoint } from '../../../../domain/Codepoint'
 import { SectionComponent } from '../../../../shared/components/section/section.component'
-import { ButtonComponent } from '../../../../shared/components/button/button.component'
-import { Bit } from '../../../../domain/Bit'
 
 @Component({
-  selector: 'utf-explanation',
   standalone: true,
-  imports: [SectionComponent, ButtonComponent],
+  selector: 'utf-explanation',
+  imports: [SectionComponent],
   template: `
-    <utf-section class="max-w-3xl flex flex-col gap-4">
+    <utf-section>
+      <p>Codepoint: {{ codepoint.getOriginalText() }}</p>
+
       <p>
-        El texto
-        <span class="font-serif">"{{ encoding.originalText }}"</span> está
-        compuesto por un número total de
-        {{ encoding.codepoints.length }} codepoints:
+        Lorem Ipsum is simply dummy text of the printing and typesetting
+        industry. Lorem Ipsum has been the industry's standard dummy text ever
+        since the 1500s, when an unknown printer took a galley of type and
+        scrambled it to make a type specimen book. It has survived not only five
+        centuries, but also the leap into electronic typesetting, remaining
+        essentially unchanged. It was popularised in the 1960s with the release
+        of Letraset sheets containing Lorem Ipsum passages, and more recently
+        with desktop publishing software like Aldus PageMaker including versions
+        of Lorem Ipsum.
       </p>
 
-      <ol class="flex flex-wrap gap-2">
-        @for (codepoint of encoding.codepoints; track $index) {
-          <ul class="max-w-sm">
-            <utf-button>
-              <h3 class="font-serif">
-                {{ codepoint.original.getOriginalText() }}
-              </h3>
-              <h3>{{ codepoint.original }}</h3>
-            </utf-button>
-          </ul>
-        }
-      </ol>
+      <p>
+        Lorem Ipsum is simply dummy text of the printing and typesetting
+        industry. Lorem Ipsum has been the industry's standard dummy text ever
+        since the 1500s, when an unknown printer took a galley of type and
+        scrambled it to make a type specimen book. It has survived not only five
+        centuries, but also the leap into electronic typesetting, remaining
+        essentially unchanged. It was popularised in the 1960s with the release
+        of Letraset sheets containing Lorem Ipsum passages, and more recently
+        with desktop publishing software like Aldus PageMaker including versions
+        of Lorem Ipsum.
+      </p>
 
-      <p>El resultado final es:</p>
-
-      <h3 class="text-secondary">{{ showPrettyBits(encoding.encodedText) }}</h3>
+      <p>
+        Lorem Ipsum is simply dummy text of the printing and typesetting
+        industry. Lorem Ipsum has been the industry's standard dummy text ever
+        since the 1500s, when an unknown printer took a galley of type and
+        scrambled it to make a type specimen book. It has survived not only five
+        centuries, but also the leap into electronic typesetting, remaining
+        essentially unchanged. It was popularised in the 1960s with the release
+        of Letraset sheets containing Lorem Ipsum passages, and more recently
+        with desktop publishing software like Aldus PageMaker including versions
+        of Lorem Ipsum.
+      </p>
     </utf-section>
   `,
 })
 export class ExplanationComponent {
-  @Input({ required: true }) encoding!: EncodingResult
-
-  // TODO: maybe move to a pipe
-  showPrettyBits(bits: Bit[]) {
-    const bytes: Bit[][] = []
-    for (let i = 0; i < bits.length; i += 8) {
-      const byte = bits.slice(i, i + 8)
-      bytes.push(byte)
-    }
-
-    return bytes.map((bits) => bits.join('')).join(' ')
-  }
+  @Input({ required: true }) codepoint!: Codepoint
 }

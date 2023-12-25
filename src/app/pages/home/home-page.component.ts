@@ -2,7 +2,7 @@ import { Component } from '@angular/core'
 import { FullScreenComponent } from '../../shared/components/fullscreen/fullscreen.component'
 import { ButtonComponent } from '../../shared/components/button/button.component'
 import { CreditsComponent } from './components/credits/credits.component'
-import { NavigateDirective } from '../../shared/directives/navigate.directive'
+import { NavigateDirective } from '../../shared/directives/navigate/navigate.directive'
 
 @Component({
   standalone: true,

@@ -2,14 +2,17 @@ import { Component, HostListener } from '@angular/core'
 import { FullScreenComponent } from '../../shared/components/fullscreen/fullscreen.component'
 import { ButtonComponent } from '../../shared/components/button/button.component'
 import { RouterModule } from '@angular/router'
-import { NavigateDirective } from '../../shared/directives/navigate.directive'
+import { NavigateDirective } from '../../shared/directives/navigate/navigate.directive'
 import { InputComponent } from '../../shared/components/input/input.component'
 import { SectionComponent } from '../../shared/components/section/section.component'
 import {
   EncodingResult,
   EncodingService,
 } from '../../shared/services/encoding/encoding.service'
+import { ResultComponent } from './components/result/result.component'
 import { ExplanationComponent } from './components/explanation/explanation.component'
+import { Codepoint } from '../../domain/Codepoint'
+import { ScrollDirective } from '../../shared/directives/scroll/scroll.directive'
 
 @Component({
   standalone: true,
@@ -20,19 +23,30 @@ import { ExplanationComponent } from './components/explanation/explanation.compo
     NavigateDirective,
     InputComponent,
     SectionComponent,
+    ResultComponent,
     ExplanationComponent,
+    ScrollDirective,
   ],
   template: ` <utf-fullscreen>
     <h1 class="font-retro">Encode</h1>
 
-    <div class="mt-20 grow flex flex-col gap-12">
+    <div class="mt-20 max-w-3xl grow flex flex-col gap-12">
       <div class="flex flex-col gap-2 items-center">
         <h3 class="text-secondary">Introduce algo</h3>
         <utf-input [disabled]="isEncoded()" [(value)]="textToEncode" />
       </div>
 
       @if (isEncoded()) {
-        <utf-explanation [encoding]="encodingResult!" />
+        <utf-result
+          [encoding]="encodingResult!"
+          (selectcodepoint)="explainCodepoint = $event"
+        />
+      }
+      @if (explainCodepoint) {
+        <utf-explanation
+          [codepoint]="explainCodepoint"
+          [utfScroll]="explainCodepoint"
+        />
       }
 
       <div class="mt-auto flex gap-5">
@@ -43,7 +57,7 @@ import { ExplanationComponent } from './components/explanation/explanation.compo
         }
 
         @if (isEncoded()) {
-          <utf-button (click)="reestart()">Restart</utf-button>
+          <utf-button (click)="restart()">Restart</utf-button>
         }
       </div>
     </div>
@@ -52,6 +66,7 @@ import { ExplanationComponent } from './components/explanation/explanation.compo
 export class EncodePageComponent {
   textToEncode = ''
   encodingResult?: EncodingResult
+  explainCodepoint?: Codepoint
 
   constructor(private encodingService: EncodingService) {}
 
@@ -66,8 +81,9 @@ export class EncodePageComponent {
     this.encodingResult = this.encodingService.encodeText(this.textToEncode)
   }
 
-  reestart() {
+  restart() {
     this.textToEncode = ''
     this.encodingResult = undefined
+    this.explainCodepoint = undefined
   }
 }
