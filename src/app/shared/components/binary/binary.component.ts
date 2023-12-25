@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core'
-import { Bit } from '../../../domain/Binary'
+import { Bit, groupInBytes } from '../../../domain/Binary'
 import { CommonModule } from '@angular/common'
 
 @Component({
@@ -8,7 +8,7 @@ import { CommonModule } from '@angular/common'
   imports: [CommonModule],
   template: `
     <div class="flex gap-6 flex-wrap">
-      @for (byte of groupInBytes(); track $index) {
+      @for (byte of getBytes(); track $index) {
         <div>
           @for (bit of byte; track $index) {
             <span
@@ -29,13 +29,7 @@ import { CommonModule } from '@angular/common'
 export class BinaryComponent {
   @Input() bits: Bit[] = []
 
-  groupInBytes() {
-    const bytes: Bit[][] = []
-    for (let i = 0; i < this.bits.length; i += 8) {
-      const byte = this.bits.slice(i, i + 8)
-      bytes.push(byte)
-    }
-
-    return bytes
+  getBytes() {
+    return groupInBytes(this.bits)
   }
 }

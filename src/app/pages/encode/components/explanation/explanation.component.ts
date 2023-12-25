@@ -28,14 +28,14 @@ import { BinaryComponent } from '../../../../shared/components/binary/binary.com
         >, este código está en hexadecimal, pero si lo pasamos a binario sería:
       </p>
 
-      <utf-binary [bits]="encodedCodepoint.getEncoding()" />
+      <utf-binary [bits]="encodedCodepoint.getCodepoint().toBinary()" />
 
       @switch (encodedCodepoint.countEncodingBytes()) {
         @case (1) {
           <p>
             El carácter entra dentro del rango de los correspondientes a ASCII.
             Luego, se codifica en UTF-8 de la misma manera en la que lo haría en
-            ASCII, es decir, su código asociado (en este caso
+            ASCII, es decir, su código unicode asociado (en este caso
             <span class="text-secondary">{{
               encodedCodepoint.getCodepoint().toString()
             }}</span
