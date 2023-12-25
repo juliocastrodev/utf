@@ -3,7 +3,7 @@ import { Codepoint } from '../Codepoint'
 import { EncodedCodepoint } from './EncodedCodepoint'
 
 export class EncodedText {
-  constructor(
+  private constructor(
     private originalText: string,
     private encodedCodepoints: EncodedCodepoint[],
   ) {}

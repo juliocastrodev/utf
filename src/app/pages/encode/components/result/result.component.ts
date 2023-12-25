@@ -26,7 +26,7 @@ import { EncodedCodepoint } from '../../../../domain/encoding/EncodedCodepoint'
           <ul class="max-w-sm">
             <utf-button (click)="selectcodepoint.emit(encodedCodepoint)">
               <h3 class="font-serif">
-                {{ encodedCodepoint.getCodepoint().getOriginalText() }}
+                {{ encodedCodepoint.getCodepoint().getCharacter() }}
               </h3>
               <h3>{{ encodedCodepoint.getCodepoint().toString() }}</h3>
             </utf-button>

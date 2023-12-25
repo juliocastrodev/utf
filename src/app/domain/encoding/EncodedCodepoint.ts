@@ -1,4 +1,4 @@
-import { Bit } from '../Binary'
+import { Bit, groupInBytes } from '../Binary'
 import { Codepoint } from '../Codepoint'
 import { Utf8Encoder } from './Utf8Encoder'
 
@@ -21,5 +21,9 @@ export class EncodedCodepoint {
 
   getEncoding() {
     return this.encoded
+  }
+
+  countEncodingBytes() {
+    return groupInBytes(this.encoded).length
   }
 }

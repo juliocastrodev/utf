@@ -1,30 +1,30 @@
-import { Bit } from "./Binary"
+import { Bit } from './Binary'
 
 export class Codepoint {
   private constructor(
     private codepointInHex: string,
-    private originalText: string,
+    private character: string,
   ) {}
 
   static from(text: string): Codepoint[] {
-    return Array.from(text).map((unit) => {
-      const codepointInDecimal = unit.codePointAt(0)
+    return Array.from(text).map((character) => {
+      const codepointInDecimal = character.codePointAt(0)
 
       if (!codepointInDecimal)
-        throw new Error(`Could not get codepoint of ${unit}`)
+        throw new Error(`Could not get codepoint of ${character}`)
 
       const codepointInHex = codepointInDecimal.toString(16).toUpperCase()
 
-      return new Codepoint(codepointInHex, unit)
+      return new Codepoint(codepointInHex, character)
     })
   }
 
-  getOriginalText() {
-    return this.originalText
+  getCharacter() {
+    return this.character
   }
 
   toBinary() {
-    return parseInt(this.codepointInHex, 16).toString(2).split("") as Bit[]
+    return parseInt(this.codepointInHex, 16).toString(2).split('') as Bit[]
   }
 
   toString() {
