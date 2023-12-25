@@ -19,7 +19,7 @@ export class Utf8Encoder {
     return template as Bit[]
   }
 
-  private static templateFor(bits: Bit[]) {
+  static templateFor(bits: Bit[]) {
     const bitsCount = bits.length
 
     if (bitsCount <= 7) return 'xxxxxxxx'.split('')

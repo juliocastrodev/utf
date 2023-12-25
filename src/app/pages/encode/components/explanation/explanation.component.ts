@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core'
 import { SectionComponent } from '../../../../shared/components/section/section.component'
 import { EncodedCodepoint } from '../../../../domain/encoding/EncodedCodepoint'
 import { SequenceComponent } from '../../../../shared/components/sequence/sequence.component'
+import { Utf8Encoder } from '../../../../domain/encoding/Utf8Encoder'
 
 @Component({
   standalone: true,
@@ -25,41 +26,52 @@ import { SequenceComponent } from '../../../../shared/components/sequence/sequen
         <span class="text-secondary">{{
           encodedCodepoint.getCodepoint().toString()
         }}</span
-        >, este código está en hexadecimal, pero si lo pasamos a binario sería:
+        >. Este código está en hexadecimal, pero si lo pasamos a binario sería:
       </p>
 
       <utf-sequence [show]="encodedCodepoint.getCodepoint().toBinary()" />
 
-      @switch (encodedCodepoint.countEncodingBytes()) {
-        @case (1) {
-          <p>
-            El carácter entra dentro del rango de los correspondientes a ASCII.
-            Luego, se codifica en UTF-8 de la misma manera en la que lo haría en
-            ASCII, es decir, su código unicode asociado (en este caso
-            <span class="text-secondary">{{
-              encodedCodepoint.getCodepoint().toString()
-            }}</span
-            >) en binario, que es justo lo que se puede apreciar arriba
-          </p>
-        }
+      @if (encodedCodepoint.countEncodingBytes() == 1) {
+        <p>
+          El carácter entra dentro del rango de los correspondientes a ASCII.
+          Luego, se codifica en UTF-8 de la misma manera en la que lo haría en
+          ASCII, es decir, su código unicode asociado (en este caso
+          <span class="text-secondary">{{
+            encodedCodepoint.getCodepoint().toString()
+          }}</span
+          >) en binario.
+        </p>
 
-        @case (2) {
-          <p>Para codificarlo en UTF-8 necesitamos un total de 2 bytes</p>
+        <p>
+          Ahora simplemente rellenamos con zeros hasta tener la longitud de
+          byte:
+        </p>
 
-          <utf-sequence show="110xxxxx10xxxxxx" [groupSize]="8" />
-        }
+        <utf-sequence [show]="encodedCodepoint.getEncoding()" [groupSize]="8" />
+      } @else {
+        <p>
+          Para codificarlo en UTF-8 necesitamos un total de
+          {{ encodedCodepoint.countEncodingBytes() }} bytes
+        </p>
 
-        @case (3) {
-          <p>Para codificarlo en UTF-8 necesitamos un total de 3 bytes</p>
-        }
+        <utf-sequence [show]="getUtf8EncodingTemplate()" [groupSize]="8" />
 
-        @case (4) {
-          <p>Para codificarlo en UTF-8 necesitamos un total de 4 bytes</p>
-        }
+        <p>
+          Vamos rellenando de derecha a izquierda las x's. Las posiciones que no
+          se utilizan se quedan a 0
+        </p>
+
+        <utf-sequence [show]="encodedCodepoint.getEncoding()" [groupSize]="8" />
       }
     </utf-section>
   `,
 })
 export class ExplanationComponent {
   @Input({ required: true }) encodedCodepoint!: EncodedCodepoint
+
+  getUtf8EncodingTemplate() {
+    return Utf8Encoder.templateFor(
+      this.encodedCodepoint.getCodepoint().toBinary(),
+    )
+  }
 }
