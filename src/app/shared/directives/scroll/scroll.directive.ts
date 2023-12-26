@@ -17,7 +17,9 @@ export class ScrollDirective implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['dependency']) {
-      this.elementRef?.nativeElement.scrollIntoView({ behavior: 'smooth' })
+      setTimeout(() => {
+        this.elementRef?.nativeElement.scrollIntoView({ behavior: 'smooth' })
+      })
     }
   }
 }
