@@ -2,32 +2,33 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core'
 import { SectionComponent } from '../../../../shared/components/section/section.component'
 import { EncodedCodepoint } from '../../../../domain/encoding/EncodedCodepoint'
 import { SequenceComponent } from '../../../../shared/components/sequence/sequence.component'
-import { Utf8Encoder } from '../../../../domain/encoding/Utf8Encoder'
-import { Bit, groupInBytes } from '../../../../domain/Binary'
+import { FormatBitsPipe } from '../../../../shared/pipes/format-bits.pipe'
 
 @Component({
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush, // TODO: put this in every component
   selector: 'utf-explanation',
-  imports: [SectionComponent, SequenceComponent],
+  imports: [SectionComponent, SequenceComponent, FormatBitsPipe],
   template: `
     <utf-section class="flex flex-col gap-4">
       <div class="flex gap-2">
         <h3>Encoding of</h3>
-        <h3 class="font-serif">{{ character }}</h3>
+        <h3 class="font-serif">{{ getCodepoint().getCharacter() }}</h3>
       </div>
 
       <p>
         El carácter
-        <span class="font-serif text-secondary">{{ character }}</span>
+        <span class="font-serif text-secondary">{{
+          getCodepoint().getCharacter()
+        }}</span>
         corresponde con el código Unicode
-        <span class="text-secondary">{{ codepointStr }}</span
+        <span class="text-secondary">{{ getCodepoint().toString() }}</span
         >. Este código está en hexadecimal, pero si lo pasamos a binario sería:
       </p>
 
       <utf-sequence
-        [show]="encodedCodepoint.getCodepoint().toBinary()"
-        [colors]="getColorsForBinaryCodepoint()"
+        [show]="getCodepoint().toBinary()"
+        [colors]="getColorsForCodepoint()"
       />
 
       @if (encodedCodepoint.countEncodingBytes() == 1) {
@@ -35,7 +36,7 @@ import { Bit, groupInBytes } from '../../../../domain/Binary'
           El carácter entra dentro del rango de los correspondientes a ASCII.
           Luego, se codifica en UTF-8 de la misma manera en la que lo haría en
           ASCII, es decir, su código unicode asociado (en este caso
-          <span class="text-secondary">{{ codepointStr }}</span
+          <span class="text-secondary">{{ getCodepoint().toString() }}</span
           >) en binario.
         </p>
 
@@ -46,7 +47,7 @@ import { Bit, groupInBytes } from '../../../../domain/Binary'
 
         <utf-sequence
           [show]="encodedCodepoint.getEncoding()"
-          [colors]="getColorsForUtf8Template()"
+          [colors]="getColorsForEncodingTemplate()"
           [groupSize]="8"
         />
       } @else {
@@ -56,8 +57,8 @@ import { Bit, groupInBytes } from '../../../../domain/Binary'
         </p>
 
         <utf-sequence
-          [show]="getUtf8EncodingTemplate()"
-          [colors]="getColorsForUtf8Template()"
+          [show]="encodedCodepoint.getEncodingTemplate()"
+          [colors]="getColorsForEncodingTemplate()"
           [groupSize]="8"
         />
 
@@ -68,15 +69,15 @@ import { Bit, groupInBytes } from '../../../../domain/Binary'
 
         <utf-sequence
           [show]="encodedCodepoint.getEncoding()"
-          [colors]="getColorsForUtf8Template()"
+          [colors]="getColorsForEncodingTemplate()"
           [groupSize]="8"
         />
       }
 
-      <p>El resultado es:</p>
+      <p>Por lo tanto, nos queda lo siguiente:</p>
 
       <h3 class="text-secondary">
-        {{ showPrettyBits(encodedCodepoint.getEncoding()) }}
+        {{ encodedCodepoint.getEncoding() | utfFormatBits }}
       </h3>
     </utf-section>
   `,
@@ -84,90 +85,41 @@ import { Bit, groupInBytes } from '../../../../domain/Binary'
 export class ExplanationComponent {
   @Input({ required: true }) encodedCodepoint!: EncodedCodepoint
 
-  get character() {
-    return this.encodedCodepoint.getCodepoint().getCharacter()
+  getCodepoint() {
+    return this.encodedCodepoint.getCodepoint()
   }
 
-  get codepointStr() {
-    return this.encodedCodepoint.getCodepoint().toString()
-  }
-
-  getUtf8EncodingTemplate() {
-    return Utf8Encoder.templateFor(
-      this.encodedCodepoint.getCodepoint().toBinary(),
-    )
-  }
-
-  getColorsForBinaryCodepoint() {
-    const bits = this.encodedCodepoint.getCodepoint().toBinary()
-
-    const color = {
-      current: 'blue',
-      change() {
-        if (this.current === 'blue') this.current = 'green'
-        else if (this.current === 'green') this.current = 'red'
-        else if (this.current === 'red') this.current = 'blue'
-      },
+  getColorsForCodepoint() {
+    let currentColor = 'blue'
+    const changeColor = () => {
+      if (currentColor === 'blue') currentColor = 'green'
+      else if (currentColor === 'green') currentColor = 'red'
+      else if (currentColor === 'red') currentColor = 'blue'
     }
 
-    const result = []
-    for (let i = bits.length - 1; i >= 0; i--) {
-      result.unshift(color.current)
+    const colors: string[] = []
+    for (let i = this.getCodepoint().toBinary().length - 1; i >= 0; i--) {
+      colors.unshift(currentColor)
 
-      if (result.length % 8 === 0) color.change()
+      if (colors.length % 8 === 0) changeColor()
     }
 
-    return result
+    return colors
   }
 
-  getColorsForUtf8Template() {
-    const template = this.getUtf8EncodingTemplate()
-    const numberOfBitsToColor = this.encodedCodepoint
-      .getCodepoint()
-      .toBinary().length
+  getColorsForEncodingTemplate() {
+    const template = this.encodedCodepoint.getEncodingTemplate()
 
-    const color = {
-      current: 'blue',
-      usageCount: 0,
-      use() {
-        this.usageCount++
-        return this.current
-      },
-      change() {
-        if (this.current === 'blue') this.current = 'green'
-        else if (this.current === 'green') this.current = 'red'
-        else if (this.current === 'red') this.current = 'blue'
-      },
-    }
+    const colorsForCodepoint = this.getColorsForCodepoint()
+    let colorIndex = colorsForCodepoint.length - 1
 
-    const result: Array<string | undefined> = []
+    const colors: Array<string | undefined> = []
     for (let i = template.length - 1; i >= 0; i--) {
-      result.unshift(
-        template[i] !== 'x' || color.usageCount >= numberOfBitsToColor
-          ? undefined
-          : color.use(),
+      colors.unshift(
+        template[i] === 'x' ? colorsForCodepoint[colorIndex--] : undefined,
       )
-
-      if (color.usageCount % 8 === 0) color.change()
     }
 
-    return result
-  }
-
-  // getColors() {
-  //   const codepointBinary = this.encodedCodepoint.getCodepoint().toBinary()
-  //   const template = this.getUtf8EncodingTemplate()
-  //   const encodingBinary = this.encodedCodepoint.getEncoding()
-
-  //   const numberOfBitsToColor = codepointBinary.length
-
-  //   template.map((val) => (val !== 'x' ? undefined : 'x'))
-  // }
-
-  // TODO: maybe move to a pipe
-  showPrettyBits(bits: Bit[]) {
-    const bytes = groupInBytes(bits)
-
-    return bytes.map((bits) => bits.join('')).join(' ')
+    return colors
   }
 }

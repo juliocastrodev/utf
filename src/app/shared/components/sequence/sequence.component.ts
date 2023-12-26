@@ -8,7 +8,7 @@ type SequenceElement = { show: string; color?: string }
   selector: 'utf-sequence',
   imports: [CommonModule],
   template: `
-    <div class="flex flex-wrap gap-4">
+    <div class="flex flex-col gap-4">
       @for (group of getGroups(); track $index) {
         <div class="flex flex-wrap">
           @for (elem of group; track $index) {

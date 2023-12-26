@@ -1,14 +1,14 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core'
 import { SectionComponent } from '../../../../shared/components/section/section.component'
 import { ButtonComponent } from '../../../../shared/components/button/button.component'
-import { Bit, groupInBytes } from '../../../../domain/Binary'
 import { EncodedText } from '../../../../domain/encoding/EncodedText'
 import { EncodedCodepoint } from '../../../../domain/encoding/EncodedCodepoint'
+import { FormatBitsPipe } from '../../../../shared/pipes/format-bits.pipe'
 
 @Component({
   selector: 'utf-result',
   standalone: true,
-  imports: [SectionComponent, ButtonComponent],
+  imports: [SectionComponent, ButtonComponent, FormatBitsPipe],
   template: `
     <utf-section class="flex flex-col gap-4">
       <p>
@@ -23,21 +23,21 @@ import { EncodedCodepoint } from '../../../../domain/encoding/EncodedCodepoint'
           encodedCodepoint of encodedText.getEncodedCodepoints();
           track $index
         ) {
-          <ul class="max-w-sm">
+          <li class="max-w-sm">
             <utf-button (click)="selectcodepoint.emit(encodedCodepoint)">
               <h3 class="font-serif">
                 {{ encodedCodepoint.getCodepoint().getCharacter() }}
               </h3>
               <h3>{{ encodedCodepoint.getCodepoint().toString() }}</h3>
             </utf-button>
-          </ul>
+          </li>
         }
       </ol>
 
       <p>El resultado final es:</p>
 
       <h3 class="text-secondary">
-        {{ showPrettyBits(encodedText.getEncoding()) }}
+        {{ encodedText.getEncoding() | utfFormatBits }}
       </h3>
     </utf-section>
   `,
@@ -45,11 +45,4 @@ import { EncodedCodepoint } from '../../../../domain/encoding/EncodedCodepoint'
 export class ResultComponent {
   @Input({ required: true }) encodedText!: EncodedText
   @Output() selectcodepoint = new EventEmitter<EncodedCodepoint>()
-
-  // TODO: maybe move to a pipe
-  showPrettyBits(bits: Bit[]) {
-    const bytes = groupInBytes(bits)
-
-    return bytes.map((bits) => bits.join('')).join(' ')
-  }
 }

@@ -23,6 +23,10 @@ export class EncodedCodepoint {
     return this.encoded
   }
 
+  getEncodingTemplate() {
+    return Utf8Encoder.templateFor(this.codepoint.toBinary())
+  }
+
   countEncodingBytes() {
     return groupInBytes(this.encoded).length
   }
