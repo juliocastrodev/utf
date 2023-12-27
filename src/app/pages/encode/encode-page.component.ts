@@ -28,7 +28,7 @@ import { EncodedCodepoint } from '../../domain/encoding/EncodedCodepoint'
   template: ` <utf-fullscreen>
     <h1 class="font-retro">Encode</h1>
 
-    <div class="mt-20 max-w-3xl grow flex flex-col gap-12">
+    <div class="mt-20 max-w-3xl flex grow flex-col gap-12">
       <div class="flex flex-col gap-2 items-center">
         <h3 class="text-secondary">Introduce algo</h3>
         <utf-input [disabled]="!!encodedText" [(value)]="textToEncode" />

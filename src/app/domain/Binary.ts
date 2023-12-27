@@ -15,3 +15,7 @@ export function groupInBytes(bits: Bit[]): Byte[] {
 
   return bytes
 }
+
+export function isBinary(str: string) {
+  return /^(0|1)+$/g.test(str)
+}

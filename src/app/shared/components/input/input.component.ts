@@ -1,3 +1,4 @@
+/* eslint-disable @angular-eslint/no-output-native */
 import { CommonModule } from '@angular/common'
 import { Component, EventEmitter, Input, Output } from '@angular/core'
 import { FormsModule } from '@angular/forms'
@@ -27,6 +28,7 @@ import { FormsModule } from '@angular/forms'
         'hover:border-b-4 focus:border-b-4',
         'disabled:opacity-50'
       ]"
+      (blur)="blur.emit($event)"
     />
   `,
 })
@@ -35,4 +37,6 @@ export class InputComponent {
   @Output() valueChange = new EventEmitter<string>()
 
   @Input() disabled = false
+
+  @Output() blur = new EventEmitter<FocusEvent>()
 }
