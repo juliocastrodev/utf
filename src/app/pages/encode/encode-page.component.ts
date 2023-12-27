@@ -47,7 +47,7 @@ import { EncodedCodepoint } from '../../domain/encoding/EncodedCodepoint'
         />
       }
 
-      <div class="mt-auto flex gap-5">
+      <div class="mt-auto flex justify-center gap-5">
         <utf-button utfNavigate="/">Back</utf-button>
 
         @if (textToEncode && !encodedText) {

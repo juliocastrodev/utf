@@ -4,16 +4,23 @@ import { ButtonComponent } from '../../../../shared/components/button/button.com
 import { EncodedText } from '../../../../domain/encoding/EncodedText'
 import { EncodedCodepoint } from '../../../../domain/encoding/EncodedCodepoint'
 import { FormatBitsPipe } from '../../../../shared/pipes/format-bits.pipe'
+import { ClipboardComponent } from '../../../../shared/components/clipboard/clipboard.component'
 
 @Component({
   selector: 'utf-result',
   standalone: true,
-  imports: [SectionComponent, ButtonComponent, FormatBitsPipe],
+  imports: [
+    SectionComponent,
+    ButtonComponent,
+    FormatBitsPipe,
+    ClipboardComponent,
+  ],
   template: `
     <utf-section class="flex flex-col gap-4">
       <p>
-        El texto
-        <span class="font-serif">"{{ encodedText.getOriginalText() }}"</span>
+        El texto <span>"</span>
+        <span class="font-serif break-all text-secondary">{{ encodedText.getOriginalText() }}</span>
+        <span>"</span>
         está compuesto por un número total de
         {{ encodedText.countCodepoints() }} codepoints:
       </p>
@@ -25,7 +32,7 @@ import { FormatBitsPipe } from '../../../../shared/pipes/format-bits.pipe'
         ) {
           <li class="max-w-sm">
             <utf-button (click)="selectcodepoint.emit(encodedCodepoint)">
-              <h3 class="font-serif">
+              <h3 class="font-serif whitespace-break-spaces">
                 {{ encodedCodepoint.getCodepoint().getCharacter() }}
               </h3>
               <h3>{{ encodedCodepoint.getCodepoint().toString() }}</h3>
@@ -36,9 +43,15 @@ import { FormatBitsPipe } from '../../../../shared/pipes/format-bits.pipe'
 
       <p>El resultado final es:</p>
 
-      <h3 class="text-secondary">
-        {{ encodedText.getEncoding() | utfFormatBits }}
-      </h3>
+      <div class="flex flex-wrap gap-2 items-center">
+        <h3 class="text-secondary">
+          {{ encodedText.getEncoding() | utfFormatBits }}
+        </h3>
+        <utf-clipboard
+          class="ml-auto"
+          [copy]="encodedText.getEncoding() | utfFormatBits"
+        />
+      </div>
     </utf-section>
   `,
 })

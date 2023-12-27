@@ -2,6 +2,8 @@ import { CommonModule } from '@angular/common'
 import { Component, EventEmitter, Input, Output } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 
+// TODO: convert in textarea when input from user is too large to fit the screen
+
 @Component({
   standalone: true,
   selector: 'utf-input',

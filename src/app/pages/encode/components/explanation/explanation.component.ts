@@ -1,14 +1,19 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core'
+import { Component, Input } from '@angular/core'
 import { SectionComponent } from '../../../../shared/components/section/section.component'
 import { EncodedCodepoint } from '../../../../domain/encoding/EncodedCodepoint'
 import { SequenceComponent } from '../../../../shared/components/sequence/sequence.component'
 import { FormatBitsPipe } from '../../../../shared/pipes/format-bits.pipe'
+import { ClipboardComponent } from '../../../../shared/components/clipboard/clipboard.component'
 
 @Component({
   standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush, // TODO: put this in every component
   selector: 'utf-explanation',
-  imports: [SectionComponent, SequenceComponent, FormatBitsPipe],
+  imports: [
+    SectionComponent,
+    SequenceComponent,
+    FormatBitsPipe,
+    ClipboardComponent,
+  ],
   template: `
     <utf-section class="flex flex-col gap-4">
       <div class="flex gap-2">
@@ -76,9 +81,15 @@ import { FormatBitsPipe } from '../../../../shared/pipes/format-bits.pipe'
 
       <p>Por lo tanto, nos queda lo siguiente:</p>
 
-      <h3 class="text-secondary">
-        {{ encodedCodepoint.getEncoding() | utfFormatBits }}
-      </h3>
+      <div class="flex flex-wrap gap-2 items-center">
+        <h3 class="text-secondary">
+          {{ encodedCodepoint.getEncoding() | utfFormatBits }}
+        </h3>
+        <utf-clipboard
+          class="ml-auto"
+          [copy]="encodedCodepoint.getEncoding() | utfFormatBits"
+        />
+      </div>
     </utf-section>
   `,
 })
