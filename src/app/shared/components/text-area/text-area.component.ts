@@ -10,7 +10,7 @@ import { AutoResizeDirective } from '../../directives/autoresize/auto-resize.dir
   imports: [CommonModule, FormsModule, AutoResizeDirective],
   template: `
     <textarea
-      utfAutoResize
+      [utfAutoResize]="{ dependsOn: value }"
       [ngModel]="value"
       (ngModelChange)="valueChange.emit($event)"
       [disabled]="disabled"

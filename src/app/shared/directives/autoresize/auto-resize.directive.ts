@@ -1,19 +1,26 @@
-import { Directive, ElementRef, HostListener, OnInit } from '@angular/core'
+import {
+  Directive,
+  ElementRef,
+  Input,
+  OnChanges,
+  SimpleChanges,
+} from '@angular/core'
 
 @Directive({
   selector: '[utfAutoResize]',
   standalone: true,
 })
-export class AutoResizeDirective implements OnInit {
-  constructor(private elementRef: ElementRef<HTMLElement>) {}
-
-  ngOnInit() {
-    this.resize()
+export class AutoResizeDirective implements OnChanges {
+  @Input({ alias: 'utfAutoResize', required: true }) dependency?: {
+    dependsOn: unknown
   }
 
-  @HostListener('input')
-  onInput() {
-    this.resize()
+  constructor(private elementRef: ElementRef<HTMLElement>) {}
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['dependency']) {
+      setTimeout(() => this.resize())
+    }
   }
 
   resize() {
