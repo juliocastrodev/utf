@@ -16,6 +16,7 @@ export class ButtonComponent {
   getClasses() {
     const defaultClasses = [
       'outline-none',
+      'w-full h-full',
       'border-2 border-solid border-primary',
       'hover:text-background hover:bg-primary',
       'focus-visible:text-background focus-visible:bg-primary',

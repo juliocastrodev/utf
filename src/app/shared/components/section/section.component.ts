@@ -6,11 +6,11 @@ import { Component, Input } from '@angular/core'
   selector: 'utf-section',
   imports: [CommonModule],
   template: `
-    <section [ngClass]="['p-4 border-4 border-dotted border-primary', class]">
+    <section [ngClass]="['p-4 border-4 border-dotted border-primary', classes]">
       <ng-content />
     </section>
   `,
 })
 export class SectionComponent {
-  @Input() 'class' = ''
+  @Input() classes = ''
 }

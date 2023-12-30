@@ -5,6 +5,8 @@ import { EncodedText } from '../../../../domain/encoding/EncodedText'
 import { EncodedCodepoint } from '../../../../domain/encoding/EncodedCodepoint'
 import { FormatBitsPipe } from '../../../../shared/pipes/format-bits.pipe'
 import { ClipboardComponent } from '../../../../shared/components/clipboard/clipboard.component'
+import { ExpandableListComponent } from '../../../../shared/components/expandable-list/expandable-list.component'
+import { ExpandableListItemComponent } from '../../../../shared/components/expandable-list/expandable-list-item.component'
 
 @Component({
   selector: 'utf-result',
@@ -14,32 +16,38 @@ import { ClipboardComponent } from '../../../../shared/components/clipboard/clip
     ButtonComponent,
     FormatBitsPipe,
     ClipboardComponent,
+    ExpandableListComponent,
+    ExpandableListItemComponent,
   ],
   template: `
-    <utf-section class="flex flex-col gap-4">
+    <utf-section classes="flex flex-col gap-4">
       <p>
         El texto <span>"</span>
-        <span class="font-serif break-all text-secondary">{{ encodedText.getOriginalText() }}</span>
+        <span class="font-serif break-all text-secondary">{{
+          encodedText.getOriginalText()
+        }}</span>
         <span>"</span>
         está compuesto por un número total de
         {{ encodedText.countCodepoints() }} codepoints:
       </p>
 
-      <ol class="flex flex-wrap gap-2">
+      <utf-expandable-list
+        classes="grid gap-2 grid-cols-[repeat(auto-fill,minmax(200px,1fr))]"
+      >
         @for (
           encodedCodepoint of encodedText.getEncodedCodepoints();
           track $index
         ) {
-          <li class="max-w-sm">
+          <utf-expandable-list-item>
             <utf-button (click)="selectcodepoint.emit(encodedCodepoint)">
               <h3 class="font-serif whitespace-break-spaces">
                 {{ encodedCodepoint.getCodepoint().getCharacter() }}
               </h3>
               <h3>{{ encodedCodepoint.getCodepoint().toString() }}</h3>
             </utf-button>
-          </li>
+          </utf-expandable-list-item>
         }
-      </ol>
+      </utf-expandable-list>
 
       <p>El resultado final es:</p>
 

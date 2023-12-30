@@ -15,7 +15,7 @@ import { ClipboardComponent } from '../../../../shared/components/clipboard/clip
     ClipboardComponent,
   ],
   template: `
-    <utf-section class="flex flex-col gap-4">
+    <utf-section classes="flex flex-col gap-4">
       <div class="flex gap-2">
         <h3>Encoding of</h3>
         <h3 class="font-serif">{{ getCodepoint().getCharacter() }}</h3>
