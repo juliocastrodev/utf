@@ -1,13 +1,13 @@
 import { Component } from '@angular/core'
-import { InputComponent } from '../input/input.component'
+import { TextAreaComponent } from '../text-area/text-area.component'
 import { Bit, isBinary } from '../../../domain/Binary'
 
 @Component({
   standalone: true,
-  selector: 'utf-binary-input',
-  imports: [InputComponent],
+  selector: 'utf-binary-text-area',
+  imports: [TextAreaComponent],
   template: `
-    <utf-input
+    <utf-text-area
       [(value)]="value"
       (keypress)="handleKeypress($event)"
       (paste)="handlePaste($event)"
@@ -15,24 +15,24 @@ import { Bit, isBinary } from '../../../domain/Binary'
     />
   `,
 })
-export class BinaryInputComponent {
+export class BinaryTextAreaComponent {
   value: string = ''
 
   // returning false in an event handler means it's ignored/discarded
 
-  handleKeypress(event: KeyboardEvent) {
-    if (event.key === 'Enter') {
+  handleKeypress({ key }: KeyboardEvent) {
+    if (key === 'Enter') {
       this.format()
       return false
     }
 
-    return isBinary(event.key)
+    return isBinary(key)
   }
 
   handlePaste(event: ClipboardEvent) {
-    const text = event.clipboardData?.getData('text/plain') ?? ''
-    const textWithoutSpaces = text.replaceAll(' ', '')
-    return isBinary(textWithoutSpaces)
+    const content =
+      event.clipboardData?.getData('text/plain').replaceAll(' ', '') ?? ''
+    return isBinary(content)
   }
 
   format() {
