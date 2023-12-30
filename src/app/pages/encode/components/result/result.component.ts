@@ -32,7 +32,7 @@ import { ExpandableListItemComponent } from '../../../../shared/components/expan
       </p>
 
       <utf-expandable-list
-        classes="grid gap-2 grid-cols-[repeat(auto-fill,minmax(200px,1fr))]"
+        classes="grid gap-2 grid-cols-auto-fit-150 sm:grid-cols-auto-fit-200"
       >
         @for (
           encodedCodepoint of encodedText.getEncodedCodepoints();
