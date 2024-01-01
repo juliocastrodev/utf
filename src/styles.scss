@@ -7,31 +7,42 @@
 
 @layer base {
   body {
-    @apply font-standard;
-    @apply bg-background;
-    @apply text-primary;
+    @apply font-standard bg-background text-primary;
+  }
+
+  .text-h1 {
+    @apply font-bold text-5xl sm:text-7xl;
+  }
+  .text-h2 {
+    @apply font-bold text-4xl sm:text-6xl;
+  }
+  .text-h3 {
+    @apply font-bold text-3xl sm:text-5xl;
+  }
+  .text-accent {
+    @apply font-normal text-4xl sm:text-6xl;
+  }
+  .text-regular {
+    @apply font-normal text-xl sm:text-2xl;
   }
 
   h1 {
-    @apply font-bold text-5xl sm:text-7xl;
+    @apply text-h1;
   }
 
   h2 {
-    @apply font-bold text-4xl sm:text-6xl;
+    @apply text-h2;
   }
 
   h3 {
-    @apply font-bold text-3xl sm:text-5xl;
+    @apply text-h3;
   }
 
-  button, input, textarea {
-    @apply font-normal text-4xl sm:text-6xl;
+  :is(button, input, textarea) {
+    @apply text-accent;
   }
 
-  a,
-  p,
-  li,
-  span {
-    @apply font-normal text-xl sm:text-2xl;
+  :is(a, p, li, span) {
+    @apply text-regular;
   }
 }

@@ -7,6 +7,7 @@ import { FormatBitsPipe } from '../../../../shared/pipes/format-bits.pipe'
 import { ClipboardComponent } from '../../../../shared/components/clipboard/clipboard.component'
 import { ExpandableListComponent } from '../../../../shared/components/expandable-list/expandable-list.component'
 import { ExpandableListItemComponent } from '../../../../shared/components/expandable-list/expandable-list-item.component'
+import { ExpandableTextComponent } from '../../../../shared/components/expandable-text/expandable-text.component'
 
 @Component({
   selector: 'utf-result',
@@ -18,6 +19,7 @@ import { ExpandableListItemComponent } from '../../../../shared/components/expan
     ClipboardComponent,
     ExpandableListComponent,
     ExpandableListItemComponent,
+    ExpandableTextComponent,
   ],
   template: `
     <utf-section classes="flex flex-col gap-4">
@@ -32,7 +34,7 @@ import { ExpandableListItemComponent } from '../../../../shared/components/expan
       </p>
 
       <utf-expandable-list
-        classes="grid gap-2 grid-cols-auto-fit-150 sm:grid-cols-auto-fit-200"
+        classes="grid gap-2 grid-cols-auto-fill-150 sm:grid-cols-auto-fill-200"
       >
         @for (
           encodedCodepoint of encodedText.getEncodedCodepoints();
@@ -52,9 +54,11 @@ import { ExpandableListItemComponent } from '../../../../shared/components/expan
       <p>El resultado final es:</p>
 
       <div class="flex flex-wrap gap-2 items-center">
-        <h3 class="text-secondary">
-          {{ encodedText.getEncoding() | utfFormatBits }}
-        </h3>
+        <utf-expandable-text
+          classes="text-h3 text-secondary"
+          [text]="encodedText.getEncoding() | utfFormatBits"
+        />
+
         <utf-clipboard
           class="ml-auto"
           [copy]="encodedText.getEncoding() | utfFormatBits"
