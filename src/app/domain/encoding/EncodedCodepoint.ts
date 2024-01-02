@@ -29,6 +29,6 @@ export class EncodedCodepoint {
   }
 
   countEncodingBytes() {
-    return this.encoded.groupInBytes().length
+    return this.encoded.countBytes()
   }
 }

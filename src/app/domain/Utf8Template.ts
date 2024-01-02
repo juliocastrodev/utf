@@ -1,7 +1,7 @@
 import { BinarySequence, Bit, Byte } from './BinarySequence'
+import { InvalidInitialUtf8ByteError } from './error/InvalidInitialUtf8ByteError'
 import { MismatchUtf8TemplateError } from './error/MismatchUtf8TemplateError'
-import { TooBigBinarySequenceError } from './error/TooBigBinarySequenceError'
-import { Utf8TemplateNotFoundError } from './error/Utf8TemplateNotFoundError'
+import { TooLongBinarySequenceError } from './error/TooLongBinarySequenceError'
 
 export class Utf8Template {
   private constructor(private template: string) {}
@@ -13,16 +13,17 @@ export class Utf8Template {
     '11110xxx10xxxxxx10xxxxxx10xxxxxx',
   )
 
+  static all() {
+    return [this.ONE_BYTE, this.TWO_BYTES, this.THREE_BYTES, this.FOUR_BYTES]
+  }
+
   static forBinary(sequence: BinarySequence) {
-    const template = [
-      this.ONE_BYTE,
-      this.TWO_BYTES,
-      this.THREE_BYTES,
-      this.FOUR_BYTES,
-    ].find((template) => template.hasEnoughSlotsFor(sequence))
+    const template = this.all().find((template) =>
+      template.hasEnoughSlotsFor(sequence),
+    )
 
     if (!template)
-      throw new TooBigBinarySequenceError({
+      throw new TooLongBinarySequenceError({
         sequence,
         maxBits: this.FOUR_BYTES.countSlots(),
       })
@@ -33,14 +34,11 @@ export class Utf8Template {
   static forInitialByte(byte: Byte) {
     const byteStr = byte.join('')
 
-    const template = [
-      this.ONE_BYTE,
-      this.TWO_BYTES,
-      this.THREE_BYTES,
-      this.FOUR_BYTES,
-    ].find((template) => byteStr.startsWith(template.prefix()))
+    const template = this.all().find((template) =>
+      byteStr.startsWith(template.prefix()),
+    )
 
-    if (!template) throw new Utf8TemplateNotFoundError(byte)
+    if (!template) throw new InvalidInitialUtf8ByteError(byte)
 
     return template
   }
@@ -50,7 +48,7 @@ export class Utf8Template {
   }
 
   prefix() {
-    const binaryParts = this.template.match(/\d+/g)! as string[]
+    const binaryParts = this.template.match(/\d+/g) as string[]
     return binaryParts[0]
   }
 
@@ -73,7 +71,7 @@ export class Utf8Template {
 
   unshiftInSlots(sequence: BinarySequence): BinarySequence {
     if (!this.hasEnoughSlotsFor(sequence)) {
-      throw new TooBigBinarySequenceError({
+      throw new TooLongBinarySequenceError({
         sequence,
         maxBits: this.countBits(),
       })

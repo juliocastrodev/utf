@@ -1,3 +1,4 @@
+import { NotBinarySequenceError } from './error/NotBinarySequenceError'
 import { NotByteSequenceError } from './error/NotByteSequenceError'
 import { chunks } from './utils/chunks'
 
@@ -8,8 +9,7 @@ export class BinarySequence {
   constructor(private bits: Bit[]) {}
 
   static from(str: string) {
-    // TODO: maybe this exception can be grouped with NotByteSequenceError
-    if (!this.isBinary(str)) throw new Error('Not Binary sequence error')
+    if (!this.isBinary(str)) throw new NotBinarySequenceError(str)
 
     return new BinarySequence(str.split('') as Bit[])
   }
@@ -31,7 +31,6 @@ export class BinarySequence {
     return this.bits[index]
   }
 
-  // TODO: maybe this can be replaced with something like getByteAt(idx)
   groupInBytes() {
     if (this.bits.length % 8 !== 0) throw new NotByteSequenceError(this)
 
@@ -40,6 +39,10 @@ export class BinarySequence {
 
   countBits() {
     return this.bits.length
+  }
+
+  countBytes() {
+    return this.groupInBytes().length
   }
 
   toDecimal() {
