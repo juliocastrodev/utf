@@ -62,7 +62,7 @@ import { ClipboardComponent } from '../../../../shared/components/clipboard/clip
         </p>
 
         <utf-sequence
-          [show]="encodedCodepoint.getEncodingTemplate()"
+          [show]="encodedCodepoint.getEncodingTemplate().toString()"
           [colors]="getColorsForEncodingTemplate()"
           [groupSize]="8"
         />
@@ -119,7 +119,7 @@ export class ExplanationComponent {
   }
 
   getColorsForEncodingTemplate() {
-    const template = this.encodedCodepoint.getEncodingTemplate()
+    const template = this.encodedCodepoint.getEncodingTemplate().toString()
 
     const colorsForCodepoint = this.getColorsForCodepoint()
     let colorIndex = colorsForCodepoint.length - 1

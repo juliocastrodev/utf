@@ -16,6 +16,7 @@ import { Bit, isBinary } from '../../../domain/Binary'
   `,
 })
 export class BinaryTextAreaComponent {
+  private readonly BIT_GROUPS_SEPARATOR = '   '
   value: string = ''
 
   // returning false in an event handler means it's ignored/discarded
@@ -38,22 +39,16 @@ export class BinaryTextAreaComponent {
   format() {
     const bits = this.getBits()
 
-    const groups: Bit[][] = []
-    let group: Bit[] = []
-    for (let i = bits.length - 1; i >= 0; i--) {
-      group.unshift(bits[i])
-
-      if (group.length === 8) {
-        groups.unshift(group)
-        group = []
-      }
+    const groups: string[] = []
+    for (let i = 0; i < bits.length; i += 8) {
+      const group = bits.slice(i, i + 8).join('')
+      groups.push(group)
     }
-    if (group.length > 0) groups.unshift(group)
 
-    this.value = groups.map((group) => group.join('')).join(' ')
+    this.value = groups.join(this.BIT_GROUPS_SEPARATOR)
   }
 
   private getBits() {
-    return this.value.replaceAll(' ', '').split('') as Bit[]
+    return this.value.replaceAll(/\s/g, '').split('') as Bit[]
   }
 }

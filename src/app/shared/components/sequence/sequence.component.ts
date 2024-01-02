@@ -3,6 +3,9 @@ import { CommonModule } from '@angular/common'
 
 type SequenceElement = { show: string; color?: string }
 
+// TODO: find all places where I do this groups/.slice(i, i+x) logic and 
+// extract it to somewhere
+
 @Component({
   standalone: true,
   selector: 'utf-sequence',

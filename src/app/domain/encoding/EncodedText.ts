@@ -9,7 +9,7 @@ export class EncodedText {
   ) {}
 
   static encode(text: string) {
-    const encodedCodepoints = Codepoint.from(text).map(EncodedCodepoint.encode)
+    const encodedCodepoints = Codepoint.fromText(text).map(EncodedCodepoint.encode)
 
     return new EncodedText(text, encodedCodepoints)
   }

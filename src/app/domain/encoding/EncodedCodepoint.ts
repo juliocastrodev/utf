@@ -1,6 +1,7 @@
 import { Bit, groupInBytes } from '../Binary'
 import { Codepoint } from '../Codepoint'
 import { Utf8Encoder } from './Utf8Encoder'
+import { Utf8Template } from '../Utf8Template'
 
 export class EncodedCodepoint {
   private constructor(
@@ -24,7 +25,7 @@ export class EncodedCodepoint {
   }
 
   getEncodingTemplate() {
-    return Utf8Encoder.templateFor(this.codepoint.toBinary())
+    return Utf8Template.forBits(this.codepoint.toBinary())
   }
 
   countEncodingBytes() {
