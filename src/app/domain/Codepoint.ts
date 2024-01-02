@@ -1,4 +1,4 @@
-import { Bit } from './Binary'
+import { BinarySequence } from './BinarySequence'
 
 // TODO: search in project all "new Error(...)" and move those (like the one
 // in this file) to a domain error if it makes sense
@@ -22,9 +22,8 @@ export class Codepoint {
     })
   }
 
-  static fromBinary(bits: Bit[]) {
-    const codepointInDecimal = parseInt(bits.join(''), 2)
-    return new Codepoint(codepointInDecimal)
+  static fromBinary(sequence: BinarySequence) {
+    return new Codepoint(sequence.toDecimal())
   }
 
   getCharacter() {
@@ -32,7 +31,7 @@ export class Codepoint {
   }
 
   toBinary() {
-    return this.codepointInDecimal.toString(2).split('') as Bit[]
+    return BinarySequence.from(this.codepointInDecimal.toString(2))
   }
 
   toHex() {

@@ -1,4 +1,4 @@
-import { Bit } from '../Binary'
+import { BinarySequence } from '../BinarySequence'
 import { Codepoint } from '../Codepoint'
 import { EncodedCodepoint } from './EncodedCodepoint'
 
@@ -9,7 +9,9 @@ export class EncodedText {
   ) {}
 
   static encode(text: string) {
-    const encodedCodepoints = Codepoint.fromText(text).map(EncodedCodepoint.encode)
+    const encodedCodepoints = Codepoint.fromText(text).map(
+      EncodedCodepoint.encode,
+    )
 
     return new EncodedText(text, encodedCodepoints)
   }
@@ -18,9 +20,11 @@ export class EncodedText {
     return this.originalText
   }
 
-  getEncoding(): Bit[] {
-    return this.encodedCodepoints.flatMap((encodedCodepoint) =>
-      encodedCodepoint.getEncoding(),
+  getEncoding(): BinarySequence {
+    return BinarySequence.concat(
+      ...this.encodedCodepoints.map((encodedCodepoint) =>
+        encodedCodepoint.getEncoding(),
+      ),
     )
   }
 

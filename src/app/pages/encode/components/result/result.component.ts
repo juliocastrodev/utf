@@ -3,7 +3,6 @@ import { SectionComponent } from '../../../../shared/components/section/section.
 import { ButtonComponent } from '../../../../shared/components/button/button.component'
 import { EncodedText } from '../../../../domain/encoding/EncodedText'
 import { EncodedCodepoint } from '../../../../domain/encoding/EncodedCodepoint'
-import { FormatBitsPipe } from '../../../../shared/pipes/format-bits.pipe'
 import { ClipboardComponent } from '../../../../shared/components/clipboard/clipboard.component'
 import { ExpandableListComponent } from '../../../../shared/components/expandable-list/expandable-list.component'
 import { ExpandableListItemComponent } from '../../../../shared/components/expandable-list/expandable-list-item.component'
@@ -15,7 +14,6 @@ import { ExpandableTextComponent } from '../../../../shared/components/expandabl
   imports: [
     SectionComponent,
     ButtonComponent,
-    FormatBitsPipe,
     ClipboardComponent,
     ExpandableListComponent,
     ExpandableListItemComponent,
@@ -56,12 +54,12 @@ import { ExpandableTextComponent } from '../../../../shared/components/expandabl
       <div class="flex flex-wrap gap-2 items-center">
         <utf-expandable-text
           classes="text-h3 text-secondary"
-          [text]="encodedText.getEncoding() | utfFormatBits"
+          [text]="encodedText.getEncoding().toString()"
         />
 
         <utf-clipboard
           class="ml-auto"
-          [copy]="encodedText.getEncoding() | utfFormatBits"
+          [copy]="encodedText.getEncoding().toString()"
         />
       </div>
     </utf-section>

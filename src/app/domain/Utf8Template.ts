@@ -1,4 +1,4 @@
-import { Bit, Byte } from './Binary'
+import { BinarySequence, Bit, Byte } from './BinarySequence'
 import { MismatchUtf8TemplateError } from './error/MismatchUtf8TemplateError'
 import { TooBigBinarySequenceError } from './error/TooBigBinarySequenceError'
 import { Utf8TemplateNotFoundError } from './error/Utf8TemplateNotFoundError'
@@ -13,15 +13,21 @@ export class Utf8Template {
     '11110xxx10xxxxxx10xxxxxx10xxxxxx',
   )
 
-  static forBits(bits: Bit[]) {
-    const bitsCount = bits.length
+  static forBinary(sequence: BinarySequence) {
+    const template = [
+      this.ONE_BYTE,
+      this.TWO_BYTES,
+      this.THREE_BYTES,
+      this.FOUR_BYTES,
+    ].find((template) => template.hasEnoughSlotsFor(sequence))
 
-    if (bitsCount <= 7) return this.ONE_BYTE
-    if (bitsCount <= 11) return this.TWO_BYTES
-    if (bitsCount <= 16) return this.THREE_BYTES
-    if (bitsCount <= 21) return this.FOUR_BYTES
+    if (!template)
+      throw new TooBigBinarySequenceError({
+        sequence,
+        maxBits: this.FOUR_BYTES.countSlots(),
+      })
 
-    throw new TooBigBinarySequenceError({ sequence: bits, maxBits: 21 })
+    return template
   }
 
   static forInitialByte(byte: Byte) {
@@ -39,59 +45,72 @@ export class Utf8Template {
     return template
   }
 
+  hasEnoughSlotsFor(sequence: BinarySequence) {
+    return this.countSlots() >= sequence.countBits()
+  }
+
   prefix() {
     const binaryParts = this.template.match(/\d+/g)! as string[]
     return binaryParts[0]
   }
 
-  unshiftInSlots(bits: Bit[]): Bit[] {
-    if (bits.length > this.template.length)
-      throw new TooBigBinarySequenceError({
-        sequence: bits,
-        maxBits: this.template.length,
-      })
+  countSlots() {
+    const xsCount = this.template.match(/x/g)?.length ?? 0
+    return xsCount
+  }
 
-    const templateArray = this.template.split('')
-
-    let currentBitIdx = bits.length - 1
-    for (
-      let toReplaceIdx = this.template.length - 1;
-      toReplaceIdx >= 0;
-      toReplaceIdx--
-    ) {
-      if (templateArray[toReplaceIdx] === 'x') {
-        templateArray[toReplaceIdx] = bits[currentBitIdx] ?? '0'
-        currentBitIdx--
-      }
-    }
-
-    return templateArray as Bit[]
+  countBits() {
+    return this.template.length
   }
 
   countBytes() {
-    const zerosCount = this.template.match(/0/g)?.length ?? 0
-    return zerosCount
+    return this.countBits() / 8
   }
 
   countIntermediateBytes() {
     return this.countBytes() - 1
   }
 
-  readSlotsFrom(bits: Bit[]) {
-    if (bits.length !== this.template.length)
-      throw new MismatchUtf8TemplateError({ sequence: bits, expected: this })
+  unshiftInSlots(sequence: BinarySequence): BinarySequence {
+    if (!this.hasEnoughSlotsFor(sequence)) {
+      throw new TooBigBinarySequenceError({
+        sequence,
+        maxBits: this.countBits(),
+      })
+    }
 
-    const result: Bit[] = []
+    const templateArray = this.template.split('')
+    let currentBitIdx = sequence.countBits() - 1
 
-    bits.forEach((bit, idx) => {
-      if (this.template[idx] === 'x') {
-        result.push(bit)
-      } else if (bit !== this.template[idx]) {
-        throw new MismatchUtf8TemplateError({ sequence: bits, expected: this })
+    for (
+      let templateIdx = templateArray.length - 1;
+      templateIdx >= 0;
+      templateIdx--
+    ) {
+      if (templateArray[templateIdx] === 'x') {
+        templateArray[templateIdx] = sequence.bitAt(currentBitIdx) ?? '0'
+        currentBitIdx--
       }
-    })
+    }
 
-    return result
+    return new BinarySequence(templateArray as Bit[])
+  }
+
+  readSlotsFrom(sequence: BinarySequence): BinarySequence {
+    if (sequence.countBits() !== this.countBits())
+      throw new MismatchUtf8TemplateError({ sequence, expected: this })
+
+    const readBits: Bit[] = []
+
+    for (let i = 0; i < this.template.length; i++) {
+      if (this.template[i] === 'x') {
+        readBits.push(sequence.bitAt(i)!)
+      } else if (this.template[i] !== sequence.bitAt(i)) {
+        throw new MismatchUtf8TemplateError({ sequence, expected: this })
+      }
+    }
+
+    return new BinarySequence(readBits)
   }
 
   toString() {

@@ -1,10 +1,8 @@
 import { Component, Input } from '@angular/core'
 import { CommonModule } from '@angular/common'
+import { chunks } from '../../../domain/utils/chunks'
 
 type SequenceElement = { show: string; color?: string }
-
-// TODO: find all places where I do this groups/.slice(i, i+x) logic and 
-// extract it to somewhere
 
 @Component({
   standalone: true,
@@ -40,13 +38,7 @@ export class SequenceComponent {
 
     if (!this.groupSize) return [elements]
 
-    const groups: SequenceElement[][] = []
-    for (let i = 0; i < elements.length; i += this.groupSize) {
-      const group = elements.slice(i, i + this.groupSize)
-      groups.push(group)
-    }
-
-    return groups
+    return chunks(elements, this.groupSize)
   }
 
   private getElements(): SequenceElement[] {

@@ -2,18 +2,12 @@ import { Component, Input } from '@angular/core'
 import { SectionComponent } from '../../../../shared/components/section/section.component'
 import { EncodedCodepoint } from '../../../../domain/encoding/EncodedCodepoint'
 import { SequenceComponent } from '../../../../shared/components/sequence/sequence.component'
-import { FormatBitsPipe } from '../../../../shared/pipes/format-bits.pipe'
 import { ClipboardComponent } from '../../../../shared/components/clipboard/clipboard.component'
 
 @Component({
   standalone: true,
   selector: 'utf-explanation',
-  imports: [
-    SectionComponent,
-    SequenceComponent,
-    FormatBitsPipe,
-    ClipboardComponent,
-  ],
+  imports: [SectionComponent, SequenceComponent, ClipboardComponent],
   template: `
     <utf-section classes="flex flex-col gap-4">
       <div class="flex gap-2">
@@ -32,7 +26,7 @@ import { ClipboardComponent } from '../../../../shared/components/clipboard/clip
       </p>
 
       <utf-sequence
-        [show]="getCodepoint().toBinary()"
+        [show]="getCodepoint().toBinary().getBits()"
         [colors]="getColorsForCodepoint()"
       />
 
@@ -51,7 +45,7 @@ import { ClipboardComponent } from '../../../../shared/components/clipboard/clip
         </p>
 
         <utf-sequence
-          [show]="encodedCodepoint.getEncoding()"
+          [show]="encodedCodepoint.getEncoding().getBits()"
           [colors]="getColorsForEncodingTemplate()"
           [groupSize]="8"
         />
@@ -73,7 +67,7 @@ import { ClipboardComponent } from '../../../../shared/components/clipboard/clip
         </p>
 
         <utf-sequence
-          [show]="encodedCodepoint.getEncoding()"
+          [show]="encodedCodepoint.getEncoding().getBits()"
           [colors]="getColorsForEncodingTemplate()"
           [groupSize]="8"
         />
@@ -83,11 +77,11 @@ import { ClipboardComponent } from '../../../../shared/components/clipboard/clip
 
       <div class="flex flex-wrap gap-2 items-center">
         <h3 class="text-secondary">
-          {{ encodedCodepoint.getEncoding() | utfFormatBits }}
+          {{ encodedCodepoint.getEncoding().toString() }}
         </h3>
         <utf-clipboard
           class="ml-auto"
-          [copy]="encodedCodepoint.getEncoding() | utfFormatBits"
+          [copy]="encodedCodepoint.getEncoding().toString()"
         />
       </div>
     </utf-section>
@@ -109,7 +103,7 @@ export class ExplanationComponent {
     }
 
     const colors: string[] = []
-    for (let i = this.getCodepoint().toBinary().length - 1; i >= 0; i--) {
+    for (let i = this.getCodepoint().toBinary().countBits() - 1; i >= 0; i--) {
       colors.unshift(currentColor)
 
       if (colors.length % 8 === 0) changeColor()

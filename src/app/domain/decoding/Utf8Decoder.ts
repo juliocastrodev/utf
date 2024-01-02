@@ -1,10 +1,10 @@
-import { Bit, groupInBytes } from '../Binary'
+import { BinarySequence } from '../BinarySequence'
 import { Codepoint } from '../Codepoint'
 import { Utf8Template } from '../Utf8Template'
 
 export class Utf8Decoder {
-  static decode(bits: Bit[]): Codepoint[] {
-    const bytes = groupInBytes(bits)
+  static decode(sequence: BinarySequence): Codepoint[] {
+    const bytes = sequence.groupInBytes()
     const codepoints: Codepoint[] = []
 
     let currentByteIdx = 0
@@ -17,7 +17,9 @@ export class Utf8Decoder {
         currentByteIdx + 1 + template.countIntermediateBytes(),
       )
 
-      const completeSequence = [firstByte, ...nextBytes].flat()
+      const completeSequence = new BinarySequence(
+        [firstByte, ...nextBytes].flat(),
+      )
       const decoded = template.readSlotsFrom(completeSequence)
 
       codepoints.push(Codepoint.fromBinary(decoded))

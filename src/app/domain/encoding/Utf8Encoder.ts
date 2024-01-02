@@ -1,8 +1,8 @@
-import { Bit } from '../Binary'
+import { BinarySequence } from '../BinarySequence'
 import { Utf8Template } from '../Utf8Template'
 
 export class Utf8Encoder {
-  static encodeBits(bits: Bit[]): Bit[] {
-    return Utf8Template.forBits(bits).unshiftInSlots(bits)
+  static encodeBits(sequence: BinarySequence): BinarySequence {
+    return Utf8Template.forBinary(sequence).unshiftInSlots(sequence)
   }
 }

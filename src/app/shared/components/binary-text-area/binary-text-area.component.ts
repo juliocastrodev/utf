@@ -1,6 +1,7 @@
 import { Component } from '@angular/core'
 import { TextAreaComponent } from '../text-area/text-area.component'
-import { Bit, isBinary } from '../../../domain/Binary'
+import { BinarySequence } from '../../../domain/BinarySequence'
+import { chunks } from '../../../domain/utils/chunks'
 
 @Component({
   standalone: true,
@@ -27,28 +28,23 @@ export class BinaryTextAreaComponent {
       return false
     }
 
-    return isBinary(key)
+    return BinarySequence.isBinary(key)
   }
 
   handlePaste(event: ClipboardEvent) {
     const content =
-      event.clipboardData?.getData('text/plain').replaceAll(' ', '') ?? ''
-    return isBinary(content)
+      event.clipboardData?.getData('text/plain').replaceAll(/\s/g, '') ?? ''
+    return BinarySequence.isBinary(content)
   }
 
   format() {
-    const bits = this.getBits()
+    const bits = this.value.replaceAll(/\s/g, '').split('')
+    const groups = chunks(bits, 8)
 
-    const groups: string[] = []
-    for (let i = 0; i < bits.length; i += 8) {
-      const group = bits.slice(i, i + 8).join('')
-      groups.push(group)
-    }
+    const formattedValue = groups
+      .map((group) => group.join(''))
+      .join(this.BIT_GROUPS_SEPARATOR)
 
-    this.value = groups.join(this.BIT_GROUPS_SEPARATOR)
-  }
-
-  private getBits() {
-    return this.value.replaceAll(/\s/g, '').split('') as Bit[]
+    this.value = formattedValue
   }
 }
