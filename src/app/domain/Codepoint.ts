@@ -21,6 +21,10 @@ export class Codepoint {
     return this.character
   }
 
+  toDecimal() {
+    return this.codepointInDecimal
+  }
+
   toBinary() {
     return BinarySequence.from(this.codepointInDecimal.toString(2))
   }

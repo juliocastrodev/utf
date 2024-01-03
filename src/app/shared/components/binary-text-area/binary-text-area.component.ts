@@ -1,6 +1,6 @@
-import { Component } from '@angular/core'
+import { Component, EventEmitter, Output } from '@angular/core'
 import { TextAreaComponent } from '../text-area/text-area.component'
-import { BinarySequence } from '../../../domain/BinarySequence'
+import { BinarySequence, Bit } from '../../../domain/BinarySequence'
 import { chunks } from '../../../domain/utils/chunks'
 
 @Component({
@@ -12,19 +12,19 @@ import { chunks } from '../../../domain/utils/chunks'
       [(value)]="value"
       (keypress)="handleKeypress($event)"
       (paste)="handlePaste($event)"
-      (blur)="format()"
+      (onblur)="formatAndSubmit()"
     />
   `,
 })
 export class BinaryTextAreaComponent {
-  private readonly BIT_GROUPS_SEPARATOR = '   '
-  value: string = ''
+  @Output() onsubmit = new EventEmitter<BinarySequence>()
+
+  value = ''
 
   // returning false in an event handler means it's ignored/discarded
-
   handleKeypress({ key }: KeyboardEvent) {
     if (key === 'Enter') {
-      this.format()
+      this.formatAndSubmit()
       return false
     }
 
@@ -34,17 +34,23 @@ export class BinaryTextAreaComponent {
   handlePaste(event: ClipboardEvent) {
     const content =
       event.clipboardData?.getData('text/plain').replaceAll(/\s/g, '') ?? ''
+
     return BinarySequence.isBinary(content)
   }
 
-  format() {
-    const bits = this.value.replaceAll(/\s/g, '').split('')
-    const groups = chunks(bits, 8)
+  formatAndSubmit() {
+    const binarySequence = this.getBinarySequence()
 
-    const formattedValue = groups
-      .map((group) => group.join(''))
-      .join(this.BIT_GROUPS_SEPARATOR)
+    const byteSizeChunks = chunks(binarySequence.getBits(), 8)
+    const byteSizeChunksStr = byteSizeChunks.map((chunk) => chunk.join(''))
+    const formattedValue = byteSizeChunksStr.join('   ')
 
     this.value = formattedValue
+    this.onsubmit.emit(binarySequence)
+  }
+
+  private getBinarySequence() {
+    const bits = this.value.replaceAll(/\s/g, '').split('') as Bit[]
+    return new BinarySequence(bits)
   }
 }

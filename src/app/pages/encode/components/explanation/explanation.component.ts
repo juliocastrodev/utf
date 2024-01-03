@@ -10,10 +10,12 @@ import { ClipboardComponent } from '../../../../shared/components/clipboard/clip
   imports: [SectionComponent, SequenceComponent, ClipboardComponent],
   template: `
     <utf-section classes="flex flex-col gap-4">
-      <div class="flex gap-2">
-        <h3>Encoding of</h3>
-        <h3 class="font-serif">{{ getCodepoint().getCharacter() }}</h3>
-      </div>
+      <h3>
+        Encoding of "<span class="text-h3 font-serif">{{
+          getCodepoint().getCharacter()
+        }}</span
+        >"
+      </h3>
 
       <p>
         El carácter

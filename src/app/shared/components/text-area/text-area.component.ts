@@ -1,4 +1,3 @@
-/* eslint-disable @angular-eslint/no-output-native */
 import { CommonModule } from '@angular/common'
 import { Component, EventEmitter, Input, Output } from '@angular/core'
 import { FormsModule } from '@angular/forms'
@@ -14,7 +13,7 @@ import { AutoResizeDirective } from '../../directives/autoresize/auto-resize.dir
       [ngModel]="value"
       (ngModelChange)="valueChange.emit($event)"
       [disabled]="disabled"
-      (blur)="blur.emit($event)"
+      (blur)="onblur.emit($event)"
       [ngClass]="[
         'w-full resize-none overflow-hidden',
         'text-center font-serif',
@@ -32,5 +31,5 @@ export class TextAreaComponent {
 
   @Input() disabled = false
 
-  @Output() blur = new EventEmitter<FocusEvent>()
+  @Output() onblur = new EventEmitter<FocusEvent>()
 }
