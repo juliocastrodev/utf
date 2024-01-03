@@ -6,7 +6,7 @@ import { ClipboardComponent } from '../../../../shared/components/clipboard/clip
 
 @Component({
   standalone: true,
-  selector: 'utf-explanation',
+  selector: 'utf-encode-explanation',
   imports: [SectionComponent, SequenceComponent, ClipboardComponent],
   template: `
     <utf-section classes="flex flex-col gap-4">
@@ -89,7 +89,7 @@ import { ClipboardComponent } from '../../../../shared/components/clipboard/clip
     </utf-section>
   `,
 })
-export class ExplanationComponent {
+export class EncodeExplanationComponent {
   @Input({ required: true }) encodedCodepoint!: EncodedCodepoint
 
   getCodepoint() {

@@ -6,8 +6,8 @@ import { NavigateDirective } from '../../shared/directives/navigate/navigate.dir
 import { TextAreaComponent } from '../../shared/components/text-area/text-area.component'
 import { SectionComponent } from '../../shared/components/section/section.component'
 import { EncodingService } from '../../shared/services/encoding/encoding.service'
-import { ResultComponent } from './components/result/result.component'
-import { ExplanationComponent } from './components/explanation/explanation.component'
+import { EncodeResultComponent } from './components/result/encode-result.component'
+import { EncodeExplanationComponent } from './components/explanation/encode-explanation.component'
 import { ScrollDirective } from '../../shared/directives/scroll/scroll.directive'
 import { EncodedText } from '../../domain/encoding/EncodedText'
 import { EncodedCodepoint } from '../../domain/encoding/EncodedCodepoint'
@@ -21,8 +21,8 @@ import { EncodedCodepoint } from '../../domain/encoding/EncodedCodepoint'
     NavigateDirective,
     TextAreaComponent,
     SectionComponent,
-    ResultComponent,
-    ExplanationComponent,
+    EncodeResultComponent,
+    EncodeExplanationComponent,
     ScrollDirective,
   ],
   template: ` <utf-fullscreen>
@@ -35,13 +35,13 @@ import { EncodedCodepoint } from '../../domain/encoding/EncodedCodepoint'
       </div>
 
       @if (encodedText) {
-        <utf-result
+        <utf-encode-result
           [encodedText]="encodedText"
           (selectcodepoint)="selectedCodepoint = $event"
         />
       }
       @if (selectedCodepoint) {
-        <utf-explanation
+        <utf-encode-explanation
           [encodedCodepoint]="selectedCodepoint"
           [utfScroll]="{ dependsOn: selectedCodepoint }"
         />

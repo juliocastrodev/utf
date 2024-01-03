@@ -9,7 +9,7 @@ import { ExpandableListItemComponent } from '../../../../shared/components/expan
 import { ExpandableTextComponent } from '../../../../shared/components/expandable-text/expandable-text.component'
 
 @Component({
-  selector: 'utf-result',
+  selector: 'utf-encode-result',
   standalone: true,
   imports: [
     SectionComponent,
@@ -65,7 +65,7 @@ import { ExpandableTextComponent } from '../../../../shared/components/expandabl
     </utf-section>
   `,
 })
-export class ResultComponent {
+export class EncodeResultComponent {
   @Input({ required: true }) encodedText!: EncodedText
   @Output() selectcodepoint = new EventEmitter<EncodedCodepoint>()
 }

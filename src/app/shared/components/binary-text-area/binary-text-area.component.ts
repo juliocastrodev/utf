@@ -3,6 +3,8 @@ import { TextAreaComponent } from '../text-area/text-area.component'
 import { BinarySequence, Bit } from '../../../domain/BinarySequence'
 import { chunks } from '../../../domain/utils/chunks'
 
+// TODO: display error message if user attempts to input stuff that is not binary
+
 @Component({
   standalone: true,
   selector: 'utf-binary-text-area',

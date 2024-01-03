@@ -4,7 +4,12 @@ import { BinaryTextAreaComponent } from '../../shared/components/binary-text-are
 import { ButtonComponent } from '../../shared/components/button/button.component'
 import { NavigateDirective } from '../../shared/directives/navigate/navigate.directive'
 import { BinarySequence } from '../../domain/BinarySequence'
-import { DecodingService } from '../../shared/services/decoding/decoding.service'
+import {
+  DecodeError,
+  DecodingService,
+} from '../../shared/services/decoding/decoding.service'
+import { DecodeErrorComponent } from './components/error/decode-error.component'
+import { DecodeResultComponent } from './components/result/decode-result.component'
 
 @Component({
   standalone: true,
@@ -13,6 +18,8 @@ import { DecodingService } from '../../shared/services/decoding/decoding.service
     BinaryTextAreaComponent,
     ButtonComponent,
     NavigateDirective,
+    DecodeErrorComponent,
+    DecodeResultComponent,
   ],
   template: `<utf-fullscreen>
     <h1 class="font-retro">Decode</h1>
@@ -20,10 +27,15 @@ import { DecodingService } from '../../shared/services/decoding/decoding.service
     <div class="mt-20 max-w-3xl flex grow flex-col gap-12">
       <div class="flex flex-col gap-2 items-center">
         <h3 class="text-secondary">Introduce tus bits</h3>
-        <utf-binary-text-area (onsubmit)="sequence = $event" />
+        <utf-binary-text-area (onsubmit)="sequence = $event; decode()" />
       </div>
 
-      <p>El resultado final es: {{ decodedText }}</p>
+      @if (decodedText) {
+        <utf-decode-result />
+      }
+      @if (error) {
+        <utf-decode-error [error]="error" />
+      }
 
       <div class="mt-auto flex justify-center gap-5">
         <utf-button utfNavigate="/">Back</utf-button>
@@ -35,6 +47,7 @@ import { DecodingService } from '../../shared/services/decoding/decoding.service
 export class DecodePageComponent {
   sequence?: BinarySequence
   decodedText?: string
+  error?: DecodeError
 
   constructor(private decodingService: DecodingService) {}
 
@@ -42,7 +55,8 @@ export class DecodePageComponent {
   decode() {
     if (!this.sequence) return
 
-    const { text } = this.decodingService.decode(this.sequence)
+    const { text, error } = this.decodingService.decode(this.sequence)
     this.decodedText = text
+    this.error = error
   }
 }
