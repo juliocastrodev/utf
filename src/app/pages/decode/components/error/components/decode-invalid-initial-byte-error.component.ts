@@ -32,12 +32,6 @@ import { Utf8Template } from '../../../../../domain/Utf8Template'
           [colors]="{ '0': 'blue', '1': 'blue' }"
         />
       }
-
-      <p>
-        Ten en cuenta que después de este byte inicial, deben de haber
-        exactamente el número correspondiente de
-        <span class="underline text-secondary">bytes intermedios</span>
-      </p>
     </div>
   `,
 })

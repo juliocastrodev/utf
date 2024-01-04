@@ -4,9 +4,13 @@ import { Utf8Decoder } from '../../../domain/decoding/Utf8Decoder'
 import { NotByteSequenceError } from '../../../domain/error/NotByteSequenceError'
 import { Codepoint } from '../../../domain/Codepoint'
 import { InvalidInitialUtf8ByteError } from '../../../domain/error/InvalidInitialUtf8ByteError'
+import { MismatchUtf8TemplateError } from '../../../domain/error/MismatchUtf8TemplateError'
 
 // TODO: move this somewhere else
-export type DecodeError = NotByteSequenceError | InvalidInitialUtf8ByteError
+export type DecodeError =
+  | NotByteSequenceError
+  | InvalidInitialUtf8ByteError
+  | MismatchUtf8TemplateError
 
 @Injectable({ providedIn: 'root' })
 export class DecodingService {

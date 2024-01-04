@@ -6,6 +6,8 @@ import { NotByteSequenceError } from '../../../../domain/error/NotByteSequenceEr
 import { InvalidInitialUtf8ByteError } from '../../../../domain/error/InvalidInitialUtf8ByteError'
 import { DecodeNotByteSequenceErrorComponent } from './components/decode-not-byte-sequence-error.component'
 import { DecodeInvalidInitialByteErrorComponent } from './components/decode-invalid-initial-byte-error.component'
+import { MismatchUtf8TemplateError } from '../../../../domain/error/MismatchUtf8TemplateError'
+import { DecodeMismatchTemplateErrorComponent } from './components/decode-mismatch-template-error.component'
 
 @Component({
   selector: 'utf-decode-error',
@@ -15,6 +17,7 @@ import { DecodeInvalidInitialByteErrorComponent } from './components/decode-inva
     ButtonComponent,
     DecodeNotByteSequenceErrorComponent,
     DecodeInvalidInitialByteErrorComponent,
+    DecodeMismatchTemplateErrorComponent,
   ],
   template: `
     <utf-section classes="flex flex-col gap-4">
@@ -24,6 +27,8 @@ import { DecodeInvalidInitialByteErrorComponent } from './components/decode-inva
         <utf-decode-not-byte-sequence-error [error]="error" />
       } @else if (isInvalidInitialByteError(this.error)) {
         <utf-decode-invalid-initial-byte-error [error]="error" />
+      } @else if (isMismatchTemplateError(error)) {
+        <utf-decode-mismatch-template-error [error]="error" />
       } @else {
         <p>Ha ocurrido un error de decodificación desconocido</p>
       }
@@ -44,5 +49,9 @@ export class DecodeErrorComponent {
 
   isInvalidInitialByteError(e: Error): e is InvalidInitialUtf8ByteError {
     return e instanceof InvalidInitialUtf8ByteError
+  }
+
+  isMismatchTemplateError(e: Error): e is MismatchUtf8TemplateError {
+    return e instanceof MismatchUtf8TemplateError
   }
 }
