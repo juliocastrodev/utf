@@ -29,7 +29,7 @@ import { Utf8Template } from '../../../../../domain/Utf8Template'
       @for (validInitialByte of getAllPossibleInitialBytes(); track $index) {
         <utf-sequence
           [show]="validInitialByte"
-          [colors]="getAllPossibleInitialBytesColors()"
+          [colors]="{ '0': 'blue', '1': 'blue' }"
         />
       }
 
@@ -50,11 +50,5 @@ export class DecodeInvalidInitialByteErrorComponent {
 
   getAllPossibleInitialBytes() {
     return Utf8Template.all().map((template) => template.getByteAt(0))
-  }
-
-  getAllPossibleInitialBytesColors() {
-    return this.getAllPossibleInitialBytes().map((character) =>
-      character === '1' ? 'blue' : undefined,
-    )
   }
 }

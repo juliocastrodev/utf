@@ -23,7 +23,7 @@ import { SequenceComponent } from '../../../../../shared/components/sequence/seq
 
       <utf-sequence
         [show]="getSuggestedSequenceToFillUp()"
-        [colors]="getSuggestedSequenceToFillUpColors()"
+        [colors]="{ x: 'red' }"
       />
     </div>
   `,
@@ -44,11 +44,5 @@ export class DecodeNotByteSequenceErrorComponent {
     return (
       'x'.repeat(missingBitsCountToCompleteByte) + uncompletedLastByte.join('')
     )
-  }
-
-  getSuggestedSequenceToFillUpColors() {
-    return this.getSuggestedSequenceToFillUp()
-      .split('')
-      .map((character) => (character === 'x' ? 'red' : undefined))
   }
 }
