@@ -31,7 +31,7 @@ import { DecodeResultComponent } from './components/result/decode-result.compone
       </div>
 
       @if (decodedText) {
-        <utf-decode-result />
+        <utf-decode-result [text]="decodedText" />
       }
       @if (error) {
         <utf-decode-error [error]="error" />

@@ -2,7 +2,7 @@ import { Byte } from '../BinarySequence'
 import { Utf8Template } from '../Utf8Template'
 
 export class InvalidInitialUtf8ByteError extends Error {
-  constructor(byte: Byte) {
+  constructor(public byte: Byte) {
     const message =
       `Byte [${byte.join('')}] doesn't have the right ` +
       `format to be the initial byte of an utf-8 binary sequence. ` +

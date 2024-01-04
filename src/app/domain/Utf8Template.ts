@@ -2,6 +2,7 @@ import { BinarySequence, Bit, Byte } from './BinarySequence'
 import { InvalidInitialUtf8ByteError } from './error/InvalidInitialUtf8ByteError'
 import { MismatchUtf8TemplateError } from './error/MismatchUtf8TemplateError'
 import { TooLongBinarySequenceError } from './error/TooLongBinarySequenceError'
+import { chunks } from './utils/chunks'
 
 export class Utf8Template {
   private constructor(private template: string) {}
@@ -67,6 +68,11 @@ export class Utf8Template {
 
   countIntermediateBytes() {
     return this.countBytes() - 1
+  }
+
+  getByteAt(idx: number): string {
+    const bytes = chunks(this.template.split(''), 8)
+    return bytes[idx].join('')
   }
 
   unshiftInSlots(sequence: BinarySequence): BinarySequence {
