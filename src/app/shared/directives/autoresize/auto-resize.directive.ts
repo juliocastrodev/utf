@@ -1,6 +1,7 @@
 import {
   Directive,
   ElementRef,
+  HostListener,
   Input,
   OnChanges,
   SimpleChanges,
@@ -21,6 +22,11 @@ export class AutoResizeDirective implements OnChanges {
     if (changes['dependency']) {
       setTimeout(() => this.resize())
     }
+  }
+
+  @HostListener('window:resize')
+  onWindowResize() {
+    this.resize()
   }
 
   resize() {

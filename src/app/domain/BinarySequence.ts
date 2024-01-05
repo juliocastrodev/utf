@@ -23,6 +23,10 @@ export class BinarySequence {
     return /^(0|1)+$/g.test(str)
   }
 
+  static extractBitsFrom(str: string) {
+    return (str.match(/(0|1)/g) ?? []) as Bit[]
+  }
+
   getBits() {
     return this.bits
   }

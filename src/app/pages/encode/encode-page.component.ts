@@ -3,7 +3,7 @@ import { FullScreenComponent } from '../../shared/components/fullscreen/fullscre
 import { ButtonComponent } from '../../shared/components/button/button.component'
 import { RouterModule } from '@angular/router'
 import { NavigateDirective } from '../../shared/directives/navigate/navigate.directive'
-import { TextAreaComponent } from '../../shared/components/text-area/text-area.component'
+import { InputComponent } from '../../shared/components/input/input.component'
 import { SectionComponent } from '../../shared/components/section/section.component'
 import { EncodingService } from '../../shared/services/encoding/encoding.service'
 import { EncodeResultComponent } from './components/result/encode-result.component'
@@ -19,7 +19,7 @@ import { EncodedCodepoint } from '../../domain/encoding/EncodedCodepoint'
     ButtonComponent,
     RouterModule,
     NavigateDirective,
-    TextAreaComponent,
+    InputComponent,
     SectionComponent,
     EncodeResultComponent,
     EncodeExplanationComponent,
@@ -31,7 +31,7 @@ import { EncodedCodepoint } from '../../domain/encoding/EncodedCodepoint'
     <div class="mt-20 max-w-3xl flex grow flex-col gap-12">
       <div class="flex flex-col gap-2 items-center">
         <h3 class="text-secondary">Introduce algo</h3>
-        <utf-text-area [disabled]="!!encodedText" [(value)]="textToEncode" />
+        <utf-input [disabled]="!!encodedText" [(value)]="textToEncode" />
       </div>
 
       @if (encodedText) {
