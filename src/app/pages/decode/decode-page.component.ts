@@ -1,6 +1,6 @@
 import { Component, HostListener } from '@angular/core'
 import { FullScreenComponent } from '../../shared/components/fullscreen/fullscreen.component'
-import { BinaryTextAreaComponent } from '../../shared/components/binary-text-area/binary-text-area.component'
+import { BinaryInputComponent } from '../../shared/components/binary-input/binary-input.component'
 import { ButtonComponent } from '../../shared/components/button/button.component'
 import { NavigateDirective } from '../../shared/directives/navigate/navigate.directive'
 import { BinarySequence } from '../../domain/BinarySequence'
@@ -15,7 +15,7 @@ import { DecodeResultComponent } from './components/result/decode-result.compone
   standalone: true,
   imports: [
     FullScreenComponent,
-    BinaryTextAreaComponent,
+    BinaryInputComponent,
     ButtonComponent,
     NavigateDirective,
     DecodeErrorComponent,
@@ -25,9 +25,9 @@ import { DecodeResultComponent } from './components/result/decode-result.compone
     <h1 class="font-retro">Decode</h1>
 
     <div class="mt-20 max-w-3xl flex grow flex-col items-center gap-12">
-      <div class="flex flex-col gap-2 ">
+      <div class="flex flex-col items-center gap-2 ">
         <h3 class="text-secondary">Introduce tus bits</h3>
-        <utf-binary-text-area [(sequence)]="sequence" />
+        <utf-binary-input [(sequence)]="sequence" [(valid)]="isValidSequence" />
       </div>
 
       @if (decodedText) {
@@ -53,13 +53,15 @@ import { DecodeResultComponent } from './components/result/decode-result.compone
 })
 export class DecodePageComponent {
   sequence = BinarySequence.empty()
+  isValidSequence?: boolean
+
   decodedText?: string
   error?: DecodeError
 
   constructor(private decodingService: DecodingService) {}
 
   canDecode() {
-    return !this.sequence.isEmpty()
+    return !this.sequence.isEmpty() && this.isValidSequence
   }
 
   @HostListener('keydown.enter')
