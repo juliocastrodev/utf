@@ -28,10 +28,16 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
       [utfAutoResize]="{ dependsOn: value }"
       [ngClass]="getClasses()"
     ></div>
+
+    @if (valid === false && errorMessage) {
+      <span class="block mt-2 font-serif text-error">{{ errorMessage }}</span>
+    }
   `,
 })
 export class InputComponent implements OnChanges {
   @Input() disabled = false
+  @Input() valid?: boolean
+  @Input() errorMessage = ''
   @Input() colored?: { color?: string; match: string }
   @Input() textAlign: 'center' | 'start' = 'center'
   @Input() value = ''
@@ -91,14 +97,18 @@ export class InputComponent implements OnChanges {
       'min-h-[70px] min-w-[210px]',
       'sm:min-h-[100px] sm:min-w-[300px]',
       'w-full overflow-hidden break-all',
-      'font-serif text-accent ',
+      'font-serif text-accent whitespace-pre-wrap',
       'p-4 outline-none bg-background',
-      'border-b-primary border-b-2',
-      'hover:border-b-4',
+      'border-b-2 hover:border-b-4',
     ]
 
     const textAlignClasses =
       this.textAlign === 'center' ? ['text-center'] : ['text-start']
+
+    const validityClasses =
+      this.valid === false
+        ? ['text-error border-error']
+        : ['text-primary border-primary']
 
     const focusClasses = ['border-b-4']
 
@@ -106,6 +116,7 @@ export class InputComponent implements OnChanges {
 
     return {
       [defaultClasses.join(' ')]: true,
+      [validityClasses.join(' ')]: true,
       [textAlignClasses.join(' ')]: true,
       [disabledClasses.join(' ')]: this.disabled,
       [focusClasses.join(' ')]: this.hasFocus,

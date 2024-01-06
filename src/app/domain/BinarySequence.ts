@@ -8,6 +8,10 @@ export type Byte = [Bit, Bit, Bit, Bit, Bit, Bit, Bit, Bit]
 export class BinarySequence {
   constructor(private bits: Bit[]) {}
 
+  static empty() {
+    return new BinarySequence([])
+  }
+
   static from(str: string) {
     if (!this.isBinary(str)) throw new NotBinarySequenceError(str)
 
@@ -39,6 +43,10 @@ export class BinarySequence {
     if (this.bits.length % 8 !== 0) throw new NotByteSequenceError(this)
 
     return chunks(this.bits, 8) as Byte[]
+  }
+
+  isEmpty() {
+    return this.bits.length === 0
   }
 
   countBits() {

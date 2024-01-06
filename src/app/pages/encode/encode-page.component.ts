@@ -50,7 +50,7 @@ import { EncodedCodepoint } from '../../domain/encoding/EncodedCodepoint'
       <div class="mt-auto flex justify-center gap-5">
         <utf-button utfNavigate="/">Back</utf-button>
 
-        @if (textToEncode && !encodedText) {
+        @if (canEncode()) {
           <utf-button (click)="encode()">Encode</utf-button>
         }
 
@@ -68,9 +68,13 @@ export class EncodePageComponent {
 
   constructor(private encodingService: EncodingService) {}
 
+  canEncode() {
+    return this.textToEncode && !this.encodedText
+  }
+
   @HostListener('keydown.enter')
   encode() {
-    if (!this.textToEncode || this.encodedText) return
+    if (!this.canEncode()) return
 
     this.encodedText = this.encodingService.encodeText(this.textToEncode)
   }

@@ -7,6 +7,7 @@ module.exports = {
         primary: "#05396b",
         secondary: "#032348",
         background: "#5cdb94",
+        error: "#ff0000",
       },
       fontFamily: {
         standard: ["Bebas Neue", "sans-serif"],

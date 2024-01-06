@@ -1,9 +1,15 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core'
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output,
+  SimpleChanges,
+} from '@angular/core'
 import { InputComponent } from '../input/input.component'
 import { BinarySequence } from '../../../domain/BinarySequence'
 import { chunks } from '../../../domain/utils/chunks'
 
-// TODO: display error message if user attempts to input stuff that is not binary.
 // TODO2: admit a color property to use it when some bits are wrong
 
 @Component({
@@ -12,55 +18,64 @@ import { chunks } from '../../../domain/utils/chunks'
   imports: [InputComponent],
   template: `
     <utf-input
-      [(value)]="value"
-      (onblur)="formatAndSubmit()"
-      (keypress)="handleKeypress($event)"
-      (paste)="handlePaste($event)"
-      [colored]="{ match: 'todo' }"
       textAlign="start"
+      [value]="inputValue"
+      (valueChange)="handleInput($event)"
+      (keypress)="handleKeypress($event)"
+      (onblur)="format()"
+      [colored]="{ match: 'TODO' }"
+      [valid]="isValid()"
+      errorMessage="Solo se permiten bits (0s y 1s)"
     />
   `,
 })
-export class BinaryTextAreaComponent {
-  @Output() onsubmit = new EventEmitter<BinarySequence>()
-  @Input() invalid?: BinarySequence
+export class BinaryTextAreaComponent implements OnChanges {
+  @Input() sequence = BinarySequence.empty()
+  @Output() sequenceChange = new EventEmitter<BinarySequence>()
 
-  value = ''
+  inputValue = ''
 
-  // TODO: don't do this. show an error instead
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['sequence']) {
+      this.inputValue = this.sequence.getBits().join('')
+      this.format()
+    }
+  }
+
+  handleInput(newValue: string) {
+    this.inputValue = newValue
+
+    if (this.isValid()) {
+      const newBits = BinarySequence.extractBitsFrom(this.inputValue)
+      const newBinarySequence = new BinarySequence(newBits)
+
+      this.sequence = newBinarySequence
+      this.sequenceChange.emit(this.sequence)
+    }
+  }
+
   // returning false in an event handler means it's ignored/discarded
   handleKeypress({ key }: KeyboardEvent) {
-    if (key === 'Enter') {
-      this.formatAndSubmit()
-      return false
-    }
-
-    return this.shouldAcceptInput(key)
+    // ignore Enter keypress
+    return key !== 'Enter'
   }
 
-  handlePaste(event: ClipboardEvent) {
-    const content =
-      event.clipboardData?.getData('text/plain').replaceAll(/\s/g, '') ?? ''
+  isValid() {
+    if (!this.inputValue) return undefined
 
-    return this.shouldAcceptInput(content)
+    const inputIsOnlyMadeOfBitsOrSeparators = /^(0|1|\s)+$/.test(
+      this.inputValue,
+    )
+    return inputIsOnlyMadeOfBitsOrSeparators
   }
 
-  formatAndSubmit() {
-    const binarySequence = this.getBinarySequence()
-    const formattedValue = chunks(binarySequence.getBits(), 8)
+  format() {
+    if (!this.isValid()) return
+
+    const formattedValue = chunks(this.sequence.getBits(), 8)
       .map((chunk) => chunk.join(''))
-      .join('&nbsp;'.repeat(3))
+      .join('   ')
 
-    this.value = formattedValue
-    this.onsubmit.emit(binarySequence)
-  }
-
-  private shouldAcceptInput(input: string) {
-    return /\s/g.test(input) || BinarySequence.isBinary(input)
-  }
-
-  private getBinarySequence() {
-    const bits = BinarySequence.extractBitsFrom(this.value)
-    return new BinarySequence(bits)
+    this.inputValue = formattedValue
   }
 }
