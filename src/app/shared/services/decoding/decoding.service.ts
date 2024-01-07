@@ -6,6 +6,10 @@ import { Codepoint } from '../../../domain/Codepoint'
 import { InvalidInitialUtf8ByteError } from '../../../domain/error/InvalidInitialUtf8ByteError'
 import { MismatchUtf8TemplateError } from '../../../domain/error/MismatchUtf8TemplateError'
 
+// There may be another good one to add as domain error: Invalid Codepoint.
+// For example, this sequence: 11110101 10101110 10100100 10101111 produces
+// an unicode (1501487) that doesn't have any character/text associated
+
 // TODO: move this somewhere else
 export type DecodeError =
   | NotByteSequenceError

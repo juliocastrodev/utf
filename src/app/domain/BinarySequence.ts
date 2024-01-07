@@ -47,6 +47,21 @@ export class BinarySequence {
     return this.bits[index]
   }
 
+  indexOf(another: BinarySequence) {
+    const thisBitsStr = this.bits.join('')
+    const anotherBitsStr = another.bits.join('')
+
+    return thisBitsStr.indexOf(anotherBitsStr)
+  }
+
+  endIndexOf(another: BinarySequence) {
+    const indexOfAnother = this.indexOf(another)
+
+    if (indexOfAnother === -1) return -1
+
+    return indexOfAnother + another.countBits() - 1
+  }
+
   groupInBytes() {
     if (!this.hasByteSize()) throw new NotByteSequenceError(this)
 

@@ -86,6 +86,8 @@ export class InputComponent implements OnChanges {
     this.moveCaretToEndOfText()
   }
 
+  // TODO: right now it's possible to paste stuff like images, formatted text and so on.
+  // Maybe also scripts, which is not very fun... So it might be a good idea to restrict this
   handleInput() {
     this.value = this.divReference?.nativeElement.textContent ?? ''
     this.valueChange.emit(this.value)

@@ -14,7 +14,7 @@ export class ButtonComponent {
   @Input() disabled = false
 
   getClasses() {
-    const defaultClasses = ['outline-none']
+    const defaultClasses = ['outline-none text-primary']
 
     const borderClasses = [
       'border-2 border-solid border-primary',

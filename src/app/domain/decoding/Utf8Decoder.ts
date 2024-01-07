@@ -23,6 +23,7 @@ export class Utf8Decoder {
       const decoded = template.readSlotsFrom(completeSequence)
 
       codepoints.push(Codepoint.fromBinary(decoded))
+
       currentByteIdx += template.countBytes()
     }
 

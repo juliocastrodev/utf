@@ -128,6 +128,12 @@ export class DecodePageComponent {
     }
 
     if (this.error instanceof MismatchUtf8TemplateError) {
+      const invalidSequence = this.error.params.sequence
+
+      this.coloredSequence = {
+        fromBitAt: this.sequence.indexOf(invalidSequence),
+        toBitAt: this.sequence.endIndexOf(invalidSequence),
+      }
       return
     }
 

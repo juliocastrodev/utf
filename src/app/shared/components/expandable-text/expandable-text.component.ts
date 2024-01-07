@@ -20,7 +20,7 @@ import { ButtonComponent } from '../button/button.component'
           width="24"
           height="24"
           viewBox="0 0 24 24"
-          style="fill:currentColor;transform:rotate(45deg);msFilter:progid:DXImageTransform.Microsoft.BasicImage(rotation=1);"
+          style="fill: currentColor;transform:rotate(45deg);msFilter:progid:DXImageTransform.Microsoft.BasicImage(rotation=1);"
         >
           <path d="M2 15h7v7h2v-9H2v2zM15 2h-2v9h9V9h-7V2z"></path>
         </svg>
