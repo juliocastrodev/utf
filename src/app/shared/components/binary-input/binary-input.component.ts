@@ -23,7 +23,7 @@ import { chunks } from '../../../domain/utils/chunks'
       (valueChange)="handleInput($event)"
       (keypress)="handleKeypress($event)"
       (onblur)="format()"
-      [colored]="{ match: 'TODO' }"
+      [colored]="getColored()"
       [valid]="valid"
       [errorMessage]="errorMessage"
     />
@@ -37,6 +37,8 @@ export class BinaryInputComponent implements OnChanges {
   @Output() validChange = new EventEmitter<boolean | undefined>()
 
   @Input() errorMessage = 'Solo se permiten bits (0s y 1s)'
+
+  @Input() highlight?: BinarySequence
 
   inputValue = ''
 
@@ -69,6 +71,12 @@ export class BinaryInputComponent implements OnChanges {
       .join('   ')
 
     this.inputValue = formattedValue
+  }
+
+  getColored() {
+    if (!this.highlight) return undefined
+
+    return { match: this.highlight.getBits().join('') }
   }
 
   private updateValidity() {

@@ -25,7 +25,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
       (focusin)="handleFocus()"
       (blur)="handleBlur($event)"
       [innerHTML]="htmlToDisplay"
-      [utfAutoResize]="{ dependsOn: value }"
+      [utfAutoResize]="{ dependsOn: [value, htmlToDisplay] }"
       [ngClass]="getClasses()"
     ></div>
 

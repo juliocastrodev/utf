@@ -18,12 +18,13 @@ import { Utf8Template } from '../../../../../domain/Utf8Template'
 
       <p>
         En UTF-8, todo byte inicial ha de empezar con un
-        <span class="underline text-secondary">prefijo válido</span> y este no
-        lo tiene.
+        <span class="underline text-secondary">prefijo válido</span> y este
+        <span class="underline text-secondary">no lo tiene.</span>
       </p>
 
       <p>
-        Por favor modifícalo para que concuerde con alguno los prefijos válidos:
+        Por favor modifícalo para que concuerde con alguno de los prefijos
+        válidos:
       </p>
 
       @for (validInitialByte of getAllPossibleInitialBytes(); track $index) {

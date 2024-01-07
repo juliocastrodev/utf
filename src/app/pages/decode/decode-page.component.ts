@@ -27,7 +27,11 @@ import { DecodeResultComponent } from './components/result/decode-result.compone
     <div class="mt-20 max-w-3xl flex grow flex-col items-center gap-12">
       <div class="flex flex-col items-center gap-2 ">
         <h3 class="text-secondary">Introduce tus bits</h3>
-        <utf-binary-input [(sequence)]="sequence" [(valid)]="isValidSequence" />
+        <utf-binary-input
+          [(sequence)]="sequence"
+          [(valid)]="isValidSequence"
+          [highlight]="getErrorSequence()"
+        />
       </div>
 
       @if (decodedText) {
@@ -77,5 +81,10 @@ export class DecodePageComponent {
     this.sequence = BinarySequence.empty()
     this.decodedText = undefined
     this.error = undefined
+  }
+
+  getErrorSequence() {
+    // if (!this.error) return undefined
+    return BinarySequence.from('1000')
   }
 }

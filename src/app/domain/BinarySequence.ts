@@ -61,6 +61,10 @@ export class BinarySequence {
     return parseInt(this.bits.join(''), 2)
   }
 
+  // TODO: search for usages of .getBits().join(''). Maybe this should be
+  // the behavior of .toString() and move this little "formatting" we have 
+  // right now somewhere else...
+
   toString() {
     return chunks(this.bits, 8)
       .map((chunk) => chunk.join(''))
