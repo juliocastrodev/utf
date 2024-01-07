@@ -31,8 +31,16 @@ export class BinarySequence {
     return (str.match(/(0|1)/g) ?? []) as Bit[]
   }
 
+  hasByteSize() {
+    return this.bits.length % 8 === 0
+  }
+
   getBits() {
-    return this.bits
+    return [...this.bits]
+  }
+
+  getPotentiallyUncompletedLastByte(): Bit[] {
+    return chunks(this.bits, 8).at(-1) ?? []
   }
 
   bitAt(index: number): Bit | undefined {
@@ -40,7 +48,7 @@ export class BinarySequence {
   }
 
   groupInBytes() {
-    if (this.bits.length % 8 !== 0) throw new NotByteSequenceError(this)
+    if (!this.hasByteSize()) throw new NotByteSequenceError(this)
 
     return chunks(this.bits, 8) as Byte[]
   }
@@ -57,17 +65,33 @@ export class BinarySequence {
     return this.groupInBytes().length
   }
 
+  countMissingBitsToCompleteByteSize() {
+    return this.hasByteSize()
+      ? 0
+      : 8 - this.getPotentiallyUncompletedLastByte().length
+  }
+
   toDecimal() {
     return parseInt(this.bits.join(''), 2)
   }
 
   // TODO: search for usages of .getBits().join(''). Maybe this should be
-  // the behavior of .toString() and move this little "formatting" we have 
+  // the behavior of .toString() and move this little "formatting" we have
   // right now somewhere else...
 
   toString() {
     return chunks(this.bits, 8)
       .map((chunk) => chunk.join(''))
       .join(' ')
+  }
+
+  equals(another: BinarySequence) {
+    if (this.countBits() !== another.countBits()) return false
+
+    for (let i = 0; i < this.countBits(); i++) {
+      if (this.bitAt(i) !== another.bitAt(i)) return false
+    }
+
+    return true
   }
 }

@@ -38,7 +38,7 @@ export class InputComponent implements OnChanges {
   @Input() disabled = false
   @Input() valid?: boolean
   @Input() errorMessage = ''
-  @Input() colored?: { color?: string; match: string }
+  @Input() colored?: { fromIdx: number; toIdx: number; color?: string }
   @Input() textAlign: 'center' | 'start' = 'center'
   @Input() value = ''
   @Output() valueChange = new EventEmitter<string>()
@@ -55,25 +55,30 @@ export class InputComponent implements OnChanges {
   ) {}
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['value'] && !this.hasFocus) {
+    if ((changes['value'] || changes['colored']) && !this.hasFocus) {
       this.updateHtmlToDisplay()
     }
   }
 
   updateHtmlToDisplay() {
-    if (!this.colored) {
+    if (!this.colored || !this.value) {
       this.htmlToDisplay = this.value
       return
     }
 
-    const { color = 'red', match: textToColor } = this.colored
+    const { fromIdx, toIdx, color = 'red' } = this.colored
 
-    const coloredText = this.value.replaceAll(
-      textToColor,
-      `<span class="text-accent" style="color: ${color};">${textToColor}</span>`,
-    )
+    const beforeIdx = this.value.slice(0, fromIdx)
+    const textToColor = this.value.slice(fromIdx, toIdx + 1)
+    const afterIdx = this.value.slice(toIdx + 1, this.value.length)
 
-    this.htmlToDisplay = this.sanitizer.bypassSecurityTrustHtml(coloredText)
+    const newHtmlToDisplay =
+      beforeIdx +
+      `<span class="text-accent" style="color: ${color};">${textToColor}</span>` +
+      afterIdx
+
+    this.htmlToDisplay =
+      this.sanitizer.bypassSecurityTrustHtml(newHtmlToDisplay)
   }
 
   handleFocus() {

@@ -1,6 +1,5 @@
 import { Component, Input } from '@angular/core'
 import { NotByteSequenceError } from '../../../../../domain/error/NotByteSequenceError'
-import { chunks } from '../../../../../domain/utils/chunks'
 import { SequenceComponent } from '../../../../../shared/components/sequence/sequence.component'
 
 @Component({
@@ -36,10 +35,11 @@ export class DecodeNotByteSequenceErrorComponent {
   }
 
   getSuggestedSequenceToFillUp() {
-    const allBits = this.error.sequence.getBits()
-    const uncompletedLastByte = chunks(allBits, 8).at(-1) ?? []
+    const uncompletedLastByte =
+      this.error.sequence.getPotentiallyUncompletedLastByte()
 
-    const missingBitsCountToCompleteByte = 8 - (uncompletedLastByte.length % 8)
+    const missingBitsCountToCompleteByte =
+      this.error.sequence.countMissingBitsToCompleteByteSize()
 
     return (
       'x'.repeat(missingBitsCountToCompleteByte) + uncompletedLastByte.join('')

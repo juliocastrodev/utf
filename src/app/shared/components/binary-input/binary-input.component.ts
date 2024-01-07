@@ -10,7 +10,10 @@ import { InputComponent } from '../input/input.component'
 import { BinarySequence } from '../../../domain/BinarySequence'
 import { chunks } from '../../../domain/utils/chunks'
 
-// TODO2: admit a color property to use it when some bits are wrong
+// TODO: check all places where I bind function calls and check if they are
+// bein called too many times. In general maybe it's a good idea to migrate
+// all components to OnPush strategy. Also a good idea is to put a console.log
+// in ngOnChanges and see if it's being triggered too many times
 
 @Component({
   standalone: true,
@@ -22,8 +25,8 @@ import { chunks } from '../../../domain/utils/chunks'
       [value]="inputValue"
       (valueChange)="handleInput($event)"
       (keypress)="handleKeypress($event)"
-      (onblur)="format()"
-      [colored]="getColored()"
+      (onblur)="format(); onblur.emit($event)"
+      [colored]="inputColored"
       [valid]="valid"
       [errorMessage]="errorMessage"
     />
@@ -37,16 +40,22 @@ export class BinaryInputComponent implements OnChanges {
   @Output() validChange = new EventEmitter<boolean | undefined>()
 
   @Input() errorMessage = 'Solo se permiten bits (0s y 1s)'
+  @Input() colored?: { fromBitAt: number; toBitAt: number; color?: string }
 
-  @Input() highlight?: BinarySequence
+  @Output() onblur = new EventEmitter<FocusEvent>()
 
   inputValue = ''
+  inputColored: InputComponent['colored']
 
   ngOnChanges(changes: SimpleChanges) {
+    console.log({ changes })
+
     if (changes['sequence']) {
       this.inputValue = this.sequence.getBits().join('')
       this.updateValidity()
       this.format()
+    } else if (changes['colored']) {
+      this.updateColors()
     }
   }
 
@@ -71,12 +80,7 @@ export class BinaryInputComponent implements OnChanges {
       .join('   ')
 
     this.inputValue = formattedValue
-  }
-
-  getColored() {
-    if (!this.highlight) return undefined
-
-    return { match: this.highlight.getBits().join('') }
+    this.updateColors()
   }
 
   private updateValidity() {
@@ -101,5 +105,27 @@ export class BinaryInputComponent implements OnChanges {
 
     this.sequence = newBinarySequence
     this.sequenceChange.emit(this.sequence)
+  }
+
+  private updateColors() {
+    if (!this.colored) {
+      this.inputColored = undefined
+      return
+    }
+
+    const { fromBitAt, toBitAt, color = 'red' } = this.colored
+
+    const bits: string[] = this.sequence.getBits()
+    bits[fromBitAt] = 'x'
+    bits[toBitAt] = 'y'
+    const formattedMarkedBits = chunks(bits, 8)
+      .map((chunk) => chunk.join(''))
+      .join('   ')
+
+    this.inputColored = {
+      fromIdx: formattedMarkedBits.indexOf('x'),
+      toIdx: formattedMarkedBits.indexOf('y'),
+      color,
+    }
   }
 }

@@ -10,6 +10,9 @@ import {
 } from '../../shared/services/decoding/decoding.service'
 import { DecodeErrorComponent } from './components/error/decode-error.component'
 import { DecodeResultComponent } from './components/result/decode-result.component'
+import { NotByteSequenceError } from '../../domain/error/NotByteSequenceError'
+import { InvalidInitialUtf8ByteError } from '../../domain/error/InvalidInitialUtf8ByteError'
+import { MismatchUtf8TemplateError } from '../../domain/error/MismatchUtf8TemplateError'
 
 @Component({
   standalone: true,
@@ -30,7 +33,8 @@ import { DecodeResultComponent } from './components/result/decode-result.compone
         <utf-binary-input
           [(sequence)]="sequence"
           [(valid)]="isValidSequence"
-          [highlight]="getErrorSequence()"
+          [colored]="coloredSequence"
+          (onblur)="decode()"
         />
       </div>
 
@@ -48,7 +52,7 @@ import { DecodeResultComponent } from './components/result/decode-result.compone
           <utf-button (click)="decode()">Decode</utf-button>
         }
 
-        @if (decodedText || error) {
+        @if (hasDecoded()) {
           <utf-button (click)="restart()">Restart</utf-button>
         }
       </div>
@@ -68,6 +72,10 @@ export class DecodePageComponent {
     return !this.sequence.isEmpty() && this.isValidSequence
   }
 
+  hasDecoded() {
+    return Boolean(this.decodedText || this.error)
+  }
+
   @HostListener('keydown.enter')
   decode() {
     if (!this.canDecode()) return
@@ -75,6 +83,7 @@ export class DecodePageComponent {
     const { text, error } = this.decodingService.decode(this.sequence)
     this.decodedText = text
     this.error = error
+    this.updateColoredSequence()
   }
 
   restart() {
@@ -83,8 +92,45 @@ export class DecodePageComponent {
     this.error = undefined
   }
 
-  getErrorSequence() {
-    // if (!this.error) return undefined
-    return BinarySequence.from('1000')
+  // TODO: I don't like to have this here...
+  coloredSequence: BinaryInputComponent['colored']
+  updateColoredSequence() {
+    if (!this.error) {
+      this.coloredSequence = undefined
+    }
+
+    if (this.error instanceof NotByteSequenceError) {
+      const uncompletedByte =
+        this.error.sequence.getPotentiallyUncompletedLastByte()
+
+      this.coloredSequence = {
+        fromBitAt: this.error.sequence.countBits() - uncompletedByte.length,
+        toBitAt: this.error.sequence.countBits() - 1,
+      }
+      return
+    }
+
+    if (this.error instanceof InvalidInitialUtf8ByteError) {
+      // TODO: maybe this can be simplified by adding more metadata to errors
+      const invalidByte = new BinarySequence(this.error.byte)
+      const invalidByteIdx =
+        8 *
+        this.sequence
+          .groupInBytes()
+          .map((byte) => new BinarySequence(byte))
+          .findIndex((seq) => seq.equals(invalidByte))
+
+      this.coloredSequence = {
+        fromBitAt: invalidByteIdx,
+        toBitAt: invalidByteIdx + 7,
+      }
+      return
+    }
+
+    if (this.error instanceof MismatchUtf8TemplateError) {
+      return
+    }
+
+    this.coloredSequence = undefined
   }
 }
