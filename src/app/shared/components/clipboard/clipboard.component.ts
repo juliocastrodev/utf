@@ -1,17 +1,25 @@
-import { Component, Input } from '@angular/core'
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  signal,
+} from '@angular/core'
 import { ButtonComponent } from '../button/button.component'
+
+// TODO: move all svgs to assets
 
 @Component({
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'utf-clipboard',
   imports: [ButtonComponent],
   template: `
     <utf-button
       (click)="handleClick()"
-      [disabled]="state !== 'initial'"
+      [disabled]="mode() !== 'initial'"
       variant="circle"
     >
-      @switch (state) {
+      @switch (mode()) {
         @case ('initial') {
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -62,13 +70,13 @@ import { ButtonComponent } from '../button/button.component'
 export class ClipboardComponent {
   @Input() copy = ''
 
-  state: 'initial' | 'loading' | 'done' = 'initial'
+  mode = signal<'initial' | 'loading' | 'done'>('initial')
 
   async handleClick() {
-    this.state = 'loading'
+    this.mode.set('loading')
     await this.copyToClipboard()
-    setTimeout(() => (this.state = 'done'), 300)
-    setTimeout(() => (this.state = 'initial'), 600)
+    setTimeout(() => this.mode.set('done'), 300)
+    setTimeout(() => this.mode.set('initial'), 600)
   }
 
   private async copyToClipboard() {

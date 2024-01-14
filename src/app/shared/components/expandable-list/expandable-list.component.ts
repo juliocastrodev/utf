@@ -1,19 +1,28 @@
 import { CommonModule } from '@angular/common'
-import { Component, ContentChildren, Input, QueryList } from '@angular/core'
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ContentChildren,
+  Input,
+  QueryList,
+  computed,
+  signal,
+} from '@angular/core'
 import { ExpandableListItemComponent } from './expandable-list-item.component'
 import { ButtonComponent } from '../button/button.component'
 
 @Component({
   standalone: true,
-  selector: 'utf-expandable-list',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule, ButtonComponent],
-  template: ` <ul [ngClass]="[classes]">
-    @for (item of getItemsToDisplay(); track $index) {
+  selector: 'utf-expandable-list',
+  template: ` <ul [ngClass]="classes">
+    @for (item of displayedItems(); track $index) {
       <ng-container *ngTemplateOutlet="item.template" />
     }
 
-    @if (shouldShowLoadMoreButton()) {
-      <utf-button (click)="loadMore()">...</utf-button>
+    @if (canLoadMoreItems()) {
+      <utf-button (click)="loadMoreItems()">...</utf-button>
     }
   </ul>`,
 })
@@ -23,19 +32,19 @@ export class ExpandableListComponent {
   @ContentChildren(ExpandableListItemComponent)
   items?: QueryList<ExpandableListItemComponent>
 
-  itemsToShow = 5
-  showLoadMoreButton = false
+  displayedItemsCount = signal(5)
 
-  getItemsToDisplay() {
-    return this.items?.filter((_, idx) => idx < this.itemsToShow)
-  }
+  displayedItems = computed(
+    () =>
+      this.items?.filter((_, idx) => idx < this.displayedItemsCount()) ?? [],
+  )
 
-  shouldShowLoadMoreButton() {
+  canLoadMoreItems = computed(() => {
     if (!this.items) return false
-    return this.itemsToShow < this.items.length
-  }
+    return this.items.length > this.displayedItemsCount()
+  })
 
-  loadMore() {
-    this.itemsToShow += 5
+  loadMoreItems() {
+    this.displayedItemsCount.set(this.displayedItemsCount() + 5)
   }
 }

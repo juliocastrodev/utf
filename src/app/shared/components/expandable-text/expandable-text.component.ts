@@ -1,30 +1,41 @@
 import { CommonModule } from '@angular/common'
-import { Component, Input } from '@angular/core'
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  computed,
+  signal,
+} from '@angular/core'
 import { ButtonComponent } from '../button/button.component'
 
 // TODO: move all svgs to assets or somewhere more standard
 
 @Component({
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'utf-expandable-text',
   imports: [CommonModule, ButtonComponent],
-  template: ` <p [ngClass]="[classes]">
-    {{ getTextToShow() }}
+  template: ` <p [ngClass]="classes">
+    {{ textToShow() }}
 
-    @if (shouldShowExpandButton()) {
-      <utf-button variant="plain" (click)="expand()">...</utf-button>
-    } @else if (shouldShowShortenButton()) {
-      <utf-button variant="circle" (click)="shrink()">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          style="fill: currentColor;transform:rotate(45deg);msFilter:progid:DXImageTransform.Microsoft.BasicImage(rotation=1);"
-        >
-          <path d="M2 15h7v7h2v-9H2v2zM15 2h-2v9h9V9h-7V2z"></path>
-        </svg>
-      </utf-button>
+    @switch (buttonToShow()) {
+      @case ('expand') {
+        <utf-button variant="plain" (click)="expand()">...</utf-button>
+      }
+
+      @case ('shorten') {
+        <utf-button variant="circle" (click)="shrink()">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            style="fill: currentColor;transform:rotate(45deg);msFilter:progid:DXImageTransform.Microsoft.BasicImage(rotation=1);"
+          >
+            <path d="M2 15h7v7h2v-9H2v2zM15 2h-2v9h9V9h-7V2z"></path>
+          </svg>
+        </utf-button>
+      }
     }
   </p>`,
 })
@@ -34,29 +45,25 @@ export class ExpandableTextComponent {
 
   private readonly MAX_INITIAL_CHARACTERS_COUNT = 64
 
-  isExpanded = false
+  isExpanded = signal(false)
 
-  getTextToShow() {
-    return this.isExpanded
+  textToShow = computed(() =>
+    this.isExpanded()
       ? this.text
-      : this.text.slice(0, this.MAX_INITIAL_CHARACTERS_COUNT)
-  }
+      : this.text.slice(0, this.MAX_INITIAL_CHARACTERS_COUNT),
+  )
 
-  shouldShowExpandButton() {
-    return (
-      this.text.length > this.MAX_INITIAL_CHARACTERS_COUNT && !this.isExpanded
-    )
-  }
+  buttonToShow = computed(() => {
+    if (this.text.length <= this.MAX_INITIAL_CHARACTERS_COUNT) return 'none'
 
-  shouldShowShortenButton() {
-    return this.isExpanded
-  }
+    return this.isExpanded() ? 'shorten' : 'expand'
+  })
 
   expand() {
-    this.isExpanded = true
+    this.isExpanded.set(true)
   }
 
   shrink() {
-    this.isExpanded = false
+    this.isExpanded.set(false)
   }
 }

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core'
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { chunks } from '../../../domain/utils/chunks'
 
@@ -31,11 +31,12 @@ type SequenceElement = { character: string; color?: string }
  * <utf-sequence show="10xxxxxx" [colors]="{ x: 'blue' }" />
  *
  * @example
- * <utf-sequence [show]="['v', 'e', 'n']" [colors]="['yellow', 'blue', 'red']" />
+ * <utf-sequence [show]="['V', 'E', 'N']" [colors]="['yellow', 'blue', 'red']" />
  */
 @Component({
   standalone: true,
   selector: 'utf-sequence',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule],
   template: `
     <div class="flex flex-col gap-4">

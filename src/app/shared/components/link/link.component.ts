@@ -1,15 +1,15 @@
 import { CommonModule } from '@angular/common'
-import { Component, Input } from '@angular/core'
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core'
 
 @Component({
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'utf-link',
   imports: [CommonModule],
   template: ` <a
     [href]="href"
     [ngClass]="[
-      'cursor-pointer underline',
-      'outline-none',
+      'underline outline-none',
       'hover:decoration-4 focus:decoration-4'
     ]"
   >
