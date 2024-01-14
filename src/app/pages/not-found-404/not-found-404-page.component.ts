@@ -1,6 +1,7 @@
 import { Component } from '@angular/core'
 import { FullScreenComponent } from '../../shared/components/fullscreen/fullscreen.component'
 
+// TODO: everything
 @Component({
   template: `<utf-fullscreen>
     <h1>Not Found</h1>

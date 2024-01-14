@@ -12,8 +12,9 @@ import { chunks } from '../../../domain/utils/chunks'
 
 // TODO: check all places where I bind function calls and check if they are
 // bein called too many times. In general maybe it's a good idea to migrate
-// all components to OnPush strategy. Also a good idea is to put a console.log
-// in ngOnChanges and see if it's being triggered too many times
+// all components to OnPush strategy (using signals may use in this migration).
+// Also a good idea is to put a console.log in ngOnChanges and see if it's
+// being triggered too many times
 
 @Component({
   standalone: true,
