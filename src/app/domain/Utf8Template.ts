@@ -4,6 +4,9 @@ import { MismatchUtf8TemplateError } from './error/MismatchUtf8TemplateError'
 import { TooLongBinarySequenceError } from './error/TooLongBinarySequenceError'
 import { chunks } from './utils/chunks'
 
+// TODO: search all usages of 'this' in static methods and change
+// it to the name of the class, it's clearer that way
+
 export class Utf8Template {
   private constructor(private template: string) {}
 
@@ -15,28 +18,31 @@ export class Utf8Template {
   )
 
   static all() {
-    return [this.ONE_BYTE, this.TWO_BYTES, this.THREE_BYTES, this.FOUR_BYTES]
+    return [
+      Utf8Template.ONE_BYTE,
+      Utf8Template.TWO_BYTES,
+      Utf8Template.THREE_BYTES,
+      Utf8Template.FOUR_BYTES,
+    ]
   }
 
-  static forBinary(sequence: BinarySequence) {
-    const template = this.all().find((template) =>
+  static toFit(sequence: BinarySequence) {
+    const template = Utf8Template.all().find((template) =>
       template.hasEnoughSlotsFor(sequence),
     )
 
     if (!template)
       throw new TooLongBinarySequenceError({
         sequence,
-        maxBits: this.FOUR_BYTES.countSlots(),
+        maxBits: Utf8Template.FOUR_BYTES.countSlots(),
       })
 
     return template
   }
 
-  static forInitialByte(byte: Byte) {
-    const byteStr = byte.join('')
-
-    const template = this.all().find((template) =>
-      byteStr.startsWith(template.prefix()),
+  static matchingInitialByte(byte: Byte) {
+    const template = Utf8Template.all().find((template) =>
+      template.matchesInitial(byte),
     )
 
     if (!template) throw new InvalidInitialUtf8ByteError(byte)
@@ -48,13 +54,32 @@ export class Utf8Template {
     return this.countSlots() >= sequence.countBits()
   }
 
-  prefix() {
+  matchesInitial(byte: Byte) {
+    const { initialBytePrefix } = this.prefixes()
+
+    return byte.join('').startsWith(initialBytePrefix)
+  }
+
+  matchesIntermediate(byte: Byte) {
+    const { intermediateBytePrefix } = this.prefixes()
+
+    if (!intermediateBytePrefix) return false
+
+    return byte.join('').startsWith(intermediateBytePrefix)
+  }
+
+  prefixes() {
     const binaryParts = this.template.match(/\d+/g) as string[]
-    return binaryParts[0]
+
+    const initialBytePrefix = binaryParts[0]
+    const intermediateBytePrefix = binaryParts[1] as string | undefined
+
+    return { initialBytePrefix, intermediateBytePrefix }
   }
 
   countSlots() {
     const xsCount = this.template.match(/x/g)?.length ?? 0
+
     return xsCount
   }
 
@@ -72,6 +97,7 @@ export class Utf8Template {
 
   getByteAt(idx: number): string {
     const bytes = chunks(this.template.split(''), 8)
+
     return bytes[idx].join('')
   }
 
@@ -79,7 +105,7 @@ export class Utf8Template {
     if (!this.hasEnoughSlotsFor(sequence)) {
       throw new TooLongBinarySequenceError({
         sequence,
-        maxBits: this.countBits(),
+        maxBits: this.countSlots(),
       })
     }
 
@@ -115,6 +141,17 @@ export class Utf8Template {
     }
 
     return new BinarySequence(readBits)
+  }
+
+  ensureMatches(sequence: BinarySequence) {
+    const [firstByte, ...restOfBytes] = sequence.groupInBytes()
+
+    if (
+      !this.matchesInitial(firstByte) ||
+      this.countIntermediateBytes() !== restOfBytes.length ||
+      restOfBytes.some((byte) => !this.matchesIntermediate(byte))
+    )
+      throw new MismatchUtf8TemplateError({ sequence, expected: this })
   }
 
   toString() {

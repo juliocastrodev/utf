@@ -9,8 +9,8 @@ import { EncodingService } from '../../shared/services/encoding/encoding.service
 import { EncodeResultComponent } from './components/result/encode-result.component'
 import { EncodeExplanationComponent } from './components/explanation/encode-explanation.component'
 import { ScrollDirective } from '../../shared/directives/scroll/scroll.directive'
-import { EncodedText } from '../../domain/encoding/EncodedText'
-import { EncodedCodepoint } from '../../domain/encoding/EncodedCodepoint'
+import { Utf8Text } from '../../domain/Utf8Text'
+import { Utf8Codepoint } from '../../domain/Utf8Codepoint'
 
 @Component({
   standalone: true,
@@ -63,8 +63,8 @@ import { EncodedCodepoint } from '../../domain/encoding/EncodedCodepoint'
 })
 export class EncodePageComponent {
   textToEncode = ''
-  encodedText?: EncodedText
-  selectedCodepoint?: EncodedCodepoint
+  encodedText?: Utf8Text
+  selectedCodepoint?: Utf8Codepoint
 
   constructor(private encodingService: EncodingService) {}
 

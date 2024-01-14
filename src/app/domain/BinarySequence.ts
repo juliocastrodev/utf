@@ -18,25 +18,25 @@ export class BinarySequence {
     return new BinarySequence(str.split('') as Bit[])
   }
 
+  static isBinary(str: string) {
+    return /^(0|1)+$/g.test(str)
+  }
+
   static concat(...sequences: BinarySequence[]) {
     const allBits = sequences.flatMap(({ bits }) => bits)
     return new BinarySequence(allBits)
   }
 
-  static isBinary(str: string) {
-    return /^(0|1)+$/g.test(str)
-  }
-
   static extractBitsFrom(str: string) {
-    return (str.match(/(0|1)/g) ?? []) as Bit[]
-  }
-
-  hasByteSize() {
-    return this.bits.length % 8 === 0
+    return str.split('').filter(this.isBinary) as Bit[]
   }
 
   getBits() {
     return [...this.bits]
+  }
+
+  isGroupableInBytes() {
+    return this.bits.length % 8 === 0
   }
 
   getPotentiallyUncompletedLastByte(): Bit[] {
@@ -47,23 +47,16 @@ export class BinarySequence {
     return this.bits[index]
   }
 
-  indexOf(another: BinarySequence) {
-    const thisBitsStr = this.bits.join('')
-    const anotherBitsStr = another.bits.join('')
+  boundariesOf(another: BinarySequence) {
+    const startIndex = this.bits.join('').indexOf(another.bits.join(''))
 
-    return thisBitsStr.indexOf(anotherBitsStr)
-  }
+    if (startIndex < 0) return { startIndex: -1, endIndex: -1 }
 
-  endIndexOf(another: BinarySequence) {
-    const indexOfAnother = this.indexOf(another)
-
-    if (indexOfAnother === -1) return -1
-
-    return indexOfAnother + another.countBits() - 1
+    return { startIndex, endIndex: startIndex + another.countBits() - 1 }
   }
 
   groupInBytes() {
-    if (!this.hasByteSize()) throw new NotByteSequenceError(this)
+    if (!this.isGroupableInBytes()) throw new NotByteSequenceError(this)
 
     return chunks(this.bits, 8) as Byte[]
   }
@@ -80,8 +73,8 @@ export class BinarySequence {
     return this.groupInBytes().length
   }
 
-  countMissingBitsToCompleteByteSize() {
-    return this.hasByteSize()
+  countBitsToReachByteGroupableSize() {
+    return this.isGroupableInBytes()
       ? 0
       : 8 - this.getPotentiallyUncompletedLastByte().length
   }

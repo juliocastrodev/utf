@@ -39,7 +39,7 @@ export class DecodeNotByteSequenceErrorComponent {
       this.error.sequence.getPotentiallyUncompletedLastByte()
 
     const missingBitsCountToCompleteByte =
-      this.error.sequence.countMissingBitsToCompleteByteSize()
+      this.error.sequence.countBitsToReachByteGroupableSize()
 
     return (
       'x'.repeat(missingBitsCountToCompleteByte) + uncompletedLastByte.join('')

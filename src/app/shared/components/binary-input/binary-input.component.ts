@@ -45,12 +45,10 @@ export class BinaryInputComponent implements OnChanges {
 
   @Output() onblur = new EventEmitter<FocusEvent>()
 
-  inputValue = ''
+  inputValue: InputComponent['value'] = ''
   inputColored: InputComponent['colored']
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log({ changes })
-
     if (changes['sequence']) {
       this.inputValue = this.sequence.getBits().join('')
       this.updateValidity()

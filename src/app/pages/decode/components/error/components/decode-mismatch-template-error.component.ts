@@ -57,6 +57,6 @@ export class DecodeMismatchTemplateErrorComponent {
   }
 
   getTemplate() {
-    return Utf8Template.forInitialByte(this.getSequenceFirstByte())
+    return Utf8Template.matchingInitialByte(this.getSequenceFirstByte())
   }
 }

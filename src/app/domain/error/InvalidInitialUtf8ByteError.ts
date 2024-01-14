@@ -7,7 +7,9 @@ export class InvalidInitialUtf8ByteError extends Error {
       `Byte [${byte.join('')}] doesn't have the right ` +
       `format to be the initial byte of an utf-8 binary sequence. ` +
       `It must start with one of the following bits prefixes: ` +
-      `[${Utf8Template.all().map((template) => template.prefix())}]`
+      `[${Utf8Template.all().map(
+        (template) => template.prefixes().initialBytePrefix,
+      )}]`
 
     super(message)
   }

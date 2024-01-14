@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core'
 import { SectionComponent } from '../../../../shared/components/section/section.component'
-import { EncodedCodepoint } from '../../../../domain/encoding/EncodedCodepoint'
+import { Utf8Codepoint } from '../../../../domain/Utf8Codepoint'
 import { SequenceComponent } from '../../../../shared/components/sequence/sequence.component'
 import { ClipboardComponent } from '../../../../shared/components/clipboard/clipboard.component'
 
@@ -32,7 +32,7 @@ import { ClipboardComponent } from '../../../../shared/components/clipboard/clip
         [colors]="getColorsForCodepoint()"
       />
 
-      @if (encodedCodepoint.countEncodingBytes() == 1) {
+      @if (encodedCodepoint.getEncoding().countBytes() == 1) {
         <p>
           El carácter entra dentro del rango de los correspondientes a ASCII.
           Luego, se codifica en UTF-8 de la misma manera en la que lo haría en
@@ -54,11 +54,11 @@ import { ClipboardComponent } from '../../../../shared/components/clipboard/clip
       } @else {
         <p>
           Para codificarlo en UTF-8 necesitamos un total de
-          {{ encodedCodepoint.countEncodingBytes() }} bytes
+          {{ encodedCodepoint.getEncoding().countBytes() }} bytes
         </p>
 
         <utf-sequence
-          [show]="encodedCodepoint.getEncodingTemplate().toString()"
+          [show]="encodedCodepoint.getEncoding().getTemplate().toString()"
           [colors]="getColorsForEncodingTemplate()"
           [groupSize]="8"
         />
@@ -90,7 +90,7 @@ import { ClipboardComponent } from '../../../../shared/components/clipboard/clip
   `,
 })
 export class EncodeExplanationComponent {
-  @Input({ required: true }) encodedCodepoint!: EncodedCodepoint
+  @Input({ required: true }) encodedCodepoint!: Utf8Codepoint
 
   getCodepoint() {
     return this.encodedCodepoint.getCodepoint()
@@ -115,7 +115,10 @@ export class EncodeExplanationComponent {
   }
 
   getColorsForEncodingTemplate() {
-    const template = this.encodedCodepoint.getEncodingTemplate().toString()
+    const template = this.encodedCodepoint
+      .getEncoding()
+      .getTemplate()
+      .toString()
 
     const colorsForCodepoint = this.getColorsForCodepoint()
     let colorIndex = colorsForCodepoint.length - 1

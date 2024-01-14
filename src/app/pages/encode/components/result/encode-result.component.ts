@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core'
 import { SectionComponent } from '../../../../shared/components/section/section.component'
 import { ButtonComponent } from '../../../../shared/components/button/button.component'
-import { EncodedText } from '../../../../domain/encoding/EncodedText'
-import { EncodedCodepoint } from '../../../../domain/encoding/EncodedCodepoint'
+import { Utf8Text } from '../../../../domain/Utf8Text'
+import { Utf8Codepoint } from '../../../../domain/Utf8Codepoint'
 import { ClipboardComponent } from '../../../../shared/components/clipboard/clipboard.component'
 import { ExpandableListComponent } from '../../../../shared/components/expandable-list/expandable-list.component'
 import { ExpandableListItemComponent } from '../../../../shared/components/expandable-list/expandable-list-item.component'
@@ -66,6 +66,6 @@ import { ExpandableTextComponent } from '../../../../shared/components/expandabl
   `,
 })
 export class EncodeResultComponent {
-  @Input({ required: true }) encodedText!: EncodedText
-  @Output() selectcodepoint = new EventEmitter<EncodedCodepoint>()
+  @Input({ required: true }) encodedText!: Utf8Text
+  @Output() selectcodepoint = new EventEmitter<Utf8Codepoint>()
 }

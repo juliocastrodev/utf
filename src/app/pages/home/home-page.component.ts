@@ -18,6 +18,7 @@ import { NavigateDirective } from '../../shared/directives/navigate/navigate.dir
     <div class="mt-20 grow flex flex-col gap-5 max-w-xl">
       <utf-button utfNavigate="encode">Codificacion</utf-button>
       <utf-button utfNavigate="decode">Decodificacion</utf-button>
+
       <utf-credits class="mt-auto" />
     </div>
   </utf-fullscreen>`,

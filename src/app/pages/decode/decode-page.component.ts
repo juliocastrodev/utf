@@ -13,6 +13,7 @@ import { DecodeResultComponent } from './components/result/decode-result.compone
 import { NotByteSequenceError } from '../../domain/error/NotByteSequenceError'
 import { InvalidInitialUtf8ByteError } from '../../domain/error/InvalidInitialUtf8ByteError'
 import { MismatchUtf8TemplateError } from '../../domain/error/MismatchUtf8TemplateError'
+import { Utf8Text } from '../../domain/Utf8Text'
 
 @Component({
   standalone: true,
@@ -63,7 +64,7 @@ export class DecodePageComponent {
   sequence = BinarySequence.empty()
   isValidSequence?: boolean
 
-  decodedText?: string
+  decodedText?: Utf8Text
   error?: DecodeError
 
   constructor(private decodingService: DecodingService) {}
@@ -73,7 +74,7 @@ export class DecodePageComponent {
   }
 
   hasDecoded() {
-    return Boolean(this.decodedText || this.error)
+    return Boolean(this.decode || this.error)
   }
 
   @HostListener('keydown.enter')
@@ -130,10 +131,10 @@ export class DecodePageComponent {
     if (this.error instanceof MismatchUtf8TemplateError) {
       const invalidSequence = this.error.params.sequence
 
-      this.coloredSequence = {
-        fromBitAt: this.sequence.indexOf(invalidSequence),
-        toBitAt: this.sequence.endIndexOf(invalidSequence),
-      }
+      const { startIndex: fromBitAt, endIndex: toBitAt } =
+        this.sequence.boundariesOf(invalidSequence)
+
+      this.coloredSequence = { fromBitAt, toBitAt }
       return
     }
 

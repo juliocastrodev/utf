@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core'
 import { BinarySequence } from '../../../domain/BinarySequence'
-import { Utf8Decoder } from '../../../domain/decoding/Utf8Decoder'
 import { NotByteSequenceError } from '../../../domain/error/NotByteSequenceError'
-import { Codepoint } from '../../../domain/Codepoint'
 import { InvalidInitialUtf8ByteError } from '../../../domain/error/InvalidInitialUtf8ByteError'
 import { MismatchUtf8TemplateError } from '../../../domain/error/MismatchUtf8TemplateError'
+import { Utf8BinarySequence } from '../../../domain/Utf8BinarySequence'
+import { Utf8Text } from '../../../domain/Utf8Text'
+import { Utf8Codepoint } from '../../../domain/Utf8Codepoint'
 
 // There may be another good one to add as domain error: Invalid Codepoint.
 // For example, this sequence: 11110101 10101110 10100100 10101111 produces
@@ -19,17 +20,18 @@ export type DecodeError =
 @Injectable({ providedIn: 'root' })
 export class DecodingService {
   decode(sequence: BinarySequence) {
-    let codepoints: Codepoint[]
+    let text: Utf8Text
+
     try {
-      codepoints = Utf8Decoder.decode(sequence)
+      const encodedCodepoints = Utf8BinarySequence.groupIntoUtf8Sequences(
+        sequence,
+      ).map((utf8Sequence) => Utf8Codepoint.from(utf8Sequence))
+
+      text = Utf8Text.from(encodedCodepoints)
     } catch (error: unknown) {
       return { error: error as DecodeError }
     }
 
-    const text = String.fromCodePoint(
-      ...codepoints.map((codepoint) => codepoint.toDecimal()),
-    )
-
-    return { codepoints, text }
+    return { text }
   }
 }
