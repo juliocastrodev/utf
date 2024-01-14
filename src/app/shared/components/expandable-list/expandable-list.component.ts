@@ -45,6 +45,6 @@ export class ExpandableListComponent {
   })
 
   loadMoreItems() {
-    this.displayedItemsCount.set(this.displayedItemsCount() + 5)
+    this.displayedItemsCount.update((previousCount) => previousCount + 5)
   }
 }

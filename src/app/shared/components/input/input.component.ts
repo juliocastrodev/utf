@@ -5,10 +5,11 @@ import {
   EventEmitter,
   Inject,
   Input,
-  OnChanges,
   Output,
-  SimpleChanges,
   ViewChild,
+  computed,
+  effect,
+  signal,
 } from '@angular/core'
 import { AutoResizeDirective } from '../../directives/autoresize/auto-resize.directive'
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
@@ -21,11 +22,11 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
     <div
       #divReference
       [contentEditable]="!disabled"
-      (input)="handleInput()"
+      (input)="handleInput($any($event))"
       (focusin)="handleFocus()"
       (blur)="handleBlur($event)"
-      [innerHTML]="htmlToDisplay"
-      [utfAutoResize]="{ dependsOn: [value, htmlToDisplay] }"
+      [innerHTML]="htmlToDisplay()"
+      [utfAutoResize]="{ dependsOn: [currentValue(), htmlToDisplay()] }"
       [ngClass]="getClasses()"
     ></div>
 
@@ -34,69 +35,85 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
     }
   `,
 })
-export class InputComponent implements OnChanges {
+export class InputComponent {
+  @ViewChild('divReference') divReference?: ElementRef<HTMLDivElement>
+
   @Input() disabled = false
   @Input() valid?: boolean
   @Input() errorMessage = ''
   @Input() colored?: { fromIdx: number; toIdx: number; color?: string }
   @Input() textAlign: 'center' | 'start' = 'center'
-  @Input() value = ''
-  @Output() valueChange = new EventEmitter<string>()
   @Output() onblur = new EventEmitter<FocusEvent>()
 
-  @ViewChild('divReference') divReference?: ElementRef<HTMLDivElement>
-
-  htmlToDisplay?: SafeHtml
-  hasFocus = false
-
-  constructor(
-    @Inject(DOCUMENT) private document: Document,
-    private sanitizer: DomSanitizer,
-  ) {}
-
-  ngOnChanges(changes: SimpleChanges) {
-    if ((changes['value'] || changes['colored']) && !this.hasFocus) {
-      this.updateHtmlToDisplay()
-    }
+  @Input() set value(newValue: string) {
+    this.currentValue.set(newValue)
   }
+  @Output() valueChange = new EventEmitter<string>()
 
-  updateHtmlToDisplay() {
-    if (!this.colored || !this.value) {
-      this.htmlToDisplay = this.value
-      return
+  currentValue = signal('')
+
+  caretPosition = signal(0)
+
+  htmlToDisplay = computed<SafeHtml>(() => {
+    const currentInputValue = this.currentValue()
+
+    if (!this.colored || !currentInputValue) {
+      return currentInputValue
     }
 
     const { fromIdx, toIdx, color = 'red' } = this.colored
 
-    const beforeIdx = this.value.slice(0, fromIdx)
-    const textToColor = this.value.slice(fromIdx, toIdx + 1)
-    const afterIdx = this.value.slice(toIdx + 1, this.value.length)
+    const beforeIdx = currentInputValue.slice(0, fromIdx)
+    const textToColor = currentInputValue.slice(fromIdx, toIdx + 1)
+    const afterIdx = currentInputValue.slice(
+      toIdx + 1,
+      currentInputValue.length,
+    )
 
     const newHtmlToDisplay =
       beforeIdx +
       `<span class="text-accent" style="color: ${color};">${textToColor}</span>` +
       afterIdx
 
-    this.htmlToDisplay =
-      this.sanitizer.bypassSecurityTrustHtml(newHtmlToDisplay)
-  }
+    return this.sanitizer.bypassSecurityTrustHtml(newHtmlToDisplay)
+  })
 
-  handleFocus() {
-    this.hasFocus = true
-    this.moveCaretToEndOfText()
-  }
+  private htmlEffect = effect(() => {
+    if (!this.htmlToDisplay()) return
+
+    this.restoreCaretPosition()
+  })
+
+  hasFocus = signal(false)
+
+  constructor(
+    @Inject(DOCUMENT) private document: Document,
+    private sanitizer: DomSanitizer,
+  ) {}
 
   // TODO: right now it's possible to paste stuff like images, formatted text and so on.
   // Maybe also scripts, which is not very fun... So it might be a good idea to restrict this
-  handleInput() {
-    this.value = this.divReference?.nativeElement.textContent ?? ''
-    this.valueChange.emit(this.value)
+  handleInput(event: InputEvent) {
+    // When isComposing is true user is typing a composed sequence. For example,
+    // while typing á by pressing ' and then a. This condition skips capturing
+    // the ' so the user can continue and type the rest.
+    if (event.isComposing) return
+
+    const divRef = event.target as HTMLDivElement
+    const newValue = divRef.textContent ?? ''
+
+    this.value = newValue
+    this.valueChange.emit(newValue)
+    this.storeCaretPosition()
+  }
+
+  handleFocus() {
+    this.hasFocus.set(true)
   }
 
   handleBlur(e: FocusEvent) {
-    this.hasFocus = false
+    this.hasFocus.set(false)
     this.onblur.emit(e)
-    this.updateHtmlToDisplay()
   }
 
   getClasses() {
@@ -126,16 +143,34 @@ export class InputComponent implements OnChanges {
       [validityClasses.join(' ')]: true,
       [textAlignClasses.join(' ')]: true,
       [disabledClasses.join(' ')]: this.disabled,
-      [focusClasses.join(' ')]: this.hasFocus,
+      [focusClasses.join(' ')]: this.hasFocus(),
     }
   }
 
-  private moveCaretToEndOfText() {
+  // This store/restore logic is needed because the browser moves the
+  // caret to the beginning of the contentEditable element when it's
+  // content is modified with code. So we need to store the position
+  // before the modification and restore it afterwards
+  private storeCaretPosition() {
     const selection = this.document.getSelection()
 
     if (!selection || !this.divReference) return
 
-    selection.selectAllChildren(this.divReference.nativeElement)
-    selection.collapseToEnd()
+    // Attatch Selection object to the div to track caret
+    selection.extend(this.divReference.nativeElement)
+
+    const caretPosition = selection.toString().length
+    this.caretPosition.set(caretPosition)
+  }
+
+  private restoreCaretPosition() {
+    const selection = this.document.getSelection()
+
+    if (!selection) return
+
+    setTimeout(() => {
+      for (let i = 0; i < this.caretPosition(); i++)
+        selection.modify('move', 'forward', 'character')
+    })
   }
 }
