@@ -31,11 +31,10 @@ import { Utf8Codepoint } from '../../domain/Utf8Codepoint'
     <div class="mt-20 max-w-3xl flex grow flex-col gap-12">
       <div class="flex flex-col gap-2 items-center">
         <h3 class="text-secondary">Introduce algo</h3>
-        <!-- TODO: remove this dummy [colored] -->
         <utf-input
-          [colored]="{ fromIdx: 2, toIdx: 5, color: 'red' }"
           [disabled]="!!encodedText"
           [(value)]="textToEncode"
+          [colored]="{ fromIdx: 0, toIdx: 4, color: 'magenta', apply: 'afterBlur' }"
         />
       </div>
 

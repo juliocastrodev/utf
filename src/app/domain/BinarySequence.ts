@@ -28,7 +28,8 @@ export class BinarySequence {
   }
 
   static extractBitsFrom(str: string) {
-    return str.split('').filter(this.isBinary) as Bit[]
+    const bits = str.split('').filter(this.isBinary) as Bit[]
+    return new BinarySequence(bits)
   }
 
   getBits() {

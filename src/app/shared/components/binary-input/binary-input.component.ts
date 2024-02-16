@@ -1,10 +1,13 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   EventEmitter,
-  Input,
-  OnChanges,
   Output,
-  SimpleChanges,
+  computed,
+  input,
+  model,
+  signal,
+  untracked,
 } from '@angular/core'
 import { InputComponent } from '../input/input.component'
 import { BinarySequence } from '../../../domain/BinarySequence'
@@ -18,113 +21,94 @@ import { chunks } from '../../../domain/utils/chunks'
 
 @Component({
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'utf-binary-input',
   imports: [InputComponent],
   template: `
     <utf-input
       textAlign="start"
-      [value]="inputValue"
-      (valueChange)="handleInput($event)"
+      [colored]="inputColors()"
+      [valid]="valid()"
+      [errorMessage]="errorMessage()"
+      [(value)]="inputValue"
+      (valueChange)="syncBinarySequenceWithInput()"
+      (onblur)="handleBlur($event)"
       (keypress)="handleKeypress($event)"
-      (onblur)="format(); onblur.emit($event)"
-      [colored]="inputColored"
-      [valid]="valid"
-      [errorMessage]="errorMessage"
     />
   `,
 })
-export class BinaryInputComponent implements OnChanges {
-  @Input() sequence = BinarySequence.empty()
-  @Output() sequenceChange = new EventEmitter<BinarySequence>()
+export class BinaryInputComponent {
+  colored = input<{ fromBitAt: number; toBitAt: number; color?: string }>()
 
-  @Input() valid?: boolean
-  @Output() validChange = new EventEmitter<boolean | undefined>()
-
-  @Input() errorMessage = 'Solo se permiten bits (0s y 1s)'
-  @Input() colored?: { fromBitAt: number; toBitAt: number; color?: string }
+  sequence = model(BinarySequence.empty())
+  valid = model<boolean>()
+  errorMessage = model('')
 
   @Output() onblur = new EventEmitter<FocusEvent>()
 
-  inputValue: InputComponent['value'] = ''
-  inputColored: InputComponent['colored']
+  inputValue = signal('')
+  inputColors = computed(() => {
+    const currentSequence = untracked(this.sequence)
+    const coloredConfig = this.colored()
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['sequence']) {
-      this.inputValue = this.sequence.getBits().join('')
-      this.updateValidity()
-      this.format()
-    } else if (changes['colored']) {
-      this.updateColors()
-    }
-  }
+    if (!coloredConfig || currentSequence.isEmpty()) return
 
-  // returning false in an event handler means it's ignored/discarded
-  handleKeypress({ key }: KeyboardEvent) {
-    // ignore Enter keypress as value
-    return key !== 'Enter'
-  }
+    const { fromBitAt, toBitAt, color = 'red' } = coloredConfig
 
-  handleInput(newValue: string) {
-    this.inputValue = newValue
-
-    this.updateValidity()
-    this.updateSequence()
-  }
-
-  format() {
-    if (!this.valid) return
-
-    const formattedValue = chunks(this.sequence.getBits(), 8)
-      .map((chunk) => chunk.join(''))
-      .join('   ')
-
-    this.inputValue = formattedValue
-    this.updateColors()
-  }
-
-  private updateValidity() {
-    if (!this.inputValue) {
-      this.valid = undefined
-      return
-    }
-
-    const inputIsOnlyMadeOfBitsOrSeparators = /^(0|1|\s)+$/.test(
-      this.inputValue,
-    )
-    this.valid = inputIsOnlyMadeOfBitsOrSeparators
-    this.validChange.emit(this.valid)
-  }
-
-  private updateSequence() {
-    if (!this.valid) return
-
-    const newBinarySequence = new BinarySequence(
-      BinarySequence.extractBitsFrom(this.inputValue),
-    )
-
-    this.sequence = newBinarySequence
-    this.sequenceChange.emit(this.sequence)
-  }
-
-  private updateColors() {
-    if (!this.colored) {
-      this.inputColored = undefined
-      return
-    }
-
-    const { fromBitAt, toBitAt, color = 'red' } = this.colored
-
-    const bits: string[] = this.sequence.getBits()
+    const bits: string[] = currentSequence.getBits()
     bits[fromBitAt] = 'x'
     bits[toBitAt] = 'y'
     const formattedMarkedBits = chunks(bits, 8)
       .map((chunk) => chunk.join(''))
       .join('   ')
 
-    this.inputColored = {
+    return {
       fromIdx: formattedMarkedBits.indexOf('x'),
       toIdx: formattedMarkedBits.indexOf('y'),
       color,
     }
+  })
+
+  // Returning false in an event handler means it's ignored/discarded.
+  // In this case we ignore Enter keypresses
+  handleKeypress({ key }: KeyboardEvent) {
+    return key !== 'Enter'
+  }
+
+  handleBlur(event: FocusEvent) {
+    this.format()
+
+    this.onblur.emit(event)
+  }
+
+  syncBinarySequenceWithInput() {
+    const currentInput = this.inputValue()
+
+    if (!currentInput) {
+      this.valid.set(undefined)
+      this.sequence.set(BinarySequence.empty())
+      return
+    }
+
+    const isInputOnlyMadeOfBitsOrSeparators = /^(0|1|\s)+$/.test(currentInput)
+    if (!isInputOnlyMadeOfBitsOrSeparators) {
+      this.valid.set(false)
+      this.errorMessage.set('Solo se permiten bits (0s y 1s)')
+      this.sequence.set(BinarySequence.empty())
+      return
+    }
+
+    this.valid.set(true)
+    this.sequence.set(BinarySequence.extractBitsFrom(currentInput))
+  }
+
+  private format() {
+    if (!this.valid()) return
+
+    const formattedValue = chunks(this.sequence().getBits(), 8)
+      .map((chunk) => chunk.join(''))
+      .join('   ')
+
+    this.inputValue.set(formattedValue)
   }
 }

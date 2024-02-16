@@ -7,6 +7,10 @@ import {
   SimpleChanges,
 } from '@angular/core'
 
+// TODO: try to migrate to new input signals. And also
+// see if it's possible to move the logic to the new
+// 'host' field for angular directives
+
 @Directive({
   selector: '[utfAutoResize]',
   standalone: true,

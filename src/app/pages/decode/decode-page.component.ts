@@ -93,8 +93,8 @@ export class DecodePageComponent {
     this.error = undefined
   }
 
-  // TODO: I don't like to have this here...
-  coloredSequence: BinaryInputComponent['colored']
+  // TODO: I don't like to have this here... (and also the any...)
+  coloredSequence: BinaryInputComponent['colored'] | any
   updateColoredSequence() {
     if (!this.error) {
       this.coloredSequence = undefined

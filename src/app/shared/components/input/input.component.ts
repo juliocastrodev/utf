@@ -1,74 +1,75 @@
-import { CommonModule, DOCUMENT } from '@angular/common'
+import { CommonModule } from '@angular/common'
 import {
+  ChangeDetectionStrategy,
   Component,
   ElementRef,
   EventEmitter,
-  Inject,
-  Input,
   Output,
-  ViewChild,
   computed,
-  effect,
-  signal,
+  input,
+  model,
+  viewChild,
 } from '@angular/core'
 import { AutoResizeDirective } from '../../directives/autoresize/auto-resize.directive'
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
+import { ConsistentCaretDirective } from '../../directives/consistent-caret/consistent-caret.directive'
+
+// TODO: move this type somewhere else
+export type InputColoredConfig = {
+  fromIdx: number
+  toIdx: number
+  color?: string
+  apply?: 'always' | 'afterBlur' // TODO: think how to solve the issue with colors using this...
+}
+
+// TODO: right now it's possible to paste stuff like images, formatted text and so on.
+// Maybe also scripts, which is not very fun... So it might be a good idea to restrict this
 
 @Component({
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'utf-input',
-  imports: [CommonModule, AutoResizeDirective],
+  imports: [CommonModule, AutoResizeDirective, ConsistentCaretDirective],
   template: `
     <div
       #divReference
-      [contentEditable]="!disabled"
-      (input)="handleInput($any($event))"
-      (focusin)="handleFocus()"
-      (blur)="handleBlur($event)"
+      [contentEditable]="!disabled()"
       [innerHTML]="htmlToDisplay()"
-      [utfAutoResize]="{ dependsOn: [currentValue(), htmlToDisplay()] }"
-      [ngClass]="getClasses()"
+      [ngClass]="classes()"
+      (input)="handleInput($any($event))"
+      (blur)="onblur.emit($event)"
+      [utfAutoResize]="{ dependsOn: htmlToDisplay() }"
+      [utfConsistentCaret]="{ dependsOn: htmlToDisplay() }"
     ></div>
 
-    @if (valid === false && errorMessage) {
-      <span class="block mt-2 font-serif text-error">{{ errorMessage }}</span>
+    @if (valid() === false && errorMessage()) {
+      <span class="block mt-2 font-serif text-error">{{ errorMessage() }}</span>
     }
   `,
 })
 export class InputComponent {
-  @ViewChild('divReference') divReference?: ElementRef<HTMLDivElement>
+  divReference = viewChild<ElementRef<HTMLDivElement>>('divReference')
 
-  @Input() disabled = false
-  @Input() valid?: boolean
-  @Input() errorMessage = ''
-  @Input() colored?: { fromIdx: number; toIdx: number; color?: string }
-  @Input() textAlign: 'center' | 'start' = 'center'
+  disabled = input(false)
+  valid = input<boolean>()
+  errorMessage = input('')
+  colored = input<InputColoredConfig>()
+  textAlign = input<'center' | 'start'>('center')
+  value = model('')
+
   @Output() onblur = new EventEmitter<FocusEvent>()
 
-  @Input() set value(newValue: string) {
-    this.currentValue.set(newValue)
-  }
-  @Output() valueChange = new EventEmitter<string>()
-
-  currentValue = signal('')
-
-  caretPosition = signal(0)
-
   htmlToDisplay = computed<SafeHtml>(() => {
-    const currentInputValue = this.currentValue()
+    const currentValue = this.value()
+    const currentColored = this.colored()
 
-    if (!this.colored || !currentInputValue) {
-      return currentInputValue
-    }
+    if (!currentValue || !currentColored) return currentValue
 
-    const { fromIdx, toIdx, color = 'red' } = this.colored
+    const { fromIdx, toIdx, color = 'red' } = currentColored
 
-    const beforeIdx = currentInputValue.slice(0, fromIdx)
-    const textToColor = currentInputValue.slice(fromIdx, toIdx + 1)
-    const afterIdx = currentInputValue.slice(
-      toIdx + 1,
-      currentInputValue.length,
-    )
+    const beforeIdx = currentValue.slice(0, fromIdx)
+    const textToColor = currentValue.slice(fromIdx, toIdx + 1)
+    const afterIdx = currentValue.slice(toIdx + 1, currentValue.length)
 
     const newHtmlToDisplay =
       beforeIdx +
@@ -78,45 +79,7 @@ export class InputComponent {
     return this.sanitizer.bypassSecurityTrustHtml(newHtmlToDisplay)
   })
 
-  private htmlEffect = effect(() => {
-    if (!this.htmlToDisplay()) return
-
-    this.restoreCaretPosition()
-  })
-
-  hasFocus = signal(false)
-
-  constructor(
-    @Inject(DOCUMENT) private document: Document,
-    private sanitizer: DomSanitizer,
-  ) {}
-
-  // TODO: right now it's possible to paste stuff like images, formatted text and so on.
-  // Maybe also scripts, which is not very fun... So it might be a good idea to restrict this
-  handleInput(event: InputEvent) {
-    // When isComposing is true user is typing a composed sequence. For example,
-    // while typing á by pressing ' and then a. This condition skips capturing
-    // the ' so the user can continue and type the rest.
-    if (event.isComposing) return
-
-    const divRef = event.target as HTMLDivElement
-    const newValue = divRef.textContent ?? ''
-
-    this.value = newValue
-    this.valueChange.emit(newValue)
-    this.storeCaretPosition()
-  }
-
-  handleFocus() {
-    this.hasFocus.set(true)
-  }
-
-  handleBlur(e: FocusEvent) {
-    this.hasFocus.set(false)
-    this.onblur.emit(e)
-  }
-
-  getClasses() {
+  classes = computed(() => {
     const defaultClasses = [
       'min-h-[70px] min-w-[210px]',
       'sm:min-h-[100px] sm:min-w-[300px]',
@@ -124,53 +87,36 @@ export class InputComponent {
       'font-serif text-accent whitespace-pre-wrap',
       'p-4 outline-none bg-background',
       'border-b-2 hover:border-b-4',
+      'focus:border-b-4',
     ]
 
     const textAlignClasses =
-      this.textAlign === 'center' ? ['text-center'] : ['text-start']
+      this.textAlign() === 'center' ? ['text-center'] : ['text-start']
 
     const validityClasses =
-      this.valid === false
+      this.valid() === false
         ? ['text-error border-error']
         : ['text-primary border-primary']
 
-    const focusClasses = ['border-b-4']
-
-    const disabledClasses = ['opacity-50']
+    const disabledClasses = this.disabled() ? ['opacity-50'] : []
 
     return {
       [defaultClasses.join(' ')]: true,
       [validityClasses.join(' ')]: true,
       [textAlignClasses.join(' ')]: true,
-      [disabledClasses.join(' ')]: this.disabled,
-      [focusClasses.join(' ')]: this.hasFocus(),
+      [disabledClasses.join(' ')]: true,
     }
-  }
+  })
 
-  // This store/restore logic is needed because the browser moves the
-  // caret to the beginning of the contentEditable element when it's
-  // content is modified with code. So we need to store the position
-  // before the modification and restore it afterwards
-  private storeCaretPosition() {
-    const selection = this.document.getSelection()
+  constructor(private sanitizer: DomSanitizer) {}
 
-    if (!selection || !this.divReference) return
+  handleInput(event: InputEvent) {
+    // When isComposing is true user is typing a composed sequence. For example,
+    // while typing á by pressing ' and then a. This condition skips capturing
+    // the ' so the user can continue and type the rest.
+    if (event.isComposing) return
 
-    // Attatch Selection object to the div to track caret
-    selection.extend(this.divReference.nativeElement)
-
-    const caretPosition = selection.toString().length
-    this.caretPosition.set(caretPosition)
-  }
-
-  private restoreCaretPosition() {
-    const selection = this.document.getSelection()
-
-    if (!selection) return
-
-    setTimeout(() => {
-      for (let i = 0; i < this.caretPosition(); i++)
-        selection.modify('move', 'forward', 'character')
-    })
+    const newValue = this.divReference()?.nativeElement.textContent ?? ''
+    this.value.set(newValue)
   }
 }
