@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core'
+import { Component, HostListener, computed, signal } from '@angular/core'
 import { FullScreenComponent } from '../../shared/components/fullscreen/fullscreen.component'
 import { ButtonComponent } from '../../shared/components/button/button.component'
 import { RouterModule } from '@angular/router'
@@ -32,22 +32,28 @@ import { Utf8Codepoint } from '../../domain/Utf8Codepoint'
       <div class="flex flex-col gap-2 items-center">
         <h3 class="text-secondary">Introduce algo</h3>
         <utf-input
-          [disabled]="!!encodedText"
+          [disabled]="!!encodedText()"
           [(value)]="textToEncode"
-          [colored]="{ fromIdx: 0, toIdx: 4, color: 'magenta', apply: 'afterBlur' }"
+          [colored]="{
+            fromIdx: 0,
+            toIdx: 4,
+            color: 'magenta',
+            apply: 'afterBlur'
+          }"
         />
       </div>
 
-      @if (encodedText) {
+      @if (encodedText()) {
         <utf-encode-result
-          [encodedText]="encodedText"
-          (selectcodepoint)="selectedCodepoint = $event"
+          [encodedText]="encodedText()!"
+          (selectcodepoint)="selectedCodepoint.set($event)"
         />
       }
-      @if (selectedCodepoint) {
+
+      @if (selectedCodepoint()) {
         <utf-encode-explanation
-          [encodedCodepoint]="selectedCodepoint"
-          [utfScroll]="{ dependsOn: selectedCodepoint }"
+          [encodedCodepoint]="selectedCodepoint()!"
+          [utfScroll]="{ dependsOn: selectedCodepoint() }"
         />
       }
 
@@ -58,7 +64,7 @@ import { Utf8Codepoint } from '../../domain/Utf8Codepoint'
           <utf-button (click)="encode()">Encode</utf-button>
         }
 
-        @if (encodedText) {
+        @if (encodedText()) {
           <utf-button (click)="restart()">Restart</utf-button>
         }
       </div>
@@ -66,26 +72,27 @@ import { Utf8Codepoint } from '../../domain/Utf8Codepoint'
   </utf-fullscreen>`,
 })
 export class EncodePageComponent {
-  textToEncode = ''
-  encodedText?: Utf8Text
-  selectedCodepoint?: Utf8Codepoint
+  textToEncode = signal('')
+  encodedText = signal<Utf8Text | undefined>(undefined)
+  selectedCodepoint = signal<Utf8Codepoint | undefined>(undefined)
 
   constructor(private encodingService: EncodingService) {}
 
-  canEncode() {
-    return this.textToEncode && !this.encodedText
-  }
+  canEncode = computed(
+    () => this.textToEncode().length > 0 && !this.encodedText(),
+  )
 
   @HostListener('keydown.enter')
   encode() {
     if (!this.canEncode()) return
 
-    this.encodedText = this.encodingService.encodeText(this.textToEncode)
+    const encoded = this.encodingService.encodeText(this.textToEncode())
+    this.encodedText.set(encoded)
   }
 
   restart() {
-    this.textToEncode = ''
-    this.encodedText = undefined
-    this.selectedCodepoint = undefined
+    this.textToEncode.set('')
+    this.encodedText.set(undefined)
+    this.selectedCodepoint.set(undefined)
   }
 }
