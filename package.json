@@ -23,6 +23,7 @@
     "@angular/router": "^17.2.1",
     "@fontsource/bebas-neue": "^5.0.18",
     "@fontsource/press-start-2p": "^5.0.18",
+    "clsx": "^2.1.0",
     "rxjs": "~7.8.1",
     "tslib": "^2.6.2",
     "zone.js": "~0.14.4"

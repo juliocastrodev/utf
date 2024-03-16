@@ -1,20 +1,27 @@
-import { CommonModule } from '@angular/common'
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core'
+import { clsx } from 'clsx'
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  input,
+} from '@angular/core'
+
+// TODO: migrate all components from [ngClass] to [class] using
+// clsx (remember to also remove CommonsModule)
 
 @Component({
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'utf-button',
-  imports: [CommonModule],
-  template: ` <button [disabled]="disabled" [ngClass]="getClasses()">
+  template: ` <button [disabled]="disabled()" [class]="classes()">
     <ng-content />
   </button>`,
 })
 export class ButtonComponent {
-  @Input() variant: 'square' | 'circle' | 'plain' = 'square'
-  @Input() disabled = false
+  variant = input<'square' | 'circle' | 'plain'>('square')
+  disabled = input(false)
 
-  getClasses() {
+  classes = computed(() => {
     const defaultClasses = ['outline-none text-primary']
 
     const borderClasses = [
@@ -31,16 +38,12 @@ export class ButtonComponent {
 
     const disabledClasses = ['opacity-80']
 
-    return {
-      [defaultClasses.join(' ')]: true,
-      [disabledClasses.join(' ')]: this.disabled,
-      // TODO: try to solve!
-      // Angular and Tailwind seems to have a conflict by doing
-      // [squareClasses.join(' ')]: this.variant === 'square' (and so on).
-      // Apparently there's class collisions or something...
-      ...(this.variant === 'square' && { [squareClasses.join(' ')]: true }),
-      ...(this.variant === 'circle' && { [circleClasses.join(' ')]: true }),
-      ...(this.variant === 'plain' && { [plainClasses.join(' ')]: true }),
-    }
-  }
+    return clsx(
+      defaultClasses,
+      this.variant() === 'square' && squareClasses,
+      this.variant() === 'circle' && circleClasses,
+      this.variant() === 'plain' && plainClasses,
+      this.disabled() && disabledClasses,
+    )
+  })
 }
